@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <title>Covid-Mole</title>
+        <link rel="shortcut icon" href="/titlelogo.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"> 
+    <link href="/login_style.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap" rel="stylesheet">
+
+
+    </head>
+<body>
+
+        
+    <div class="main">  	
+        <input type="checkbox" id="l_check" aria-hidden="true" onclick="javascript:uncheck_su_check(this);">
+        <input type="checkbox" id="su_check" aria-hidden="true" onclick="javascript:uncheck_l_check(this);">
+            <div class="signup">
+                <form action="/register" method="POST">
+                    <input type="text" name="username" placeholder="User name" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button>Sign up</button>
+                    <label for="su_check" aria-hidden="true">SIGN UP</label>
+                </form>
+            </div>
+            <div class="login">
+                <%if (messages.error) {%>
+                    <%messages.error %>
+                <%}%>
+                <form action="/login" method="POST">
+                    <label for="l_check" aria-hidden="true">LOGIN</label>
+                    <input type="text" name="username" placeholder="User name" required>
+                    <input type="password" name="password" placeholder="Password" required="">
+                    <button>Login</button>
+                </form>
+            </div>
+    </div>
+</body>
+<script language="javascript" type="text/javascript">
+    function uncheck_l_check(obj)
+            {
+                document.getElementById("l_check").checked = false;
+            }
+    function uncheck_su_check(obj)
+            {
+             document.getElementById("su_check").checked = false;
+            }
+    </script>   
+</html>
+
