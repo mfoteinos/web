@@ -13,6 +13,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport')
 const methodOverride = require('method-override')
 const UserM = require('./models/user');
+const fs = require('fs');
 
 
 
@@ -49,6 +50,18 @@ function checkNotAuthenticated(req, res, next) {
 
     next()
 }
+
+let supermarkets;
+
+fs.readFile('export.geojson', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    data = JSON.parse(data)
+    data = data.features.filter(feature => feature.properties.name != null && feature.properties.name != "No supermarket" )
+    supermarkets = JSON.stringify(data)
+  });
 
 app.listen(3000);
 
@@ -99,7 +112,7 @@ app.delete('/logout', (req, res) => {
 })
 
 app.get('/user_home', checkAuthenticated, (req,res) => {
-    res.render('user_home');
+    res.render('user_home', {supermarkets:supermarkets});
 
 });
 

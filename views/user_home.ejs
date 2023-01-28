@@ -4,276 +4,68 @@
 
 <head>
 <title>Covid-Mole</title>
-<link rel="shortcut icon" href="/coronavirus_sarscov2_model_ed-removebg-preview.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8"> 
 <link rel="stylesheet" href="/user_style.css">
+<link rel="stylesheet" href="/leaflet-search-master/dist/leaflet-search.src.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
-
 </head>
 
-<body data-type="scroll" data-target=".nav_bar" data-offset="80">
-<section class="main_banner">
-    <a id="main_jlink" class="nav_link"></a>
-<div class="loader">
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-</div>
+<body>
+
 
 <div id = "map"></div>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script> 
+<script src="/leaflet-search-master/dist/leaflet-search.src.js"></script> 
+
 
 <script>
 var map = L.map('map').setView([38.2462420, 21.7350847], 16);
 
- var OSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+var OSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright%22%3EOpenStreetMap</a> contributors'
 });
 
 OSM.addTo(map);
 
+
+var geojsonFeature = <%- JSON.stringify(supermarkets) %>;
+
+geojsonFeature = JSON.parse(geojsonFeature)
+
+
+
+const searchLayer = L.geoJSON(geojsonFeature, {
+    onEachFeature: function(feature, layer){
+        if (feature.properties.name) {
+            layer.bindPopup(feature.properties.name)
+        }
+    }
+}).addTo(map);
+
+const searchControl = new L.Control.Search({
+    layer: searchLayer,
+    propertyName: 'name'
+})
+
+map.addControl(searchControl);
+
+
 </script>
 
-<div class="words">
-        <h1>
-            WE SNITCH
-        </h1>
-        <h2>
-            WE PROTECT
-        </h2>
-        <a href="#services_jlink">
-            <button class="button">
-                Explore Us
-            </button>
-</div>
-<nav class="nav_bar">
-        <a class="nav_bar_logo" href="/user_home.html">
-            <img id="mainlogo" src="/covidmolelogoredwhite-removebg-preview.png">
-        </a>
-            <ul class="nav_bar_menu">
-                <li><a id="home" href="#main_jlink">Home</a></li>
-                <li><a id="services" href="#services_jlink">Services</a></li>
-                <li><a id="about" href="#about_jlink">About</a></li>
-                <li><a id="team" href="#team_jlink">Team</a></li>
-                <li> 
-                    <form action="/logout?_method=DELETE" method="POST">
-                        <button type="submit">Log Out</button>
-                    </form>
-                </li>
-                
-            </ul>
-            <div class="account">
-            <div class="user" onclick="user_menuToggle();">
-                    <img src="useraccountrred.png">
-                    </div>
-                <div class="user_menu">
-                <ul>
-                    <li> <img src="settings.png"><a href="#">Options</a></li>
-                    <li> <img src="question.png"><a href="#">Help</a></li>
-                    <li> <img src="logout.png"><a href="/index.html">Logout</a></li>
-                </ul>
-            </div>
-            </div>
-            
-    </nav>
-</section>
 
-<section class="separator1">
-</section>
-<section id="services" class="services_banner">
-<a id="services_jlink" class="nav_link"></a>
-        <div class="section_heading">
-            <h3> Services </h3>
-        </div>
-<div class="services_boxes">
-<div class="box_link">
-    Map
-    <div class="icon">
-        <img src="map-marker-alt-solid.svg">
-    </div>
-</div>
-<div class="box_link">
-    Covid Cases
-    <div class="icon">
-        <img src="virus-solid.svg">
-    </div>
-
-</div>
+<li> 
+    <form action="/logout?_method=DELETE" method="POST">
+        <button type="submit">Log Out</button>
+    </form>
+</li>
 
 
-<div class="box_link">
-    <a href="/user_profile">
-        My Profile
-        <div class="icon">
-            <img src="user-circle-solid.svg">
-        </div>
-    </a>
-</div>
+<a href="/user_profile">
+     My Profile
+</a>
 
-</div>
-</section>
-<section class="separator2">
-</section>
-<section id="about" class="about_banner">
-    <a id="about_jlink" class="nav_link"></a>
-    <div class="section_heading">
-        <h3> About </h3>
-    </div>
-    <div class="grid">
-        <div class="purpose">
-            <span>Our Purpose</span>
-            <p>Covid-Mole's purpose is to protect our clients from the pandemic by alerting them about a case around theirs block or inside theirs positions of interest.<br>
-            In addition, if in the worst-case senario one of our clients is tested positive to covid-19 then this service will share the information to the other users.</p>
-            
-        </div>
-        <div class="animated_nums">
-            <div class="clients">
-                <img src="smile-beam-solid.svg">
-                <span id="ctr1"></span>
-                <p>Clients</p>
-            </div>
-            <div class="cups">
-                <img src="mug-hot-solid.svg">
-                <span id="ctr2"></span>
-                <p>Cups of coffee</p>
-            </div>
-        </div>
-        <div class="socialdist">
-            <img src="socialdistance.jpg">
-        </div>
-        <div class="goal">
-            <span>Our Goal</span>
-            <p>Covid-Mole's goal is to provide a healthy enviroment for everyone in these terrible conditions we live in.<br>
-                Our development teams is hoping for the best as the humankind fights for the elimination of <br> covid-19.</p>
-            
-        </div>
-        <div class="quote">
-            <p> This pandemic has made us realize the amount of things we take  for granted in life,<br> not to mention, life itself.</p>
-        </div>
-    </div>
-</section>
-
-<section class="separator3">
-</section>
-
-<section id="team" class="team_banner">
-    <a id="team_jlink" class="nav_link"></a>
-        <div class="section_heading">
-            <h3> Team </h3>
-        </div>
-    <div class="team_boxes">
-        <div class="team_member">
-            <div class="member_photo">
-                <img src="13.png">
-            </div>
-            <div class="member_info">
-                <h5>Φωτεινός Εμμανουήλ</h5>
-                <span>email: st1067428@ceid.upatras.gr</span>
-            </div>
-
-        </div>
-        <div class="team_member">
-            <div class="member_photo">
-                <img src="11.png">
-            </div>
-            <div class="member_info">
-                <h5>Θεοδώρου Μιχαήλ</h5>
-                <span>email: st1067391@ceid.upatras.gr</span>
-            </div>
-
-        </div>
-        <div class="team_member">
-            <div class="member_photo">
-                <img src="9.png">
-            </div>
-            <div class="member_info">
-                <h5>Μαρκοδήμος Παναγιώτης</h5>
-                <span>email: st1067523@ceid.upatras.gr</span>
-            </div>
-        </div>
-</section>
-
-<section class="separator4">
-</section>
 
 </body>
-<script>
-    function user_menuToggle(){
-        const toggleMenu = document.querySelector('.user_menu');
-        toggleMenu.classList.toggle('active');
-    }
-    window.onscroll = function() {activeNav_bar()};
-    function activeNav_bar(){
-        if (document.body.scrollTop > 0 && document.body.scrollTop <900 || document.documentElement.scrollTop > 0 && document.documentElement.scrollTop <900){
-            document.getElementById("home").className = "activeNav"
-            document.getElementById("services").className = "not_activeNav"
-            document.getElementById("about").className = "not_activeNav"
-            document.getElementById("team").className = "not_activeNav"
-    }
-        if (document.body.scrollTop > 900 && document.body.scrollTop <1800 || document.documentElement.scrollTop > 900 && document.documentElement.scrollTop <1800) {
-            document.getElementById("home").className = "not_activeNav"
-            document.getElementById("services").className = "activeNav"
-            document.getElementById("about").className = "not_activeNav"
-            document.getElementById("team").className = "not_activeNav"
-    }
-        if (document.body.scrollTop > 1800 && document.body.scrollTop <2600 || document.documentElement.scrollTop > 1800 && document.documentElement.scrollTop <2600) {
-            document.getElementById("home").className = "not_activeNav"
-            document.getElementById("services").className = "not_activeNav"
-            document.getElementById("about").className = "activeNav"
-            document.getElementById("team").className = "not_activeNav"
-            
-    }
-        if (document.body.scrollTop > 2600 && document.body.scrollTop <3600 || document.documentElement.scrollTop > 2600 && document.documentElement.scrollTop <3600) {
-            document.getElementById("home").className = "not_activeNav"
-            document.getElementById("services").className = "not_activeNav"
-            document.getElementById("about").className = "not_activeNav"
-            document.getElementById("team").className = "activeNav"
-    }
-
-
-    }
-    var client = setInterval(happyclients, 50)
-    var cups = setInterval(cupsofcoffee, 14)
-    let count1 = 1;
-    let count2 = 1;
-
-    function happyclients(){
-        if (document.body.scrollTop > 1800 && document.body.scrollTop <2600 || document.documentElement.scrollTop > 1800 && document.documentElement.scrollTop <2600)
-        {   
-            count1++;
-            document.querySelector("#ctr1").innerHTML = count1;
-
-            if (count1 == 100){
-                clearInterval(client)
-            }
-        }
-    }
-    function cupsofcoffee(){
-        if (document.body.scrollTop > 1800 && document.body.scrollTop <2600 || document.documentElement.scrollTop > 1800 && document.documentElement.scrollTop <2600)
-        {   
-            count2++;
-            document.querySelector("#ctr2").innerHTML = count2;
-
-            if (count2 == 371){
-                clearInterval(cups)
-            }
-        }
-    }
-
-
-
-</script>
 </html>
