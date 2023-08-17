@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/add_offer.css">
+    
+    <title>Document</title>
+</head>
+<body>
+      <div class="create-offer">
+        <form action="/add_offer" method="post">
+          <label for="category">Choose a category:</label>
+          <select name="category" id="category">
+            <% ctg_name.forEach(element => { %>
+              <option value ='<%= element.name %>'><%= element.name %></option>
+            <% }) %>
+          </select>
+
+          <br><br>
+
+          <label for="sub_cat">Choose a subcategory:</label>
+          <select name="sub_cat" id="sub_cat">
+            <% ctg_name.forEach(element => { %>
+              <% for (const sub of element.subcategories) { %>
+              <option value ='<%= sub.name %>'><%= sub.name %></option>
+            <% }}) %>
+          </select>
+
+          <br><br>
+
+          <label for="product">Choose a Product:</label>
+          <select name="product" id="product">
+            <% product.forEach(element => { %>
+              <option value ='<%= element.name %>'><%= element.name %></option>
+            <% }) %>
+          </select>
+
+          <br><br>
+
+          <label for="price">New Price:</label>
+          <input type="number" id="price" name="price" required>
+
+           <input type="submit" onclick="getOption()" value="Submit" id="submit"> 
+        </form>
+      </div>
+
+      <br></br>
+
+      <div class="search-product">
+        <label for="search">Search Product:</label>
+        <input type="search" id="search" product-search>
+      </div>
+      
+      <div class="product-card" data-prodact-card>
+      <template product-data id="templ">
+        <div class="card">
+          <div class="header" data-header id="head"></div>
+          <div class="body" data-body></div>
+        </div>
+      </template>
+    </div>
+
+    <button id="product">Press</button>
+
+<script>
+  var Product = <%- JSON.stringify(product) %>;
+  var Cat_Sub = <%- JSON.stringify(ctg_name) %>;
+
+  const userCardTemplate = document.querySelector("[product-data]")
+  const data_prodact_card = document.querySelector("[data-prodact-card]")
+  const searchInput = document.querySelector("[product-search]")
+
+  let products = []
+
+  searchInput.addEventListener("input", e => {
+    const value = e.target.value.toLowerCase()
+      products.forEach(product => {
+        const isVisible =
+        product.name.toLowerCase().includes(value) ||
+        product.id.toLowerCase().includes(value)
+      product.element.classList.toggle("hide", !isVisible)
+    })
+  })
+
+  products = Product.map(product => {
+    const card = userCardTemplate.content.cloneNode(true).children[0]
+    const header = card.querySelector('[data-header]')
+    const body = card.querySelector('[data-body]')
+    header.textContent = product.name
+    body.textContent = product.id
+    data_prodact_card.append(card)
+    return { name: product.name, id: product.id, element: card }
+  })
+
+  function getOption() {
+        category = document.querySelector('#category');
+        categ = category.value;
+
+        Sub_Cat = document.querySelector('#sub_cat');
+        sub_cat = Sub_Cat.value;
+          console.log(category)
+        }
+
+</script>
+    
+</body>
+</html>

@@ -13,6 +13,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport')
 const methodOverride = require('method-override')
 const UserM = require('./models/user');
+const SupermarketM = require('./models/supermarket');
 const fs = require('fs');
 
 
@@ -20,7 +21,7 @@ const fs = require('fs');
 
 const app = express();
 
-const db_url = 'mongodb+srv://xrhsthsthsvashs:ZJgAlDrKedPXkUUZ@cluster0.eixd381.mongodb.net/user?retryWrites=true&w=majority';
+const db_url = 'mongodb+srv://xrhsthsthsvashs:ZJgAlDrKedPXkUUZ@cluster0.eixd381.mongodb.net/Data?retryWrites=true&w=majority';
 mongoose.connect(db_url, {useNewUrlParser: true, useUnifiedTopology: true} )
 .then((result) => console.log('connected to database'))
 .catch((err) => console.log(err))
@@ -51,7 +52,7 @@ function checkNotAuthenticated(req, res, next) {
     next()
 }
 
-let supermarkets;
+let allSupermarkets;
 
 fs.readFile('export.geojson', 'utf8', (err, data) => {
     if (err) {
@@ -60,7 +61,7 @@ fs.readFile('export.geojson', 'utf8', (err, data) => {
     }
     data = JSON.parse(data)
     data = data.features.filter(feature => feature.properties.name != null && feature.properties.name != "No supermarket" )
-    supermarkets = JSON.stringify(data)
+    allSupermarkets = JSON.stringify(data)
   });
 
 app.listen(3000);
@@ -112,7 +113,25 @@ app.delete('/logout', (req, res) => {
 })
 
 app.get('/user_home', checkAuthenticated, (req,res) => {
-    res.render('user_home', {supermarkets:supermarkets});
+
+
+    SupermarketM.find({ 'properties.offers':  { $size: 0 } }).lean(true)
+    .then((result) => {
+        var gjNoOfferSups = result;
+        SupermarketM.find({ 'properties.offers':  { $not: {$size: 0} } }).lean(true)
+        .then((result) => {
+            var gjOfferSups = result;
+            console.log(gjNoOfferSups[0]);
+            console.log(gjOfferSups[0]);
+            res.render('user_home', {gjNoOfferSups,gjOfferSups});
+        })
+        .catch((err) =>{
+            console.log(err);
+        })
+     })
+    .catch((err) =>{
+        console.log(err);
+    })
 
 });
 
