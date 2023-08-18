@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/review_offer.css">
+    
+    <title>Document</title>
+</head>
+<body>
+<script>
+
+var reviewedsup = <%- JSON.stringify(reviewedsup) %>;
+
+function customPopup(reviewedsup){
+    let offertext = ``
+    for (offer of reviewedsup.properties.offers) {
+        let temptext = `<div> Προϊόν: ${offer.product} </div>
+                        <div> Τιμούλα: ${offer.price} </div>
+                        <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>
+                        <div> Likes: ${offer.likes} <form action="/like/${offer.id}" method="post"><button id='like${offer.id}' >Like</button></form></div>
+                        <div> Dislikes: ${offer.dislikes} <form action="/dislike/${offer.id}" method="post"><button id='dislike${offer.id}'>Dislike</button></form></div>
+                        <div> Διαθέσιμο: ${offer.available} <form action="/available/${offer.id}" method="post"><button id='available${offer.id}'>Εναλλαγή</button></form></div></div>` 
+        offertext = offertext.concat(temptext)
+
+    }
+
+    return `<b> ${reviewedsup.properties.name} </b>
+            ${offertext}
+    
+    `
+}
+
+text = customPopup(reviewedsup)
+
+document.write(text)
+
+
+</script>
+
+</body>
+</html>

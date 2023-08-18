@@ -64,8 +64,12 @@ function customPopup(feature){
 
     return `<b> ${feature.properties.name} </b>
             ${offertext}
-            <div> <form action="/add_offer/${feature.properties.id}" method="get">
-                <button id='${feature.properties.name}'>Add Offer</button>
+                <div> <form action="/add_offer/${feature.properties.id}" method="get">
+                <button id='addoffer${feature.properties.name}'>Προσθήκη προσφοράς</button>
+                </form></div>
+
+                <div> <form action="/review_offer/${feature.properties.id}" method="get">
+                <button id='review${feature.properties.name}'>Αξιολόγηση προσφορών</button>
                 </form></div>
     
     `
@@ -84,31 +88,6 @@ const OffMarkers = L.geoJSON(gjOfferSups, {
         layer.bindPopup(customPopup(feature));
     }
 }).addTo(map);
-
-// // create popup contents
-// var customPopup = "<b>My office</b><br/><img src='http://netdna.webdesignerdepot.com/uploads/2014/05/workspace_06_previo.jpg' alt='maptime logo gif' width='150px'/>";
-
-// // specify popup options 
-// var customOptions =
-//     {
-//     'maxWidth': '400',
-//     'width': '200',
-//     'className' : 'popupCustom'
-//     }
-
-
-// var marker = L.marker([lat, lng], {icon: myIcon}).addTo(map);
-
-// // bind the custom popup 
-// marker.bindPopup(customPopup,customOptions);
-
-// const offMarkers = L.geoJSON(gjOfferSups, {
-//     onEachFeature: function(feature, layer){
-//         layer.setIcon(redIcon);
-//         layer.bindPopup(feature.properties.name);
-
-//     }
-// }).addTo(map);
 
 var overlays = {
 
