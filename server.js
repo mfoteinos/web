@@ -161,6 +161,51 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
 
 });
 
+app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
+
+    console.log(req.params.id)
+    SupermarketM.find({ 'properties.id': req.params.id }).then((result) =>{
+        console.log(result[0])
+        res.render('review_offer', {reviewedsup:result[0]})
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+});
+
+app.post('/like/:id', checkAuthenticated, (req,res) => {
+
+    SupermarketM.updateOne({ 'properties.offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'properties.offers.$.likes': 1}}).then((result) =>{
+        console.log("nice")
+        console.log(result)
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+});
+
+app.post('/dislike/:id', checkAuthenticated, (req,res) => {
+
+    SupermarketM.updateOne({ 'properties.offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'properties.offers.$.dislikes': 1}}).then((result) =>{
+        console.log("nice")
+        console.log(result)
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+});
+
+app.post('/available/:id', checkAuthenticated, (req,res) => {
+
+    SupermarketM.updateOne({ 'properties.offers':{$elemMatch:{id:req.params.id}}}, {$set: { 'properties.offers.$.available': false}}).then((result) =>{
+        console.log("nice")
+        console.log(result)
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+});
+
 
 app.get('/user_profile', checkAuthenticated, (req,res) => {
     res.render('user_profile', {name:req.user.username});
