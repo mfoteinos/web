@@ -34,6 +34,10 @@ const supermarketSchema = new Schema({
                 type: String,
                 required: true
             },
+            username: {
+                type: String,
+                required: true
+            },
             product:{
                 type: String,
                 required: true
