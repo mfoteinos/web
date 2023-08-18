@@ -14,6 +14,8 @@ const passport = require('passport')
 const methodOverride = require('method-override')
 const UserM = require('./models/user');
 const SupermarketM = require('./models/supermarket');
+const Categ_Sub = require('./models/Categ_Subcateg')
+const Product = require('./models/product')
 const fs = require('fs');
 
 
@@ -121,8 +123,8 @@ app.get('/user_home', checkAuthenticated, (req,res) => {
         SupermarketM.find({ 'properties.offers':  { $not: {$size: 0} } }).lean(true)
         .then((result) => {
             var gjOfferSups = result;
-            console.log(gjNoOfferSups[0]);
-            console.log(gjOfferSups[0]);
+            //console.log(gjNoOfferSups[0]);
+            //console.log(gjOfferSups[0]);
             res.render('user_home', {gjNoOfferSups,gjOfferSups});
         })
         .catch((err) =>{
@@ -134,6 +136,31 @@ app.get('/user_home', checkAuthenticated, (req,res) => {
     })
 
 });
+
+
+app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
+
+    console.log(req.params.id)
+    Categ_Sub.find().then((result) =>{
+        var ctg_name = result
+        Product.find().then((result) =>{
+            var product = result 
+            res.render('add_offer', {ctg_name, product})
+        }).catch((err) =>{
+            console.log(err);
+        })
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+});
+
+app.post('/add_offer', checkAuthenticated, (req,res) => {
+    
+    console.log(req.body )
+
+});
+
 
 app.get('/user_profile', checkAuthenticated, (req,res) => {
     res.render('user_profile', {name:req.user.username});
