@@ -8,8 +8,8 @@
     <title>Document</title>
 </head>
 <body>
-      <div class="create-offer">
-        <form action="/add_offer" method="post">
+      <div class="create-offer" id="create-offer">
+        <form action="/add_offer" method="POST">
           <label for="category">Choose a category:</label>
           <select name="category" id="category">
             <% ctg_name.forEach(element => { %>
@@ -29,19 +29,9 @@
 
           <br><br>
 
-          <label for="product">Choose a Product:</label>
-          <select name="product" id="product">
-            <% product.forEach(element => { %>
-              <option value ='<%= element.name %>'><%= element.name %></option>
-            <% }) %>
-          </select>
+          <button id="find_Product" onclick="FindProduct()">Find Product</button>
 
-          <br><br>
-
-          <label for="price">New Price:</label>
-          <input type="number" id="price" name="price" required>
-
-           <input type="submit" onclick="getOption()" value="Submit" id="submit"> 
+           <!-- <input type="submit" onclick="getOption()" value="Submit" id="submit"> -->
         </form>
       </div>
 
@@ -61,9 +51,10 @@
       </template>
     </div>
 
-    <button id="product">Press</button>
+    
 
 <script>
+ 
   var Product = <%- JSON.stringify(product) %>;
   var Cat_Sub = <%- JSON.stringify(ctg_name) %>;
 
@@ -79,7 +70,8 @@
         const isVisible =
         product.name.toLowerCase().includes(value) ||
         product.id.toLowerCase().includes(value)
-      product.element.classList.toggle("hide", !isVisible)
+        product.element.classList.toggle("hide", !isVisible)
+      
     })
   })
 
@@ -93,16 +85,32 @@
     return { name: product.name, id: product.id, element: card }
   })
 
-  function getOption() {
+  function FindProduct() {
         category = document.querySelector('#category');
         categ = category.value;
 
         Sub_Cat = document.querySelector('#sub_cat');
         sub_cat = Sub_Cat.value;
-          console.log(category)
-        }
+
+        
+
+        console.log(Cat_Sub)
+
+        var id = []
+        var uuid = []
+        Cat_Sub.forEach(element => {
+          if (element.name == categ){
+          id.push(element.id)}
+          for (const sub of element.subcategories){
+            if (sub.name == sub_cat){
+              uuid.push(sub.uuid)
+            }
+          }
+        })
+        console.log(id, uuid)
+      }
 
 </script>
-    
+
 </body>
 </html>

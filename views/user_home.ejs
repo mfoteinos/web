@@ -50,10 +50,23 @@ var gjOfferSups = <%- JSON.stringify(gjOfferSups) %>;
 
 
 function customPopup(feature){
+    let offertext = ``
+    for (offer of feature.properties.offers) {
+        let temptext = `<div> Προϊόν: ${offer.product} </div>
+                        <div> Τιμούλα: ${offer.price} </div>
+                        <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>
+                        <div> Likers: ${offer.likes} </div>
+                        <div> Dislikes: ${offer.dislikes} </div>
+                        <div> Διαθέσιμο: ${offer.available} </div>`
+        offertext = offertext.concat(temptext)
+
+    }
+
     return `<b> ${feature.properties.name} </b>
-            <div> Προσφορά: ${feature.properties.offers[0].product} </div>
-            <div> Τιμούλα: ${feature.properties.offers[0].price} </div>
-            <div> <button type="button"> Add Offer </button> </div>
+            ${offertext}
+            <div> <form action="/add_offer/${feature.properties.id}" method="get">
+                <button id='${feature.properties.name}'>Add Offer</button>
+                </form></div>
     
     `
 }
@@ -61,7 +74,7 @@ function customPopup(feature){
 const noOffMarkers = L.geoJSON(gjNoOfferSups, {
     onEachFeature: function(feature, layer){
         layer.setIcon(redIcon);
-        layer.bindPopup(feature.properties.name);
+        layer.bindPopup(customPopup(feature));
     }
 }).addTo(map);
 
