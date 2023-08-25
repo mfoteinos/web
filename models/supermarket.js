@@ -27,44 +27,45 @@ const supermarketSchema = new Schema({
             type: String,
             required: true
         },
-        offers: {
-            type: Array,
-            required: false,
-            id:{
-                type: String,
-                required: true
+    },
+    offers:{
+        type:Array,
+        required:true,
+        id:{
+            type: String,
+            required: true
+        },
+        username: {
+            type: String,
+            required: true
             },
-            username: {
-                type: String,
-                required: true
+        product:{
+            type: String,
+            required: true
             },
-            product:{
-                type: String,
-                required: true
+        price:{
+            type: Number,
+            required: true
             },
-            price:{
-                type: String,
-                required: true
+        date:{
+            type: String,
+            required: true
             },
-            date:{
-                type: String,
-                required: true
+        likes:{
+            type: Number,
+            required: true
             },
-            likes:{
-                type: String,
-                required: true
+        dislikes:{
+            type: Number,
+            required: true
             },
-            dislikes:{
-                type: String,
-                required: true
-            },
-            available:{
-                type: Boolean,
-                required: true
+        available:{
+            type: Boolean,
+            equired: true
             }
         }
     }
-})
+)
 
 const SupermarketM= mongoose.model('Supermarket', supermarketSchema);
 

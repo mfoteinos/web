@@ -21,11 +21,15 @@
 <script>
 var map = L.map('map').setView([38.2462420, 21.7350847], 16);
 
+
+
 var OSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright%22%3EOpenStreetMap</a> contributors'
 });
 
 OSM.addTo(map);
+
+
 
 var blueIcon = L.icon({
     iconUrl: '/icons/supermarket.png',
@@ -51,13 +55,14 @@ var gjOfferSups = <%- JSON.stringify(gjOfferSups) %>;
 
 function customPopup(feature){
     let offertext = ``
-    for (offer of feature.properties.offers) {
+    for (offer of feature.offers) {
         let temptext = `<div> Προϊόν: ${offer.product} </div>
                         <div> Τιμούλα: ${offer.price} </div>
                         <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>
                         <div> Likers: ${offer.likes} </div>
                         <div> Dislikes: ${offer.dislikes} </div>
-                        <div> Διαθέσιμο: ${offer.available} </div>`
+                        <div> Διαθέσιμο: ${offer.available} </div>
+                        <br></br>`
         offertext = offertext.concat(temptext)
 
     }
@@ -96,9 +101,8 @@ var overlays = {
 }
 
 
-
-
 L.control.layers(null,overlays).addTo(map);
+
 
 </script>
 

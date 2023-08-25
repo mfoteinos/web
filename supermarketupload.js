@@ -8,11 +8,6 @@ mongoose.connect(db_url, {useNewUrlParser: true, useUnifiedTopology: true} )
 .catch((err) => console.log(err))
 
 
-// SupermarketM.collection.drop(function(err, delOK) {
-//   if (err) throw err;
-//   if (delOK) console.log("Collection deleted");
-// });
-
 fs.readFile('export.geojson', 'utf8', (err, data) => {
   if (err) {
     console.error(err);
@@ -34,14 +29,16 @@ fs.readFile('export.geojson', 'utf8', (err, data) => {
     if (i % 2 == 0){
       temp = new SupermarketM({
         type:element.type,
-        properties: {id:(element.id.slice(5)),name:element.properties.name,offers: [{id: (element.id.slice(5)),username:"Dusk",product: "Μπάμιες",price: "1000",date: "0/0/0000",likes: "-100",dislikes: "0",available: true}]},
+        properties: {id:(element.id.slice(5)),name:element.properties.name},
+        offers: [{id: (element.id.slice(5)),username:"Dusk",product: "Μπάμιες",price: 1000,date: '0/0/0000',likes: 100, dislikes: 0,available: true}],
         geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
       });
     }
     else {
       temp = new SupermarketM({
         type:element.type,
-        properties: {id:(element.id.slice(5)),name:element.properties.name,offers: []},
+        properties: {id:(element.id.slice(5)),name:element.properties.name},
+        offers: [],
         geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
       });
     }

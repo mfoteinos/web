@@ -31,6 +31,8 @@ mongoose.connect(db_url, {useNewUrlParser: true, useUnifiedTopology: true} )
 app.set('view engine', 'ejs')
 
 const initializePassport = require('./passport-config');
+const { render } = require('ejs');
+const { result } = require('lodash');
 initializePassport(
     passport, 
     username => UserM.find({'username':username}),
@@ -75,9 +77,10 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
 app.use(flash())
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { secure: false }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -115,12 +118,42 @@ app.delete('/logout', (req, res) => {
 })
 
 app.get('/user_home', checkAuthenticated, (req,res) => {
+    let today = "8/14/2023"
+    let week = new Date();
+    week.setDate(week.getDate() - 7)
 
+    let likes = 0
+    let dislikes = 0
 
-    SupermarketM.find({ 'properties.offers':  { $size: 0 } }).lean(true)
+    SupermarketM.find({'offers.username': req.user.username}).then(result =>{
+        result.forEach(element => {
+            for(x of element.offers){
+                if(x.username == req.user.username){
+                    likes += x.likes
+                    dislikes += x.dislikes
+                }
+            }
+     })
+
+     let sum_points = 5 * likes + (-1) * dislikes
+
+     if(sum_points <= 0){
+        UserM.updateOne({'username': req.user.username}, {'points': 0}).then(result =>{
+            console.log(result)  
+        })
+     }else{
+        UserM.updateOne({'username': req.user.username}, {'points': sum_points}).then(result =>{
+            console.log(result)  
+     }) 
+     }
+    })
+    
+
+   SupermarketM.updateMany({}, {$pull: {offers: {date: week.toLocaleDateString()}}}).then(result => {
+    SupermarketM.find({'offers':  { $size: 0 } }).lean(true)
     .then((result) => {
         var gjNoOfferSups = result;
-        SupermarketM.find({ 'properties.offers':  { $not: {$size: 0} } }).lean(true)
+        SupermarketM.find({'offers':  { $not: {$size: 0} } }).lean(true)
         .then((result) => {
             var gjOfferSups = result;
             //console.log(gjNoOfferSups[0]);
@@ -134,18 +167,21 @@ app.get('/user_home', checkAuthenticated, (req,res) => {
     .catch((err) =>{
         console.log(err);
     })
+    }).catch((err) =>{
+    console.log(err);
+    })
 
 });
 
 
 app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
 
-    console.log(req.params.id)
+    var Sup_id = req.params.id
     Categ_Sub.find().then((result) =>{
         var ctg_name = result
         Product.find().then((result) =>{
             var product = result 
-            res.render('add_offer', {ctg_name, product})
+            res.render('add_offer', {ctg_name, product, Sup_id})
         }).catch((err) =>{
             console.log(err);
         })
@@ -156,9 +192,17 @@ app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
 });
 
 app.post('/add_offer', checkAuthenticated, (req,res) => {
-    
-    console.log(req.body )
 
+    let today = new Date().toLocaleDateString();
+    console.log(req.body)
+
+
+    SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:(req.body.Sup_id.slice(5)), username:req.user.username, product:req.body.product, 
+        price:req.body.new_value, date:today,likes:0, dislikes:0, available:true }}}).then(result => {
+        res.redirect('/user_home')
+    }).catch((err) =>{
+        console.log(err);
+    })
 });
 
 app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
@@ -175,7 +219,7 @@ app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
 
 app.post('/like/:id', checkAuthenticated, (req,res) => {
 
-    SupermarketM.updateOne({ 'properties.offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'properties.offers.$.likes': 1}}).then((result) =>{
+    SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.likes': 1}}).then((result) =>{
         console.log("nice")
         console.log(result)
     }).catch((err) =>{
@@ -186,7 +230,7 @@ app.post('/like/:id', checkAuthenticated, (req,res) => {
 
 app.post('/dislike/:id', checkAuthenticated, (req,res) => {
 
-    SupermarketM.updateOne({ 'properties.offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'properties.offers.$.dislikes': 1}}).then((result) =>{
+    SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.dislikes': 1}}).then((result) =>{
         console.log("nice")
         console.log(result)
     }).catch((err) =>{
@@ -197,7 +241,7 @@ app.post('/dislike/:id', checkAuthenticated, (req,res) => {
 
 app.post('/available/:id', checkAuthenticated, (req,res) => {
 
-    SupermarketM.updateOne({ 'properties.offers':{$elemMatch:{id:req.params.id}}}, {$set: { 'properties.offers.$.available': false}}).then((result) =>{
+    SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$set: { 'offers.$.available': false}}).then((result) =>{
         console.log("nice")
         console.log(result)
     }).catch((err) =>{
@@ -208,7 +252,19 @@ app.post('/available/:id', checkAuthenticated, (req,res) => {
 
 
 app.get('/user_profile', checkAuthenticated, (req,res) => {
-    res.render('user_profile', {name:req.user.username});
+    SupermarketM.find({'offers.username': req.user.username}).then(result =>{
+
+        let offers = []
+        result.forEach(element =>{
+            for(const x of element.offers){
+                if(x.username == req.user.username){
+                    offers.push(x)
+                }
+            }
+        })
+        res.render('user_profile', {name:req.user.username, offers});
+    })
+
 
 });
 
