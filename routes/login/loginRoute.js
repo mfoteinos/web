@@ -5,14 +5,12 @@ const express = require('express');
 
 const router = express.Router();
 
-const routes = require('./routes');
 
-
-
-
-
-
-
+router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+    successRedirect: '/user_home',
+    failureRedirect: '/',
+    failureFlash: true
+}))
 
 
 module.export = router;
