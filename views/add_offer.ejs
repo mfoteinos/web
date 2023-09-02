@@ -131,6 +131,9 @@ Categories()
     const searchString = e.target.value.toLowerCase();
 
     const filteredCharacters = Product.filter((product) => {
+      if(searchString == ""){
+        return ""
+      }
         return (
             product.name.toLowerCase().includes(searchString)
         );

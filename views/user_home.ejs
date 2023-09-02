@@ -68,7 +68,7 @@ function customPopup(feature){
         let temptext = `<div> Προϊόν: ${offer.product} </div>
                         <div> Τιμούλα: ${offer.price} </div>
                         <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>
-                        <div> Likers: ${offer.likes} </div>
+                        <div> Likes: ${offer.likes} </div>
                         <div> Dislikes: ${offer.dislikes} </div>
                         <div> Διαθέσιμο: ${offer.available} </div>
                         <br></br>`
@@ -124,13 +124,16 @@ searchBar.addEventListener('keyup', (e) => {
 const searchString = e.target.value.toLowerCase();
 
 const filteredCharacters = Sups.filter((properties) => {
+    if(searchString == ""){
+        return ""
+      }
     return (
         properties.properties.name.toLowerCase().includes(searchString)
     );
 });
-if (searchString != 0){
+
     displayCharacters(filteredCharacters);
-}
+
 });
 
 
