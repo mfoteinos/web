@@ -147,6 +147,7 @@ app.get('/user_home', checkAuthenticated, (req,res) => {
      }) 
      }
     })
+
     
 
    SupermarketM.updateMany({}, {$pull: {offers: {date: week.toLocaleDateString()}}}).then(result => {
@@ -156,9 +157,12 @@ app.get('/user_home', checkAuthenticated, (req,res) => {
         SupermarketM.find({'offers':  { $not: {$size: 0} } }).lean(true)
         .then((result) => {
             var gjOfferSups = result;
-            //console.log(gjNoOfferSups[0]);
-            //console.log(gjOfferSups[0]);
-            res.render('user_home', {gjNoOfferSups,gjOfferSups});
+            Categ_Sub.find().then((result) =>{
+                var ctg_name = result
+                res.render('user_home', {gjNoOfferSups,gjOfferSups, ctg_name})
+            }).catch((err) =>{
+                console.log(err);
+            })
         })
         .catch((err) =>{
             console.log(err);
