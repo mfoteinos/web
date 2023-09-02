@@ -12,6 +12,15 @@
 
 <body>
 
+    <div class="serch-box">
+        <div class="row">
+            <input type="text" id="input-box" placeholder="Search Supermarket" autocomplete="off">
+            <button>Search</button>
+        </div>
+      </div>
+      <div id="productList"></div>
+      <br></br>
+
 
 <div id = "map"></div>
 
@@ -103,6 +112,70 @@ var overlays = {
 
 L.control.layers(null,overlays).addTo(map);
 
+
+Sups = gjOfferSups.concat(gjNoOfferSups)
+
+const charactersList = document.getElementById('productList');
+const searchBar = document.getElementById('input-box');
+let hpCharacters = [];
+
+searchBar.addEventListener('keyup', (e) => {
+
+const searchString = e.target.value.toLowerCase();
+
+const filteredCharacters = Sups.filter((properties) => {
+    return (
+        properties.properties.name.toLowerCase().includes(searchString)
+    );
+});
+if (searchString != 0){
+    displayCharacters(filteredCharacters);
+}
+});
+
+
+
+const displayCharacters = (properties) => {
+    const htmlString = properties
+        .map((properties) => {
+            return `
+            <div id="productList"></div>
+                
+                <a onclick = "FindSuper([${properties.geometry.coordinates}])">${properties.properties.name}</a>
+                
+                <br></br>
+           
+        `;
+        })
+        .join('');
+    charactersList.innerHTML = htmlString;
+      }
+
+function FindSuper(cords){
+    map.setView(new L.LatLng(cords[1], cords[0]), 16);
+}
+
+function Categories(){
+    let categories = ``
+      let tempcat = ` <div class="create-offer1" id="create-offer1">
+          <label for="category">Choose a category: </label>
+          <select name="category" id="category" onchange="Sub_Cat()">
+            <% ctg_name.forEach(element => { %>
+              <option></option>
+              <option value ='<%= element.name %>'><%= element.name %></option>
+            <% }) %>
+          </select>
+          <br><br>
+          </div> `
+
+        categories = categories.concat(tempcat)
+        
+
+    document.write(categories)
+
+  }
+
+  Categories() 
 
 </script>
 
