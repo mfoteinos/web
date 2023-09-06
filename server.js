@@ -159,7 +159,12 @@ app.get('/user_home', checkAuthenticated, (req,res) => {
             var gjOfferSups = result;
             Categ_Sub.find().then((result) =>{
                 var ctg_name = result
-                res.render('user_home', {gjNoOfferSups,gjOfferSups, ctg_name})
+                Product.find().then((ressult) => {
+                    var prod = ressult
+                    res.render('user_home', {gjNoOfferSups, gjOfferSups, ctg_name, prod})
+                }).catch((err) =>{
+                    console.log(err);
+                })
             }).catch((err) =>{
                 console.log(err);
             })
@@ -195,19 +200,27 @@ app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
 
 });
 
+
 app.post('/add_offer', checkAuthenticated, (req,res) => {
 
     let today = new Date().toLocaleDateString();
     console.log(req.body)
 
 
+
+
     SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:(req.body.Sup_id.slice(5)), username:req.user.username, product:req.body.product, 
         price:req.body.new_value, date:today,likes:0, dislikes:0, available:true }}}).then(result => {
         res.redirect('/user_home')
-    }).catch((err) =>{
-        console.log(err);
+       }).catch((err) =>{
+            console.log(err);
     })
+
+    
+    
+
 });
+
 
 app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
 
