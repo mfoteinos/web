@@ -11,18 +11,39 @@
 <script>
 
 var reviewedsup = <%- JSON.stringify(reviewedsup) %>;
+var likedoffers = <%- JSON.stringify(likedoffers) %>;
+var dislikedoffers = <%- JSON.stringify(dislikedoffers) %>;
 
+
+console.log(likedoffers.includes(4101518891))
 function customPopup(reviewedsup){
     let offertext = ``
+    let likedtext = ``
+    let dislikedtext = ``
+    let availabletext = ``
     for (offer of reviewedsup.offers) {
         let temptext = `<div> Προϊόν: ${offer.product} </div>
-                        <div> Τιμούλα: ${offer.price} </div>
-                        <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>
-                        <div> Likes: ${offer.likes} <form action="/like/${offer.id}" method="post"><button id='like${offer.id}' >Like</button></form></div>
-                        <div> Dislikes: ${offer.dislikes} <form action="/dislike/${offer.id}" method="post"><button id='dislike${offer.id}'>Dislike</button></form></div>
-                        <div> Διαθέσιμο: ${offer.available} <form action="/available/${offer.id}" method="post"><button id='available${offer.id}'>Εναλλαγή</button></form></div></div>
-                        <br></br>` 
-        offertext = offertext.concat(temptext)
+                        <div> Τιμή: ${offer.price} </div>
+                        <div> Από Χρήστη: ${offer.username} </div>
+                        <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>`
+        if (!likedoffers.includes(offer.id) && offer.available == true){
+            likedtext = `<div> Likes: ${offer.likes} <form action="/like/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='like${offer.id}' >Like</button></form></div>`
+        } else {
+            likedtext = `<div> Likes: ${offer.likes} <form action="/like/${reviewedsup.properties.id}/${offer.id}" method="post"><button disabled id='like${offer.id}' >Like</button></form></div>`
+        }
+
+        if (!dislikedoffers.includes(offer.id) && offer.available == true){
+            dislikedtext = `<div> Dislikes: ${offer.dislikes} <form action="/dislike/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='dislike${offer.id}'>Dislike</button></form></div>`
+        } else {
+            dislikedtext = `<div> Dislikes: ${offer.dislikes} <form action="/dislike/${reviewedsup.properties.id}/${offer.id}" method="post"><button disabled id='dislike${offer.id}'>Dislike</button></form></div>`
+        }
+
+        if (offer.available == true){
+            availabletext = `<div> Διαθέσιμο! <form action="/unavailable/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='available${offer.id}'>Εναλλαγή</button></form></div></div>  <br></br>`
+        } else {
+            availabletext = `<div> Μη Διαθέσιμο! <form action="/available/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='available${offer.id}'>Εναλλαγή</button></form></div></div>  <br></br>`
+        }
+        offertext = offertext.concat(temptext, likedtext, dislikedtext, availabletext)
 
     }
 
