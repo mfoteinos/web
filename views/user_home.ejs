@@ -28,6 +28,7 @@
 
 
 <script>
+
 var map = L.map('map').setView([38.2462420, 21.7350847], 16);
 
 
@@ -37,7 +38,7 @@ var OSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 });
 
 OSM.addTo(map);
-
+var markerGroup = L.layerGroup().addTo(map);
 
 
 var blueIcon = L.icon({
@@ -57,9 +58,14 @@ var redIcon = L.icon({
 });
 
 
+
 var gjNoOfferSups = <%- JSON.stringify(gjNoOfferSups) %>;
 
 var gjOfferSups = <%- JSON.stringify(gjOfferSups) %>;
+
+var Cat_Sub = <%- JSON.stringify(ctg_name) %>;
+
+var Prod = <%- JSON.stringify(prod) %>;
 
 
 function customPopup(feature){
@@ -94,14 +100,14 @@ const noOffMarkers = L.geoJSON(gjNoOfferSups, {
         layer.setIcon(redIcon);
         layer.bindPopup(customPopup(feature));
     }
-}).addTo(map);
+}).addTo(markerGroup);
 
 const OffMarkers = L.geoJSON(gjOfferSups, {
     onEachFeature: function(feature, layer){
         layer.setIcon(blueIcon);
         layer.bindPopup(customPopup(feature));
     }
-}).addTo(map);
+}).addTo(markerGroup);
 
 var overlays = {
 
@@ -162,7 +168,7 @@ function Categories(){
     let categories = ``
       let tempcat = ` <div class="create-offer1" id="create-offer1">
           <label for="category">Choose a category: </label>
-          <select name="category" id="category" onchange="Sub_Cat()">
+          <select name="category" id="category" onchange="Change_Map()">
             <% ctg_name.forEach(element => { %>
               <option></option>
               <option value ='<%= element.name %>'><%= element.name %></option>
@@ -178,7 +184,70 @@ function Categories(){
 
   }
 
-  Categories() 
+function Change_Map(){
+
+    category = document.querySelector('#category');
+    categ = category.value;
+
+
+    if(categ == ""){
+        const noOffMarkers = L.geoJSON(gjNoOfferSups, {
+    onEachFeature: function(feature, layer){
+        layer.setIcon(redIcon);
+        layer.bindPopup(customPopup(feature));
+    }
+}).addTo(markerGroup);
+
+const OffMarkers = L.geoJSON(gjOfferSups, {
+    onEachFeature: function(feature, layer){
+        layer.setIcon(blueIcon);
+        layer.bindPopup(customPopup(feature));
+    }
+}).addTo(markerGroup);
+
+    return ""
+    }
+
+    markerGroup.clearLayers();
+
+
+
+    var id = []
+    Cat_Sub.forEach(element => {
+          if (element.name == categ){
+            id.push(element.id)
+          }
+    })
+
+    var P_name = []
+    Prod.forEach(element => {
+          if (element.category == id){
+           P_name.push(element.name)
+          }
+    })
+
+    var sup = []
+    gjOfferSups.forEach(element => {
+        for(x of element.offers){
+            for(y of P_name){
+                if(x.product == y){
+                    sup.push(element)
+                }
+            }
+        }
+    })
+
+
+    const Sups = L.geoJSON(sup, {
+    onEachFeature: function(feature, layer){
+        layer.setIcon(blueIcon);
+        layer.bindPopup(customPopup(feature));
+    }
+    }).addTo(markerGroup);
+
+}
+
+Categories() 
 
 </script>
 
@@ -192,6 +261,10 @@ function Categories(){
 
 <a href="/user_profile">
      My Profile
+</a>
+
+<a href="/user_profile">
+    My Profile
 </a>
 
 
