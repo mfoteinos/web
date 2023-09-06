@@ -207,9 +207,9 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
     console.log(req.body)
 
 
+    let id_string = req.body.Sup_id.concat(req.user.username,req.body.product)
 
-
-    SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:(req.body.Sup_id.slice(5)), username:req.user.username, product:req.body.product, 
+    SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
         price:req.body.new_value, date:today,likes:0, dislikes:0, available:true }}}).then(result => {
         res.redirect('/user_home')
        }).catch((err) =>{
@@ -226,18 +226,28 @@ app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
 
     console.log(req.params.id)
     SupermarketM.find({ 'properties.id': req.params.id }).then((result) =>{
+        result1 = result
         console.log(result[0])
-        res.render('review_offer', {reviewedsup:result[0]})
+        UserM.find({'username': req.user.username}).then((result) =>{
+            console.log(result[0].likedoffers.id)
+            res.render('review_offer', {reviewedsup:result1[0], likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers})
+        }).catch((err) =>{
+            console.log(err);
+        })
     }).catch((err) =>{
         console.log(err);
     })
 
 });
 
-app.post('/like/:id', checkAuthenticated, (req,res) => {
+app.post('/like/:supid/:id', checkAuthenticated, (req,res) => {
 
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.likes': 1}}).then((result) =>{
-        console.log("nice")
+        UserM.updateOne({'username': req.user.username}, {$push: {likedoffers: req.params.id}}).then((result) =>{
+            res.redirect('/review_offer/' + req.params.supid)
+        }).catch((err) =>{
+            console.log(err);
+        })
         console.log(result)
     }).catch((err) =>{
         console.log(err);
@@ -245,10 +255,24 @@ app.post('/like/:id', checkAuthenticated, (req,res) => {
 
 });
 
-app.post('/dislike/:id', checkAuthenticated, (req,res) => {
+app.post('/dislike/:supid/:id', checkAuthenticated, (req,res) => {
 
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.dislikes': 1}}).then((result) =>{
-        console.log("nice")
+        UserM.updateOne({'username': req.user.username}, {$push: {dislikedoffers: req.params.id}}).then((result) =>{
+            res.redirect('/review_offer/' + req.params.supid)
+        }).catch((err) =>{
+            console.log(err);
+        })
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+});
+
+app.post('/available/:supid/:id', checkAuthenticated, (req,res) => {
+
+    SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$set: { 'offers.$.available': true}}).then((result) =>{
+        res.redirect('/review_offer/' + req.params.supid)
         console.log(result)
     }).catch((err) =>{
         console.log(err);
@@ -256,10 +280,10 @@ app.post('/dislike/:id', checkAuthenticated, (req,res) => {
 
 });
 
-app.post('/available/:id', checkAuthenticated, (req,res) => {
+app.post('/unavailable/:supid/:id', checkAuthenticated, (req,res) => {
 
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$set: { 'offers.$.available': false}}).then((result) =>{
-        console.log("nice")
+        res.redirect('/review_offer/' + req.params.supid)
         console.log(result)
     }).catch((err) =>{
         console.log(err);
