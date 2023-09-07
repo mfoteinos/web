@@ -20,6 +20,9 @@
   </div>
   <div id="productList"></div>
   <br></br>
+  <div id="categ"></div>
+  <div id="subcat"></div>
+  <div id="prod"></div>
 
 
 <script>
@@ -42,9 +45,9 @@
           </div> `
 
         categories = categories.concat(tempcat)
-        
 
-    document.write(categories)
+        var y = document.getElementById("categ")
+          y.innerHTML = `${categories}`
 
   }
 
@@ -57,6 +60,17 @@
 
     category = document.querySelector('#category');
     categ = category.value;
+
+    var k = document.getElementById("prod")
+          k.innerHTML = ``
+
+    if(categ == ""){
+      var x = document.getElementById("subcat")
+          x.innerHTML = ``
+      var k = document.getElementById("prod")
+          k.innerHTML = ``
+      return ""
+    }
 
     Cat_Sub.forEach(element => {
           if (element.name == categ){
@@ -73,13 +87,19 @@
 
 
          sub_categories = sub_categories.concat(tempSub)
-          var x = document.getElementById("create-offer1")
+          var x = document.getElementById("subcat")
           x.innerHTML = `${sub_categories}`
   }
 
   function findPr(){
     uuid = document.querySelector('#sub-cat');
     uuid = uuid.value;
+
+    if(uuid == ""){
+      var k = document.getElementById("prod")
+          k.innerHTML = ``
+          return""
+    }
 
     let product = ``
     let head = `<form action="/add_offer" method="POST">
@@ -115,11 +135,12 @@
                                   `
                     product = product.concat(foot)
 
-          var x = document.getElementById("create-offer1")
-          x.innerHTML = `${product}`
+          var k = document.getElementById("prod")
+          k.innerHTML = `${product}`
   }
   
 Categories()
+Sub_Cat()
 
 
     const charactersList = document.getElementById('productList');

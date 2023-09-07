@@ -8,6 +8,7 @@
 <meta charset="UTF-8"> 
 <link rel="stylesheet" href="/user_style.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
 </head>
 
 <body>
@@ -25,7 +26,7 @@
 <div id = "map"></div>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script> 
-
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js" charset="utf-8"></script>
 
 <script>
 
@@ -117,6 +118,25 @@ var overlays = {
 
 
 L.control.layers(null,overlays).addTo(map);
+
+var startMarker = L.layerGroup();
+var lc = L.control.locate({
+    layer: startMarker,
+    drawCircle: false,
+    showPopup: false,
+  })
+  .addTo(map);
+
+  function onLocationFound(e) {
+    var radius = 50;
+
+    L.marker(e.latlng).addTo(map)
+        .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+    L.circle(e.latlng, radius).addTo(map);
+    }
+
+map.on('locationfound', onLocationFound);
 
 
 Sups = gjOfferSups.concat(gjNoOfferSups)
@@ -263,9 +283,6 @@ Categories()
      My Profile
 </a>
 
-<a href="/user_profile">
-    My Profile
-</a>
 
 
 </body>
