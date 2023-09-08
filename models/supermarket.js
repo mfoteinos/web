@@ -61,7 +61,7 @@ const supermarketSchema = new Schema({
             },
         available:{
             type: Boolean,
-            equired: true
+            required: true
             }
         }
     }
