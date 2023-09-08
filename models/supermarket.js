@@ -62,6 +62,14 @@ const supermarketSchema = new Schema({
         available:{
             type: Boolean,
             required: true
+            },
+        reqDay:{
+            type: Boolean,
+            required: false
+            },
+        reqWeek:{
+            type: Boolean,
+            required: false
             }
         }
     }
