@@ -19,12 +19,17 @@ const userSchema = new Schema({
         default: 0,
         required: true
     },
-monthpoints:{
+    monthpoints:{
         type: Number,
         default: 0,
         required: true
     },
     tokens:{
+        type: Number,
+        default: 0,
+        required: true
+    },
+    month_tokens:{
         type: Number,
         default: 0,
         required: true

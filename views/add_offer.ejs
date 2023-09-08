@@ -126,7 +126,7 @@
                           <br><br>
 
                         <label for="new-value">New Value: </label>
-                        <input type="number" name="new_value" id="new_value" required>
+                        <input type="number" name="new_value" id="new_value" step="any" required>
 
                         <input type="hidden" name="Sup_id" id="Sup_id" value="<%= Sup_id %>">
 
@@ -173,7 +173,7 @@ const displayCharacters = (product) => {
                 
                 <h2>${product.name}</h2>
                 <label for="new-value">New Value: </label>
-                        <input type="number" name="new_value" id="new_value" required>
+                        <input type="number" name="new_value" id="new_value" step="any" required>
 
                         <input type="hidden" name="Sup_id" id="Sup_id" value="<%= Sup_id %>"> 
                         <input type="hidden" name="product" id="product" value="${product.name}">

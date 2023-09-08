@@ -203,8 +203,30 @@ app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
 
 app.post('/add_offer', checkAuthenticated, (req,res) => {
 
+//   function CheckReq(f_prod_name, f_offer_value){
+//         let req_Day = false
+//         let req_Week = false
+//         Product.find({'name': f_prod_name}).then(result =>{
+//             let sum = 0
+            
+//             for(x of result[0].prices){
+//                 sum += x.price
+//             }
+//             let avg = sum / 7
+//             if(f_offer_value <= 0.8*result[0].prices[0].price){
+//                 req_Day = true
+//             }
+//             if(f_offer_value <= 0.8*avg){
+//                 req_Week = true
+//             }
+//             return [req_Day, req_Week]
+//         }).catch((err) =>{
+//             console.log(err);
+//     })
+//     }
+
+
     let today = new Date().toLocaleDateString();
-    console.log(req.body)
 
 
     let id_string = req.body.Sup_id.concat(req.user.username,req.body.product_id)
@@ -218,30 +240,91 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                 }
             }
         })
+        let req_Day = false
+        let req_Week = false
         if(offer == ""){
-            SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
-                price:req.body.new_value, date:today,likes:0, dislikes:0, available:true }}}).then(result => {
-                res.redirect('/user_home')
-                }).catch((err) =>{
-                    console.log(err);
-            })
-        }else if(offer[0].price > req.body.new_value*1.2){
-            SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$pull: {offers: {id:offer[0].id_string, username:offer[0].username, product:offer[0].product, 
-                price:offer[0].new_value, date:offer[0].date,likes:offer[0].likes, dislikes:offer[0].dislikes, available:true }}}).then(result => {
-                    SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
-                        price:req.body.new_value, date:today,likes:0, dislikes:0, available:true }}}).then(result => {
-                        res.redirect('/user_home')
-                        }).catch((err) =>{
-                            console.log(err);
-                    })
-                }).catch((err) =>{
-                    console.log(err);
-            })
+
+            Product.find({'name': req.body.product}).then(result =>{
+                let sum = 0
+                
+                for(x of result[0].prices){
+                    sum += x.price
+                }
+                let avg = sum / 7
+                if(req.body.new_value <= 0.8*result[0].prices[0].price){
+                    req_Day = true
+                }
+                if(req.body.new_value <= 0.8*avg){
+                    req_Week = true
+                }
+                SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
+                    price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week}}}).then(result => {
+                        let points = 0
+                        if(req_Day){
+                            points += 50
+                        }
+                        if(req_Week){
+                            points += 20
+                        }
+                        if(points > 0){
+                            UserM.updateOne({'username':  req.user.username}, {$inc: { 'points': points, 'monthpoints': points}}).then((result) =>{
+                            }).catch((err) =>{
+                                console.log(err);
+                            })
+                        }
+                    res.redirect('/user_home')
+                    }).catch((err) =>{
+                        console.log(err);
+                })
+            }).catch((err) =>{
+                console.log(err);
+        })
+        }else if(offer[0].price*0.8 >= req.body.new_value){
+            
+            Product.find({'name': req.body.product}).then(result =>{
+                let sum = 0
+                
+                for(x of result[0].prices){
+                    sum += x.price
+                }
+                let avg = sum / 7
+                if(req.body.new_value <= 0.8*result[0].prices[0].price){
+                    req_Day = true
+                }
+                if(req.body.new_value <= 0.8*avg){
+                    req_Week = true
+                }
+                SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$pull: {offers: {id:offer[0].id_string, username:offer[0].username, product:offer[0].product, 
+                    price:offer[0].new_value, date:offer[0].date,likes:offer[0].likes, dislikes:offer[0].dislikes, available:offer[0].available, reqDay: offer[0].reqDay, reqWeek: offer[0].reqDay}}}).then(result => {
+                        SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
+                            price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week}}}).then(result => {
+                            let points = 0
+                            if(req_Day){
+                                points += 50
+                            }
+                            if(req_Week){
+                                points += 20
+                            }
+                            if(points > 0){
+                                UserM.updateOne({'username': req.user.username}, {$inc: { 'points': points, 'monthpoints': points}}).then((result) =>{
+                                }).catch((err) =>{
+                                    console.log(err);
+                                })
+                            }
+                                res.redirect('/user_home')
+                                }).catch((err) =>{
+                                    console.log(err);
+                            })
+                    }).catch((err) =>{
+                        console.log(err);
+                })
+            }).catch((err) =>{
+                console.log(err);
+        })
         }else{
             res.redirect('/user_home')
         }
     })
-
 });
 
 
