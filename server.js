@@ -126,26 +126,26 @@ app.get('/user_home', checkAuthenticated, (req,res) => {
     // let dislikes = 0
 
     // SupermarketM.find({'offers.username': req.user.username}).then(result =>{
-    //     result.forEach(element => {
-    //         for(x of element.offers){
-    //             if(x.username == req.user.username){
-    //                 likes += x.likes
-    //                 dislikes += x.dislikes
-    //             }
+        //     result.forEach(element => {
+            //         for(x of element.offers){
+                //             if(x.username == req.user.username){
+                    //                 likes += x.likes
+                    //                 dislikes += x.dislikes
+                //             }
     //         }
     //  })
 
     //  let sum_points = 5 * likes + (-1) * dislikes
 
-    //  if(sum_points <= 0){
-    //     UserM.updateOne({'username': req.user.username}, {'points': 0}).then(result =>{
-    //         console.log(result)  
-    //     })
-    //  }else{
-    //     UserM.updateOne({'username': req.user.username}, {'points': sum_points}).then(result =>{
-    //         console.log(result)  
-    //  }) 
-    //  }
+     //  if(sum_points <= 0){
+        //     UserM.updateOne({'username': req.user.username}, {'points': 0}).then(result =>{
+            //         console.log(result)  
+        //     })
+     //  }else{
+        //     UserM.updateOne({'username': req.user.username}, {'points': sum_points}).then(result =>{
+            //         console.log(result)  
+     //  }) 
+     //  }
     // })
 
     
@@ -209,15 +209,38 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
 
     let id_string = req.body.Sup_id.concat(req.user.username,req.body.product_id)
 
-    SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
-        price:req.body.new_value, date:today,likes:0, dislikes:0, available:true }}}).then(result => {
-        res.redirect('/user_home')
-       }).catch((err) =>{
-            console.log(err);
+    var offer = []
+    SupermarketM.find({'properties.id': req.body.Sup_id}, {'offers':1}).then(result => {
+        result.forEach(element => {
+            for(x of element.offers){
+                if(x.product == req.body.product && x.username == req.user.username){
+                    offer.push(x)
+                }
+            }
+        })
+        if(offer == ""){
+            SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
+                price:req.body.new_value, date:today,likes:0, dislikes:0, available:true }}}).then(result => {
+                res.redirect('/user_home')
+                }).catch((err) =>{
+                    console.log(err);
+            })
+        }else if(offer[0].price > req.body.new_value*1.2){
+            SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$pull: {offers: {id:offer[0].id_string, username:offer[0].username, product:offer[0].product, 
+                price:offer[0].new_value, date:offer[0].date,likes:offer[0].likes, dislikes:offer[0].dislikes, available:true }}}).then(result => {
+                    SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
+                        price:req.body.new_value, date:today,likes:0, dislikes:0, available:true }}}).then(result => {
+                        res.redirect('/user_home')
+                        }).catch((err) =>{
+                            console.log(err);
+                    })
+                }).catch((err) =>{
+                    console.log(err);
+            })
+        }else{
+            res.redirect('/user_home')
+        }
     })
-
-    
-    
 
 });
 
@@ -243,17 +266,17 @@ app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
 app.post('/like/:supid/:id', checkAuthenticated, (req,res) => {
 
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.likes': 1}}).then((result) =>{
-        console.log(req.body.offeruser)
+console.log(req.body.offeruser)
         UserM.updateOne({'username': req.user.username}, {$push: {likedoffers: req.params.id}}).then((result) =>{
             res.redirect('/review_offer/' + req.params.supid)
-            UserM.updateOne({'username': req.body.offeruser}, {$inc: { 'points': 5, 'monthpoints': 5}}).then((result) =>{
+UserM.updateOne({'username': req.body.offeruser}, {$inc: { 'points': 5, 'monthpoints': 5}}).then((result) =>{
             }).catch((err) =>{
                 console.log(err);
             })
         }).catch((err) =>{
             console.log(err);
         })
-    }).catch((err) =>{
+            }).catch((err) =>{
         console.log(err);
     })
 
@@ -264,7 +287,7 @@ app.post('/dislike/:supid/:id', checkAuthenticated, (req,res) => {
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.dislikes': 1}}).then((result) =>{
         UserM.updateOne({'username': req.user.username}, {$push: {dislikedoffers: req.params.id}}).then((result) =>{
             res.redirect('/review_offer/' + req.params.supid)
-            UserM.updateOne({'username': req.body.offeruser, "monthpoints": { $gt: 0 }}, {$inc: { 'points': -1, 'monthpoints': -1}}).then((result) =>{
+UserM.updateOne({'username': req.body.offeruser, "monthpoints": { $gt: 0 }}, {$inc: { 'points': -1, 'monthpoints': -1}}).then((result) =>{
             }).catch((err) =>{
                 console.log(err);
             })

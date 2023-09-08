@@ -14,16 +14,31 @@ fs.readFile('Data.Prices.json', 'utf8', (err, data) => {
     }
     data = JSON.parse(data);
     console.log(data)
-    let today = new Date().toLocaleDateString();
+
+    let today = new Date();
+    today.setDate(today.getDate())
+
+    today.toLocaleDateString()
     data.forEach(element => {
-        for(x of element.prices){
-            Product.updateOne({'name': element.name}, {$push: {prices: {date: today, price: x.price}}}).then(result => {
-                console.log(result)
-               }).catch((err) =>{
-                    console.log(err);
-            })
-        }
-})
+        Product.updateOne({'name': element.name}, { $pull: { prices : {price: {$gt:-1}} } }).then(result => {
+                          console.log(result)
+                         }).catch((err) =>{
+                              console.log(err);
+                      })
+    })
+    data.forEach(element => {
+            let i = 0
+            while(i < 7){
+              let week = new Date();
+              week.setDate(week.getDate() - i)
+                Product.updateOne({'name': element.name}, {$push: {prices: {date: week.toLocaleDateString(), price: Math.round((Math.random()*5)* 100)/100 + 1}}}).then(result => {
+                    console.log(result)
+                   }).catch((err) =>{
+                        console.log(err);
+                })
+                i += 1
+            }
+    })
 
 })
 
