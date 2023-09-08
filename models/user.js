@@ -19,6 +19,16 @@ const userSchema = new Schema({
         default: 0,
         required: true
     },
+    monthpoints:{
+        type: Number,
+        default: 0,
+        required: true
+    },
+    tokens:{
+        type: Number,
+        default: 0,
+        required: true
+    },
     admin: {
         type: Boolean,
         required: false

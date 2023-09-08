@@ -122,31 +122,31 @@ app.get('/user_home', checkAuthenticated, (req,res) => {
     let week = new Date();
     week.setDate(week.getDate() - 7)
 
-    let likes = 0
-    let dislikes = 0
+    // let likes = 0
+    // let dislikes = 0
 
-    SupermarketM.find({'offers.username': req.user.username}).then(result =>{
-        result.forEach(element => {
-            for(x of element.offers){
-                if(x.username == req.user.username){
-                    likes += x.likes
-                    dislikes += x.dislikes
-                }
-            }
-     })
+    // SupermarketM.find({'offers.username': req.user.username}).then(result =>{
+    //     result.forEach(element => {
+    //         for(x of element.offers){
+    //             if(x.username == req.user.username){
+    //                 likes += x.likes
+    //                 dislikes += x.dislikes
+    //             }
+    //         }
+    //  })
 
-     let sum_points = 5 * likes + (-1) * dislikes
+    //  let sum_points = 5 * likes + (-1) * dislikes
 
-     if(sum_points <= 0){
-        UserM.updateOne({'username': req.user.username}, {'points': 0}).then(result =>{
-            console.log(result)  
-        })
-     }else{
-        UserM.updateOne({'username': req.user.username}, {'points': sum_points}).then(result =>{
-            console.log(result)  
-     }) 
-     }
-    })
+    //  if(sum_points <= 0){
+    //     UserM.updateOne({'username': req.user.username}, {'points': 0}).then(result =>{
+    //         console.log(result)  
+    //     })
+    //  }else{
+    //     UserM.updateOne({'username': req.user.username}, {'points': sum_points}).then(result =>{
+    //         console.log(result)  
+    //  }) 
+    //  }
+    // })
 
     
 
@@ -207,7 +207,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
     console.log(req.body)
 
 
-    let id_string = req.body.Sup_id.concat(req.user.username,req.body.product)
+    let id_string = req.body.Sup_id.concat(req.user.username,req.body.product_id)
 
     SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
         price:req.body.new_value, date:today,likes:0, dislikes:0, available:true }}}).then(result => {
@@ -224,12 +224,12 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
 
 app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
 
-    console.log(req.params.id)
+    // console.log(req.params.id)
     SupermarketM.find({ 'properties.id': req.params.id }).then((result) =>{
         result1 = result
-        console.log(result[0])
+        // console.log(result[0])
         UserM.find({'username': req.user.username}).then((result) =>{
-            console.log(result[0].likedoffers.id)
+            // console.log(result[0].likedoffers.id)
             res.render('review_offer', {reviewedsup:result1[0], likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers})
         }).catch((err) =>{
             console.log(err);
@@ -243,12 +243,16 @@ app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
 app.post('/like/:supid/:id', checkAuthenticated, (req,res) => {
 
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.likes': 1}}).then((result) =>{
+        console.log(req.body.offeruser)
         UserM.updateOne({'username': req.user.username}, {$push: {likedoffers: req.params.id}}).then((result) =>{
             res.redirect('/review_offer/' + req.params.supid)
+            UserM.updateOne({'username': req.body.offeruser}, {$inc: { 'points': 5, 'monthpoints': 5}}).then((result) =>{
+            }).catch((err) =>{
+                console.log(err);
+            })
         }).catch((err) =>{
             console.log(err);
         })
-        console.log(result)
     }).catch((err) =>{
         console.log(err);
     })
@@ -260,6 +264,10 @@ app.post('/dislike/:supid/:id', checkAuthenticated, (req,res) => {
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.dislikes': 1}}).then((result) =>{
         UserM.updateOne({'username': req.user.username}, {$push: {dislikedoffers: req.params.id}}).then((result) =>{
             res.redirect('/review_offer/' + req.params.supid)
+            UserM.updateOne({'username': req.body.offeruser, "monthpoints": { $gt: 0 }}, {$inc: { 'points': -1, 'monthpoints': -1}}).then((result) =>{
+            }).catch((err) =>{
+                console.log(err);
+            })
         }).catch((err) =>{
             console.log(err);
         })

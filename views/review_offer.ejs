@@ -27,13 +27,15 @@ function customPopup(reviewedsup){
                         <div> Από Χρήστη: ${offer.username} </div>
                         <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>`
         if (!likedoffers.includes(offer.id) && offer.available == true){
-            likedtext = `<div> Likes: ${offer.likes} <form action="/like/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='like${offer.id}' >Like</button></form></div>`
+            likedtext = `<div> Likes: ${offer.likes} <form action="/like/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='like${offer.id}' >Like</button>
+                 <input type="hidden" name="offeruser" id="offeruser" value="${offer.username}"></form></div>`
         } else {
             likedtext = `<div> Likes: ${offer.likes} <form action="/like/${reviewedsup.properties.id}/${offer.id}" method="post"><button disabled id='like${offer.id}' >Like</button></form></div>`
         }
 
         if (!dislikedoffers.includes(offer.id) && offer.available == true){
-            dislikedtext = `<div> Dislikes: ${offer.dislikes} <form action="/dislike/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='dislike${offer.id}'>Dislike</button></form></div>`
+            dislikedtext = `<div> Dislikes: ${offer.dislikes} <form action="/dislike/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='dislike${offer.id}'>Dislike</button>
+                <input type="hidden" name="offeruser" id="offeruser" value="${offer.username}"></form></div>`
         } else {
             dislikedtext = `<div> Dislikes: ${offer.dislikes} <form action="/dislike/${reviewedsup.properties.id}/${offer.id}" method="post"><button disabled id='dislike${offer.id}'>Dislike</button></form></div>`
         }
