@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Covid-Mole</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"> 
+<link rel="stylesheet" href="/user_style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
+</head>
+
+<body>
+
+    <div class="serch-box">
+        <div class="row">
+            <input type="text" id="input-box" placeholder="Search Supermarket" autocomplete="off">
+            <button>Search</button>
+        </div>
+      </div>
+      <div id="productList"></div>
+      <br></br>
+
+
+<div id = "map"></div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script> 
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+
+<script>
+
+var map = L.map('map').setView([38.2462420, 21.7350847], 16);
+
+
+
+var OSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright%22%3EOpenStreetMap</a> contributors'
+});
+
+OSM.addTo(map);
+var markerGroup = L.layerGroup().addTo(map);
+
+
+var blueIcon = L.icon({
+    iconUrl: '/icons/supermarket.png',
+
+    iconSize:     [26, 30], // size of the icon
+    iconAnchor:   [13, 30], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
+});
+
+var redIcon = L.icon({
+    iconUrl: '/icons/supermarketred.png',
+
+    iconSize:     [26, 30], // size of the icon
+    iconAnchor:   [13, 30], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
+});
+
+
+
+var gjNoOfferSups = <%- JSON.stringify(gjNoOfferSups) %>;
+
+var gjOfferSups = <%- JSON.stringify(gjOfferSups) %>;
+
+var Cat_Sub = <%- JSON.stringify(ctg_name) %>;
+
+var Prod = <%- JSON.stringify(prod) %>;
+
+
+function measure(lat1, lon1, lat2, lon2){  // generally used geo measurement function
+    var R = 6378.137; // Radius of earth in KM
+    var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d * 1000; // meters
+}
+
+
+function customPopup(feature){
+    let offertext = ``
+    for (offer of feature.offers) {
+        let temptext = `<div> Προϊόν: ${offer.product} </div>
+                        <div> Τιμούλα: ${offer.price} </div>
+                        <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>
+                        <div> Likes: ${offer.likes} </div>
+                        <div> Dislikes: ${offer.dislikes} </div>
+                        <div> Διαθέσιμο: ${offer.available} </div>
+                        <div> Κριτήριο Μέρας: ${offer.reqDay} </div>
+                        <div> Κριτήριο Βδομάδας: ${offer.reqWeek} </div>
+                        <br></br>`
+        offertext = offertext.concat(temptext)
+
+    }
+
+    distance = measure(38.2454669, 21.7355058, feature.geometry.coordinates[1], feature.geometry.coordinates[0])
+
+    let buttonhtml = ``
+    if (distance < 1000){
+        buttonhtml = `<div> <form action="/add_offer/${feature.properties.id}" method="get">
+                <button id='addoffer${feature.properties.name}'>Προσθήκη προσφοράς</button>
+                </form></div>
+
+                <div> <form action="/review_offer/${feature.properties.id}" method="get">
+                <button id='review${feature.properties.name}'>Αξιολόγηση προσφορών</button>
+                </form></div>`
+    }
+
+    return `<b> ${feature.properties.name} </b>
+            ${offertext}
+            ${buttonhtml}
+    
+    `
+}
+
+const noOffMarkers = L.geoJSON(gjNoOfferSups, {
+    onEachFeature: function(feature, layer){
+        layer.setIcon(redIcon);
+        layer.bindPopup(customPopup(feature));
+    }
+}).addTo(markerGroup);
+
+const OffMarkers = L.geoJSON(gjOfferSups, {
+    onEachFeature: function(feature, layer){
+        layer.setIcon(blueIcon);
+        layer.bindPopup(customPopup(feature));
+    }
+}).addTo(markerGroup);
+
+var overlays = {
+
+    "Supermarkets without offers":noOffMarkers,
+
+}
+
+
+L.control.layers(null,overlays).addTo(map);
+
+var startMarker = L.layerGroup();
+var lc = L.control.locate({
+    layer: startMarker,
+    drawCircle: false,
+    showPopup: false,
+  })
+  .addTo(map);
+
+  function onLocationFound(e) {
+    var radius = 50;
+
+    L.marker(e.latlng).addTo(map)
+        .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+    L.circle(e.latlng, radius).addTo(map);
+    }
+
+map.on('locationfound', onLocationFound);
+
+
+Sups = gjOfferSups.concat(gjNoOfferSups)
+
+const charactersList = document.getElementById('productList');
+const searchBar = document.getElementById('input-box');
+let hpCharacters = [];
+
+searchBar.addEventListener('keyup', (e) => {
+
+const searchString = e.target.value.toLowerCase();
+
+const filteredCharacters = Sups.filter((properties) => {
+    if(searchString == ""){
+        return ""
+      }
+    return (
+        properties.properties.name.toLowerCase().includes(searchString)
+    );
+});
+
+    displayCharacters(filteredCharacters);
+
+});
+
+
+
+const displayCharacters = (properties) => {
+    const htmlString = properties
+        .map((properties) => {
+            return `
+            <div id="productList"></div>
+                
+                <a onclick = "FindSuper([${properties.geometry.coordinates}])">${properties.properties.name}</a>
+                
+                <br></br>
+           
+        `;
+        })
+        .join('');
+    charactersList.innerHTML = htmlString;
+      }
+
+function FindSuper(cords){
+    map.setView(new L.LatLng(cords[1], cords[0]), 16);
+}
+
+function Categories(){
+    let categories = ``
+      let tempcat = ` <div class="create-offer1" id="create-offer1">
+          <label for="category">Choose a category: </label>
+          <select name="category" id="category" onchange="Change_Map()">
+            <% ctg_name.forEach(element => { %>
+              <option></option>
+              <option value ='<%= element.name %>'><%= element.name %></option>
+            <% }) %>
+          </select>
+          <br><br>
+          </div> `
+
+        categories = categories.concat(tempcat)
+        
+
+    document.write(categories)
+
+  }
+
+function Change_Map(){
+
+    category = document.querySelector('#category');
+    categ = category.value;
+
+
+    if(categ == ""){
+        const noOffMarkers = L.geoJSON(gjNoOfferSups, {
+    onEachFeature: function(feature, layer){
+        layer.setIcon(redIcon);
+        layer.bindPopup(customPopup(feature));
+    }
+}).addTo(markerGroup);
+
+const OffMarkers = L.geoJSON(gjOfferSups, {
+    onEachFeature: function(feature, layer){
+        layer.setIcon(blueIcon);
+        layer.bindPopup(customPopup(feature));
+    }
+}).addTo(markerGroup);
+
+    return ""
+    }
+
+    markerGroup.clearLayers();
+
+
+
+    var id = []
+    Cat_Sub.forEach(element => {
+          if (element.name == categ){
+            id.push(element.id)
+          }
+    })
+
+    var P_name = []
+    Prod.forEach(element => {
+          if (element.category == id){
+           P_name.push(element.name)
+          }
+    })
+
+    var sup = []
+    gjOfferSups.forEach(element => {
+        for(x of element.offers){
+            for(y of P_name){
+                if(x.product == y){
+                    sup.push(element)
+                }
+            }
+        }
+    })
+
+
+    const Sups = L.geoJSON(sup, {
+    onEachFeature: function(feature, layer){
+        layer.setIcon(blueIcon);
+        layer.bindPopup(customPopup(feature));
+    }
+    }).addTo(markerGroup);
+
+}
+
+Categories() 
+
+</script>
+
+
+<li> 
+    <form action="/logout?_method=DELETE" method="POST">
+        <button type="submit">Log Out</button>
+    </form>
+</li>
+
+
+<a href="/user_profile">
+     My Profile
+</a>
+
+
+
+</body>
+</html>

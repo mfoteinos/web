@@ -36,7 +36,7 @@ const userSchema = new Schema({
     },
     admin: {
         type: Boolean,
-        required: false
+        required: true
     },
     likedoffers: {
         type:Array,

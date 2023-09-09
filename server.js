@@ -42,6 +42,8 @@ initializePassport(
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
+
+        
         return next()
     }
 
@@ -55,6 +57,24 @@ function checkNotAuthenticated(req, res, next) {
 
     next()
 }
+
+function checkAdmin(req, res, next) {
+    if (req.user.admin == true) {
+        return next()
+
+    }
+
+    res.redirect('/user_home')
+}
+
+function checkNotAdmin(req, res, next) {
+    if (req.user.admin == true) {
+        return res.redirect('/admin_home')
+    }
+
+    next()
+}
+
 
 let allSupermarkets;
 
@@ -93,10 +113,17 @@ app.get('/', checkNotAuthenticated, (req,res) => {
 });
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/user_home',
+
     failureRedirect: '/',
     failureFlash: true
-}))
+}), function(req, res) {
+        if (req.user.admin==true) {
+                res.redirect("/admin_home");
+        }
+        else {
+            res.redirect("/user_home");
+    }
+  });
 
 app.post('/register', checkNotAuthenticated, async (req,res) => {
     const new_user = new UserM(req.body);
@@ -117,7 +144,10 @@ app.delete('/logout', (req, res) => {
       });
 })
 
-app.get('/user_home', checkAuthenticated, (req,res) => {
+app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
+
+
+
     let today = "8/14/2023"
     let week = new Date();
     week.setDate(week.getDate() - 7)
@@ -445,6 +475,44 @@ app.put('/user_profile_password', checkAuthenticated, async (req,res) => {
         console.log(err);
     })
     res.redirect('/user_profile');
+});
+
+app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
+    let today = "8/14/2023"
+    let week = new Date();
+    week.setDate(week.getDate() - 7)
+    
+
+   SupermarketM.updateMany({}, {$pull: {offers: {date: week.toLocaleDateString()}}}).then(result => {
+    SupermarketM.find({'offers':  { $size: 0 } }).lean(true)
+    .then((result) => {
+        var gjNoOfferSups = result;
+        SupermarketM.find({'offers':  { $not: {$size: 0} } }).lean(true)
+        .then((result) => {
+            var gjOfferSups = result;
+            Categ_Sub.find().then((result) =>{
+                var ctg_name = result
+                Product.find().then((ressult) => {
+                    var prod = ressult
+                    res.render('user_home', {gjNoOfferSups, gjOfferSups, ctg_name, prod})
+                }).catch((err) =>{
+                    console.log(err);
+                })
+            }).catch((err) =>{
+                console.log(err);
+            })
+        })
+        .catch((err) =>{
+            console.log(err);
+        })
+     })
+    .catch((err) =>{
+        console.log(err);
+    })
+    }).catch((err) =>{
+    console.log(err);
+    })
+
 });
 
 app.use((req,res) => {
