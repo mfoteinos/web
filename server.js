@@ -557,6 +557,9 @@ app.get('/leaderboard', checkAuthenticated, checkAdmin, (req,res) => {
 });
 
 app.get('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
+
+    SupermarketM.find({})
+
     res.render('add_product')
 });
 
@@ -573,6 +576,45 @@ app.post('/add_product', checkAuthenticated, checkAdmin, uploads.array("files"),
     })
    
 })
+
+app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
+
+    let date_ob = new Date();
+    let date = ("0" + date_ob.getDate()).slice(-2);
+
+    // current month
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+
+    // current year
+    let year = date_ob.getFullYear();
+
+    let startDate = year + "-" + month + "-01";
+
+    let startDateRev = "01-"; + "-" + month + "-" + year;
+
+    let lastday = new Date(year,month,0).getDate()
+
+    let endDate = year + "-" + month + '-' + lastday;
+
+    let endDateRev = lastday + "-" + month + '-' + year;
+    
+    console.log(startDate)
+    console.log(endDate)
+
+    SupermarketM.find({'offers.date': {$gte: startDateRev,  $lte: endDateRev}}).then((result) =>{
+        for (superm of result){
+            for (offer of superm.offers){
+                console.log(superm.properties.name)
+                console.log(offer.date)
+            }
+        }
+        console.log(result[0].offers[0].date)
+        res.render('statistics', {startDate:startDate,endDate:endDate})
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+});
 
 app.use((req,res) => {
 
