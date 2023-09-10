@@ -7,7 +7,10 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const flash = require('express-flash');
 const session = require('express-session');
-//const _ = require('lodash');
+//
+const multer = require('multer')
+const cors = require('cors')
+//
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const passport = require('passport')
@@ -33,6 +36,7 @@ app.set('view engine', 'ejs')
 const initializePassport = require('./passport-config');
 const { render } = require('ejs');
 const { result } = require('lodash');
+const path = require('path');
 initializePassport(
     passport, 
     username => UserM.find({'username':username}),
@@ -105,6 +109,19 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
+app.use(express.json());
+app.use(cors())
+
+const storage = multer.diskStorage({
+    destination: function(req, res, callback){
+        callback(null, __dirname + "/uploads")
+    },
+    filename: function(req, file, callback){
+        callback(null, file.originalname)
+    }
+})
+
+const uploads = multer({storage: storage})
 
 
 app.get('/', checkNotAuthenticated, (req,res) => {
@@ -543,11 +560,18 @@ app.get('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
     res.render('add_product')
 });
 
-app.post('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
-   console.log(req.body.products)
-   data = JSON.parse(req.body.products);
-    console.log(data)
 
+app.post('/add_product', checkAuthenticated, checkAdmin, uploads.array("files"), (req,res) => {
+
+    fs.readFile('uploads/Data.products.json', 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        data = JSON.parse(data);
+        console.log(data)
+    })
+   
 })
 
 app.use((req,res) => {

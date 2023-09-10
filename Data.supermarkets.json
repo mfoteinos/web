@@ -1,0 +1,1161 @@
+[{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa51fc"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.712654,
+      38.2080319
+    ]
+  },
+  "properties": {
+    "id": "354449389",
+    "name": "Lidl"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa521a"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7265283,
+      38.2392836
+    ]
+  },
+  "properties": {
+    "id": "7677225097",
+    "name": "MyMarket"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa520e"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7323293,
+      38.1951968
+    ]
+  },
+  "properties": {
+    "id": "3354481184",
+    "name": "Ανδρικόπουλος"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5203"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7489662,
+      38.2596476
+    ]
+  },
+  "properties": {
+    "id": "1643818281",
+    "name": "Σκλαβενίτης"
+  },
+  "offers": [
+    {
+      "id": "1643818281",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5213"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7481501,
+      38.2691937
+    ]
+  },
+  "properties": {
+    "id": "5164678230",
+    "name": "Ανδρικόπουλος - Supermarket"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5223"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7460078,
+      38.2586424
+    ]
+  },
+  "properties": {
+    "id": "8777171555",
+    "name": "3A ARAPIS"
+  },
+  "offers": [
+    {
+      "id": "8777171555",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5215"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7357783,
+      38.2170935
+    ]
+  },
+  "properties": {
+    "id": "5620198221",
+    "name": "ΑΒ Βασιλόπουλος"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5217"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7389771,
+      38.2486316
+    ]
+  },
+  "properties": {
+    "id": "7673976786",
+    "name": "Spar"
+  },
+  "offers": [
+    {
+      "id": "7673976786",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa521b"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7253472,
+      38.2346622
+    ]
+  },
+  "properties": {
+    "id": "8214753473",
+    "name": "Ena Cash And Carry"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5224"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7355058,
+      38.2454669
+    ]
+  },
+  "properties": {
+    "id": "8805335004",
+    "name": "Μασούτης"
+  },
+  "offers": [
+    {
+      "id": "8805335004",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    },
+    {
+      "id": "8805335004a468",
+      "username": "a",
+      "product": "Proderm Υγρό Απορ/κο 17μεζ 1250ml",
+      "price": "1",
+      "date": "9/8/2023",
+      "likes": 0,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5226"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7455558,
+      38.2398789
+    ]
+  },
+  "properties": {
+    "id": "8806495733",
+    "name": "3Α ΑΡΑΠΗΣ"
+  },
+  "offers": [
+    {
+      "id": "8806495733",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa520a"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.736371,
+      38.2399863
+    ]
+  },
+  "properties": {
+    "id": "1971240515",
+    "name": "Ανδρικόπουλος"
+  },
+  "offers": [
+    {
+      "id": "1971240515",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5212"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7296435,
+      38.2425794
+    ]
+  },
+  "properties": {
+    "id": "4931300543",
+    "name": "Kronos"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5211"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7302559,
+      38.2427963
+    ]
+  },
+  "properties": {
+    "id": "4357589496",
+    "name": "Ανδρικόπουλος"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa520f"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7418506,
+      38.2565589
+    ]
+  },
+  "properties": {
+    "id": "4101518891",
+    "name": "ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ"
+  },
+  "offers": [
+    {
+      "id": "4101518891",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5200"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7642075,
+      38.2104365
+    ]
+  },
+  "properties": {
+    "id": "364463568",
+    "name": "Σκλαβενίτης"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa51fe"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7434265,
+      38.2633511
+    ]
+  },
+  "properties": {
+    "id": "360226900",
+    "name": "Lidl"
+  },
+  "offers": [
+    {
+      "id": "360226900",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5222"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7428703,
+      38.2601801
+    ]
+  },
+  "properties": {
+    "id": "8777081651",
+    "name": "Σκλαβενίτης"
+  },
+  "offers": [
+    {
+      "id": "8777081651",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa51ff"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7908028,
+      38.2952086
+    ]
+  },
+  "properties": {
+    "id": "364381224",
+    "name": "Σουπερμάρκετ Ανδρικόπουλος"
+  },
+  "offers": [
+    {
+      "id": "364381224",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5204"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7436127,
+      38.2613806
+    ]
+  },
+  "properties": {
+    "id": "1657132006",
+    "name": "Ρουμελιώτης SUPER Market"
+  },
+  "offers": [
+    {
+      "id": "1657132006",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5202"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7814957,
+      38.3013087
+    ]
+  },
+  "properties": {
+    "id": "1643373636",
+    "name": "Σκλαβενίτης"
+  },
+  "offers": [
+    {
+      "id": "1643373636",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa521e"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7328984,
+      38.2375068
+    ]
+  },
+  "properties": {
+    "id": "8214887306",
+    "name": "3Α Αράπης"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5225"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7380288,
+      38.24957
+    ]
+  },
+  "properties": {
+    "id": "8805467220",
+    "name": "ΑΒ Shop & Go"
+  },
+  "offers": [
+    {
+      "id": "8805467220",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa521d"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7306406,
+      38.2379176
+    ]
+  },
+  "properties": {
+    "id": "8214887295",
+    "name": "Ανδρικόπουλος Super Market"
+  },
+  "offers": [
+    {
+      "id": "8214887295",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5205"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.741582,
+      38.2585236
+    ]
+  },
+  "properties": {
+    "id": "1657132008",
+    "name": "Σκλαβενίτης"
+  },
+  "offers": [
+    {
+      "id": "1657132008",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5209"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.8051332,
+      38.3067563
+    ]
+  },
+  "properties": {
+    "id": "1815896581",
+    "name": "Lidl"
+  },
+  "offers": [
+    {
+      "id": "1815896581",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa520d"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7396708,
+      38.2568618
+    ]
+  },
+  "properties": {
+    "id": "3144355008",
+    "name": "My market"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5218"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7383224,
+      38.2481545
+    ]
+  },
+  "properties": {
+    "id": "7673986831",
+    "name": "ΑΝΔΡΙΚΟΠΟΥΛΟΣ"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa520b"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7373409,
+      38.2364945
+    ]
+  },
+  "properties": {
+    "id": "1971247760",
+    "name": "Σκλαβενίτης"
+  },
+  "offers": [
+    {
+      "id": "1971247760",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5201"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.740082,
+      38.2312926
+    ]
+  },
+  "properties": {
+    "id": "980515550",
+    "name": "Lidl"
+  },
+  "offers": [
+    {
+      "id": "980515550",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5207"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7257294,
+      38.2322376
+    ]
+  },
+  "properties": {
+    "id": "1763830474",
+    "name": "ΑΒ Βασιλόπουλος"
+  },
+  "offers": [
+    {
+      "id": "1763830474",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5210"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.733285,
+      38.2434859
+    ]
+  },
+  "properties": {
+    "id": "4356183595",
+    "name": "Σκλαβενίτης"
+  },
+  "offers": [
+    {
+      "id": "4356183595a468",
+      "username": "a",
+      "product": "Proderm Υγρό Απορ/κο 17μεζ 1250ml",
+      "price": "1",
+      "date": "9/8/2023",
+      "likes": 0,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    },
+    {
+      "id": "4356183595c55",
+      "username": "c",
+      "product": "Noxzema Αποσμ Rollon Classic 50ml",
+      "price": "1",
+      "date": "09/09/2023",
+      "likes": 0,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5216"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7396687,
+      38.2504514
+    ]
+  },
+  "properties": {
+    "id": "7673935764",
+    "name": "3A"
+  },
+  "offers": [
+    {
+      "id": "7673935764",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    },
+    {
+      "id": "7673935764a55",
+      "username": "a",
+      "product": "Noxzema Αποσμ Rollon Classic 50ml",
+      "price": "1",
+      "date": "09/09/2023",
+      "likes": 2,
+      "dislikes": 1,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa521c"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7294915,
+      38.2358002
+    ]
+  },
+  "properties": {
+    "id": "8214854586",
+    "name": "ΚΡΟΝΟΣ - (Σκαγιοπουλείου)"
+  },
+  "offers": [
+    {
+      "id": "8214854586",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa520c"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7342362,
+      38.2427052
+    ]
+  },
+  "properties": {
+    "id": "1971249846",
+    "name": "My Market"
+  },
+  "offers": [
+    {
+      "id": "1971249846",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5219"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7308044,
+      38.2429466
+    ]
+  },
+  "properties": {
+    "id": "7674120315",
+    "name": "ΑΝΔΡΙΚΟΠΟΥΛΟΣ"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa521f"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.733787,
+      38.2361127
+    ]
+  },
+  "properties": {
+    "id": "8214910532",
+    "name": "Γαλαξίας"
+  },
+  "offers": [
+    {
+      "id": "8214910532",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5220"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7283123,
+      38.2360129
+    ]
+  },
+  "properties": {
+    "id": "8215010716",
+    "name": "Super Market Θεοδωρόπουλος"
+  },
+  "offers": [
+    {
+      "id": "8215010716",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa51fd"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7806567,
+      38.28931
+    ]
+  },
+  "properties": {
+    "id": "360217468",
+    "name": "The Mart"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5214"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7497014,
+      38.2690963
+    ]
+  },
+  "properties": {
+    "id": "5164741179",
+    "name": "Σκλαβενίτης"
+  },
+  "offers": [
+    {
+      "id": "5164741179",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5206"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7473265,
+      38.2323892
+    ]
+  },
+  "properties": {
+    "id": "1763830009",
+    "name": "My market"
+  },
+  "offers": []
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5208"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7603629,
+      38.2644973
+    ]
+  },
+  "properties": {
+    "id": "1770994538",
+    "name": "Markoulas"
+  },
+  "offers": [
+    {
+      "id": "1770994538",
+      "username": "Dusk",
+      "product": "Μπάμιες",
+      "price": 1000,
+      "date": "0/0/0000",
+      "likes": 100,
+      "dislikes": 0,
+      "available": true,
+      "reqDay": true,
+      "reqWeek": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64fb4920255a58c779aa5221"
+  },
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      21.7340723,
+      38.2390442
+    ]
+  },
+  "properties": {
+    "id": "8215157448",
+    "name": "Super Market ΚΡΟΝΟΣ"
+  },
+  "offers": []
+}]
