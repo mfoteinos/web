@@ -366,7 +366,7 @@ app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
         // console.log(result[0])
         UserM.find({'username': req.user.username}).then((result) =>{
             // console.log(result[0].likedoffers.id)
-            res.render('review_offer', {reviewedsup:result1[0], likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers})
+            res.render('review_offer', {reviewedsup:result1[0], likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers, admin:req.user.admin})
         }).catch((err) =>{
             console.log(err);
         })
@@ -382,7 +382,7 @@ app.post('/like/:supid/:id', checkAuthenticated, (req,res) => {
 console.log(req.body.offeruser)
         UserM.updateOne({'username': req.user.username}, {$push: {likedoffers: req.params.id}}).then((result) =>{
             res.redirect('/review_offer/' + req.params.supid)
-UserM.updateOne({'username': req.body.offeruser}, {$inc: { 'points': 5, 'monthpoints': 5}}).then((result) =>{
+            UserM.updateOne({'username': req.body.offeruser}, {$inc: { 'points': 5, 'monthpoints': 5}}).then((result) =>{
             }).catch((err) =>{
                 console.log(err);
             })
@@ -400,7 +400,7 @@ app.post('/dislike/:supid/:id', checkAuthenticated, (req,res) => {
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.dislikes': 1}}).then((result) =>{
         UserM.updateOne({'username': req.user.username}, {$push: {dislikedoffers: req.params.id}}).then((result) =>{
             res.redirect('/review_offer/' + req.params.supid)
-UserM.updateOne({'username': req.body.offeruser, "monthpoints": { $gt: 0 }}, {$inc: { 'points': -1, 'monthpoints': -1}}).then((result) =>{
+            UserM.updateOne({'username': req.body.offeruser, "monthpoints": { $gt: 0 }}, {$inc: { 'points': -1, 'monthpoints': -1}}).then((result) =>{
             }).catch((err) =>{
                 console.log(err);
             })
@@ -429,6 +429,16 @@ app.post('/unavailable/:supid/:id', checkAuthenticated, (req,res) => {
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$set: { 'offers.$.available': false}}).then((result) =>{
         res.redirect('/review_offer/' + req.params.supid)
         console.log(result)
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+});
+
+app.post('/delete/:supid/:id', checkAuthenticated, checkAdmin, (req,res) => {
+
+    SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$pull: { offers: {id:req.params.id} }}).then((result) =>{
+        res.redirect('/review_offer/' + req.params.supid)
     }).catch((err) =>{
         console.log(err);
     })
@@ -478,6 +488,7 @@ app.put('/user_profile_password', checkAuthenticated, async (req,res) => {
 });
 
 app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
+
     let today = "8/14/2023"
     let week = new Date();
     week.setDate(week.getDate() - 7)
@@ -512,6 +523,19 @@ app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
     }).catch((err) =>{
     console.log(err);
     })
+
+});
+
+app.get('/leaderboard', checkAuthenticated, checkAdmin, (req,res) => {
+    
+    UserM.find({}).sort({points:-1})
+    .then( (result) => {
+        res.render('leaderboard', {userscores:result})
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+
 
 });
 

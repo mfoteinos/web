@@ -13,14 +13,14 @@
 var reviewedsup = <%- JSON.stringify(reviewedsup) %>;
 var likedoffers = <%- JSON.stringify(likedoffers) %>;
 var dislikedoffers = <%- JSON.stringify(dislikedoffers) %>;
+var admin = <%- JSON.stringify(admin) %>;
 
-
-console.log(likedoffers.includes(4101518891))
 function customPopup(reviewedsup){
     let offertext = ``
     let likedtext = ``
     let dislikedtext = ``
     let availabletext = ``
+    let deletetext = ``
     for (offer of reviewedsup.offers) {
         let temptext = `<div> Προϊόν: ${offer.product} </div>
                         <div> Τιμή: ${offer.price} </div>
@@ -41,11 +41,16 @@ function customPopup(reviewedsup){
         }
 
         if (offer.available == true){
-            availabletext = `<div> Διαθέσιμο! <form action="/unavailable/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='available${offer.id}'>Εναλλαγή</button></form></div></div>  <br></br>`
+            availabletext = `<div> Διαθέσιμο! <form action="/unavailable/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='available${offer.id}'>Εναλλαγή</button></form></div></div>  `
         } else {
-            availabletext = `<div> Μη Διαθέσιμο! <form action="/available/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='available${offer.id}'>Εναλλαγή</button></form></div></div>  <br></br>`
+            availabletext = `<div> Μη Διαθέσιμο! <form action="/available/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='available${offer.id}'>Εναλλαγή</button></form></div></div>  `
         }
-        offertext = offertext.concat(temptext, likedtext, dislikedtext, availabletext)
+        if (admin == true){
+            deletetext = `<div> <form action="/delete/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='delete${offer.id}'>Διαγραφή Προσφοράς</button></form></div></div>  <br></br>`
+        } else {
+            deletetext = `<br></br>`
+        }
+        offertext = offertext.concat(temptext, likedtext, dislikedtext, availabletext, deletetext)
 
     }
 

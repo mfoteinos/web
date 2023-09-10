@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/review_offer.css">
+    
+<title>Document</title>
+</head>
+<body>
+<script>
+
+var userscores = <%- JSON.stringify(userscores) %>;
+
+console.log(userscores)
+
+
+function customText(userscores){
+    let text = ``
+    for (user of userscores) {
+        let temptext = `=================================================
+                        <div> Χρήστης ${user.username} </div>
+                        <div> Πόντοι: ${user.points} </div>
+                        <div> Tokens Προηγούμενου Μήνα: ${user.monthtokens} </div>
+                        <div> Συνολικά Tokens: ${user.tokens} </div>`
+        text = text.concat(temptext)
+
+    }
+
+    return `${text}`
+}
+
+text = customText(userscores)
+
+document.write(text)
+
+
+</script>
+
+</body>
+</html>
