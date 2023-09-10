@@ -7,6 +7,9 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const flash = require('express-flash');
 const session = require('express-session');
+//
+const multer = require('multer')
+const cors = require('cors')
 //const _ = require('lodash');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
@@ -33,6 +36,7 @@ app.set('view engine', 'ejs')
 const initializePassport = require('./passport-config');
 const { render } = require('ejs');
 const { result } = require('lodash');
+const path = require('path');
 initializePassport(
     passport, 
     username => UserM.find({'username':username}),
@@ -105,6 +109,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
+app.use(express.json());
 
 
 app.get('/', checkNotAuthenticated, (req,res) => {
@@ -543,10 +548,12 @@ app.get('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
     res.render('add_product')
 });
 
+
 app.post('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
-   console.log(req.body.products)
-   data = JSON.parse(req.body.products);
-    console.log(data)
+   
+    console.log(req.body)
+ 
+
 
 })
 

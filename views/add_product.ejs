@@ -7,35 +7,34 @@
 </head>
 <body>
 
-    <form action="/add_product" method="post">
-        <label for="myfile">Select Products File:</label>
-        <input type="file" id="products_file" name="products_file" ><br><br>
-        <input type="hidden" id="prod">
-        <input type="submit">
-      </form>
+    <form>
+        <input type="text" name="file-name" id="name">
+        <input type="file" name="file" id="files" multiple>
+        <button type="submit">Submit</button>
+    </form>
 <script>
-document.getElementById('products_file').onchange = function(evt) {
-        try {
-            let files = evt.target.files;
-            if (!files.length) {
-                alert('No file selected!');
-                return;
-            }
-            let file = files[0];
-            let reader = new FileReader();
-            const self = this;
-            reader.onload = (event) => {
-
-                var k = document.getElementById("prod")
-                k.innerHTML = `<input type="hidden" name="products" id="products" value="${event.target.result}">`
-
-                console.log('FILE CONTENT', event.target.result);
-            };
-            reader.readAsText(file);
-        } catch (err) {
-            console.error(err);
-        }
+    const form = document.querySelector('form');
+form.addEventListener('submit', (e) => {
+    
+    e.preventDefault();
+    // Prevents HTML handling submission
+    const files = document.getElementById("files");
+    const formData = new FormData();
+    // Creates empty formData object
+    // Appends value of text input
+    for(let i =0; i < files.files.length; i++) {
+        formData.append("files", files.files[i]);
     }
+    console.log(...formData)
+    // Appends value(s) of file input
+    // Post data to Node and Express server:
+    fetch('/add_product', {
+        method: 'POST',
+        body: formData, // Payload is formData object
+    })
+    .then(res => res.json())
+    .then(data => console.log(data));
+})
 </script>
 
 </body>
