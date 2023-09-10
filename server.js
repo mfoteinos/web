@@ -7,7 +7,10 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const flash = require('express-flash');
 const session = require('express-session');
-//const _ = require('lodash');
+//
+const multer = require('multer')
+const cors = require('cors')
+//
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const passport = require('passport')
@@ -33,6 +36,7 @@ app.set('view engine', 'ejs')
 const initializePassport = require('./passport-config');
 const { render } = require('ejs');
 const { result } = require('lodash');
+const path = require('path');
 initializePassport(
     passport, 
     username => UserM.find({'username':username}),
@@ -105,6 +109,19 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
+app.use(express.json());
+app.use(cors())
+
+const storage = multer.diskStorage({
+    destination: function(req, res, callback){
+        callback(null, __dirname + "/uploads")
+    },
+    filename: function(req, file, callback){
+        callback(null, file.originalname)
+    }
+})
+
+const uploads = multer({storage: storage})
 
 
 app.get('/', checkNotAuthenticated, (req,res) => {
@@ -366,7 +383,7 @@ app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
         // console.log(result[0])
         UserM.find({'username': req.user.username}).then((result) =>{
             // console.log(result[0].likedoffers.id)
-            res.render('review_offer', {reviewedsup:result1[0], likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers})
+            res.render('review_offer', {reviewedsup:result1[0], likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers, admin:req.user.admin})
         }).catch((err) =>{
             console.log(err);
         })
@@ -382,7 +399,7 @@ app.post('/like/:supid/:id', checkAuthenticated, (req,res) => {
 console.log(req.body.offeruser)
         UserM.updateOne({'username': req.user.username}, {$push: {likedoffers: req.params.id}}).then((result) =>{
             res.redirect('/review_offer/' + req.params.supid)
-UserM.updateOne({'username': req.body.offeruser}, {$inc: { 'points': 5, 'monthpoints': 5}}).then((result) =>{
+            UserM.updateOne({'username': req.body.offeruser}, {$inc: { 'points': 5, 'monthpoints': 5}}).then((result) =>{
             }).catch((err) =>{
                 console.log(err);
             })
@@ -400,7 +417,7 @@ app.post('/dislike/:supid/:id', checkAuthenticated, (req,res) => {
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.dislikes': 1}}).then((result) =>{
         UserM.updateOne({'username': req.user.username}, {$push: {dislikedoffers: req.params.id}}).then((result) =>{
             res.redirect('/review_offer/' + req.params.supid)
-UserM.updateOne({'username': req.body.offeruser, "monthpoints": { $gt: 0 }}, {$inc: { 'points': -1, 'monthpoints': -1}}).then((result) =>{
+            UserM.updateOne({'username': req.body.offeruser, "monthpoints": { $gt: 0 }}, {$inc: { 'points': -1, 'monthpoints': -1}}).then((result) =>{
             }).catch((err) =>{
                 console.log(err);
             })
@@ -429,6 +446,16 @@ app.post('/unavailable/:supid/:id', checkAuthenticated, (req,res) => {
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$set: { 'offers.$.available': false}}).then((result) =>{
         res.redirect('/review_offer/' + req.params.supid)
         console.log(result)
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+});
+
+app.post('/delete/:supid/:id', checkAuthenticated, checkAdmin, (req,res) => {
+
+    SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$pull: { offers: {id:req.params.id} }}).then((result) =>{
+        res.redirect('/review_offer/' + req.params.supid)
     }).catch((err) =>{
         console.log(err);
     })
@@ -478,6 +505,7 @@ app.put('/user_profile_password', checkAuthenticated, async (req,res) => {
 });
 
 app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
+
     let today = "8/14/2023"
     let week = new Date();
     week.setDate(week.getDate() - 7)
@@ -494,7 +522,7 @@ app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
                 var ctg_name = result
                 Product.find().then((ressult) => {
                     var prod = ressult
-                    res.render('user_home', {gjNoOfferSups, gjOfferSups, ctg_name, prod})
+                    res.render('admin_home', {gjNoOfferSups, gjOfferSups, ctg_name, prod})
                 }).catch((err) =>{
                     console.log(err);
                 })
@@ -514,6 +542,37 @@ app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
     })
 
 });
+
+app.get('/leaderboard', checkAuthenticated, checkAdmin, (req,res) => {
+    
+    UserM.find({}).sort({points:-1})
+    .then( (result) => {
+        res.render('leaderboard', {userscores:result})
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+
+
+});
+
+app.get('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
+    res.render('add_product')
+});
+
+
+app.post('/add_product', checkAuthenticated, checkAdmin, uploads.array("files"), (req,res) => {
+
+    fs.readFile('uploads/Data.products.json', 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        data = JSON.parse(data);
+        console.log(data)
+    })
+   
+})
 
 app.use((req,res) => {
 
