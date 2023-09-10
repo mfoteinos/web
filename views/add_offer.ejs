@@ -113,14 +113,15 @@
     Product.forEach(element => {
             if (element.subcategory == uuid){
               let tempProduct = `
-              <option value ='${element.name }'>${element.name }</option>
-              <input type="hidden" name="product_id" id="product_id" value="${element.id}"> `
+              <option></option>
+              <option value ='${element.name}'>${element.name}</option>
+              `
 
-          product = product.concat(tempProduct)
+              product = product.concat(tempProduct)
 
             }
         })
-
+       
         let foot = `</select>
 
                           <br><br>

@@ -35,7 +35,7 @@ app.set('view engine', 'ejs')
 
 const initializePassport = require('./passport-config');
 const { render } = require('ejs');
-const { result } = require('lodash');
+const { result, fromPairs } = require('lodash');
 const path = require('path');
 initializePassport(
     passport, 
@@ -244,7 +244,6 @@ app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
     }).catch((err) =>{
         console.log(err);
     })
-
 });
 
 
@@ -271,12 +270,12 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
 //             console.log(err);
 //     })
 //     }
-
+    console.log(req.body)
 
     let today = new Date().toLocaleDateString();
 
 
-    let id_string = req.body.Sup_id.concat(req.user.username,req.body.product_id)
+    let id_string = req.body.Sup_id.concat(req.user.username)
 
     var offer = []
     SupermarketM.find({'properties.id': req.body.Sup_id}, {'offers':1}).then(result => {
@@ -566,13 +565,78 @@ app.get('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
 
 app.post('/add_product', checkAuthenticated, checkAdmin, uploads.array("files"), (req,res) => {
 
-    fs.readFile('uploads/Data.products.json', 'utf8', (err, data) => {
+    fs.readFile('uploads/Data.products.json', 'utf8', (err, product) => {
         if (err) {
           console.error(err);
           return;
         }
-        data = JSON.parse(data);
-        console.log(data)
+        product = JSON.parse(product);
+
+        fs.readFile('Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+            cat_subs = JSON.parse(cat_subs);
+
+            var prod = []
+        
+            for(x of cat_subs){
+                for(y of product.products){
+                    for(k of x.subcategories){
+                            if(x.id == y.category && k.uuid == y.subcategory ){
+                                prod.push(y)
+                        } 
+                }
+            }
+         }
+
+            prod.forEach(element => {
+                console.log(element.name)
+                  Product.find({'name': element.name}).then(result => {
+                        if(result == ""){
+                                    temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory, prices:[]})
+                                    let i = 0
+                                        while(i < 7){
+                                          let week = new Date();
+                                          week.setDate(week.getDate() - i)
+                                            Product.updateOne({'name': element.name}, {$push: {prices: {date: week.toLocaleDateString(), price: (Math.floor((Math.random()*5)* 100)/100) + 1}}}).then(result => {
+                                                console.log(result)
+                                               }).catch((err) =>{
+                                                    console.log(err);
+                                            })
+                                            i += 1
+                                        }
+                                    Product.collection.insertOne(temp, (err) => {
+                                        if(err)
+                                        {
+                                          return console.error(err);
+                                        }
+                                    })
+                                }else{
+                                    Product.updateOne({'name': element.name}, {$push: {id: element.id, name:element.name, category: element.category, subcategory: element.subcategory, prices:[]}}).then(result => {
+                                        let i = 0
+                                        while(i < 7){
+                                            let week = new Date();
+                                            week.setDate(week.getDate() - i)
+                                              Product.updateOne({'name': element.name}, {$push: {prices: {date: week.toLocaleDateString(), price: (Math.floor((Math.random()*5)* 100)/100) + 1}}}).then(result => {
+                                                  console.log(result)
+                                                 }).catch((err) =>{
+                                                      console.log(err);
+                                              })
+                                              i += 1
+                                          }
+                                                     console.log(result)
+                                                    }).catch((err) =>{
+                                                       console.log(err);
+                                                 })
+                                }
+                })
+
+            })
+         })
+
+       
     })
    
 })
