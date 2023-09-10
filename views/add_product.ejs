@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"> 
+    <title>Add Products</title>
+</head>
+<body>
+
+    <form action="/add_product" method="post">
+        <label for="myfile">Select Products File:</label>
+        <input type="file" id="products_file" name="products_file" ><br><br>
+        <input type="hidden" id="prod">
+        <input type="submit">
+      </form>
+<script>
+document.getElementById('products_file').onchange = function(evt) {
+        try {
+            let files = evt.target.files;
+            if (!files.length) {
+                alert('No file selected!');
+                return;
+            }
+            let file = files[0];
+            let reader = new FileReader();
+            const self = this;
+            reader.onload = (event) => {
+
+                var k = document.getElementById("prod")
+                k.innerHTML = `<input type="hidden" name="products" id="products" value="${event.target.result}">`
+
+                console.log('FILE CONTENT', event.target.result);
+            };
+            reader.readAsText(file);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+</script>
+
+</body>
+</html>

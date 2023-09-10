@@ -494,7 +494,7 @@ app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
                 var ctg_name = result
                 Product.find().then((ressult) => {
                     var prod = ressult
-                    res.render('user_home', {gjNoOfferSups, gjOfferSups, ctg_name, prod})
+                    res.render('admin_home', {gjNoOfferSups, gjOfferSups, ctg_name, prod})
                 }).catch((err) =>{
                     console.log(err);
                 })
@@ -514,6 +514,17 @@ app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
     })
 
 });
+
+app.get('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
+    res.render('add_product')
+});
+
+app.post('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
+   console.log(req.body.products)
+   data = JSON.parse(req.body.products);
+    console.log(data)
+
+})
 
 app.use((req,res) => {
 
