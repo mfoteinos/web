@@ -10,7 +10,7 @@ const session = require('express-session');
 //
 const multer = require('multer')
 const cors = require('cors')
-//const _ = require('lodash');
+//
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const passport = require('passport')
@@ -110,6 +110,18 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
 app.use(express.json());
+app.use(cors())
+
+const storage = multer.diskStorage({
+    destination: function(req, res, callback){
+        callback(null, __dirname + "/uploads")
+    },
+    filename: function(req, file, callback){
+        callback(null, file.originalname)
+    }
+})
+
+const uploads = multer({storage: storage})
 
 
 app.get('/', checkNotAuthenticated, (req,res) => {
@@ -549,12 +561,17 @@ app.get('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
 });
 
 
-app.post('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
+app.post('/add_product', checkAuthenticated, checkAdmin, uploads.array("files"), (req,res) => {
+
+    fs.readFile('uploads/Data.products.json', 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        data = JSON.parse(data);
+        console.log(data)
+    })
    
-    console.log(req.body)
- 
-
-
 })
 
 app.use((req,res) => {
