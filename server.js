@@ -132,8 +132,18 @@ const categ = multer.diskStorage({
     }
 })
 
+const price = multer.diskStorage({
+    destination: function(req, res, callback){
+        callback(null, __dirname + "/prices")
+    },
+    filename: function(req, file, callback){
+        callback(null, file.originalname)
+    }
+})
+
 const products = multer({storage: storage})
 const categories = multer({storage: categ})
+const prices = multer({storage: price})
 
 
 app.get('/', checkNotAuthenticated, (req,res) => {
@@ -572,6 +582,16 @@ app.get('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
     res.render('add_product')
 });
 
+app.get('/add_categories', checkAuthenticated, checkAdmin, (req,res) => {
+
+    res.render('add_categories')
+});
+
+app.get('/add_prices', checkAuthenticated, checkAdmin, (req,res) => {
+
+    res.render('add_prices')
+});
+
 
 app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files"), (req,res) => {
 
@@ -604,7 +624,7 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
             prod.forEach(element => {
                   Product.find({'name': element.name}).then(result => {
                         if(result == ""){
-                                    temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory, prices:[]})
+                                    temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory})
                                     let i = 0
                                         while(i < 7){
                                           let week = new Date();
@@ -643,7 +663,6 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
           return;
         }
         cat_subs = JSON.parse(cat_subs);
-        console.log(cat_subs)
 
         let temp = 0
         let tempArray = [];
@@ -668,6 +687,10 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
           }
           })
     })
+})
+
+app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Price"), (req,res) => {
+
 })
 
 app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{

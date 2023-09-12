@@ -9,10 +9,11 @@
 
     <form>
         <div>
-            <label for="file">Add Products:</label>
-            <input type="file" name="file" id="prod_files">
+            <label for="gateg_subcat">Add Categ Subcat:</label>
+            <input type="file" name="gateg_subcat" id="gateg_subcat">
         </div>
         <button type="submit">Submit</button>
+
     </form>
 
     <br></br>
@@ -27,18 +28,21 @@
     e.preventDefault();
 
 
-    const files = document.getElementById("prod_files");
-    const formData = new FormData();
-
-
-    for(let i =0; i < files.files.length; i++) {
-        formData.append("files", files.files[i]);
+/////////////////////////////////////////////////////
+    const Categ = document.getElementById("gateg_subcat");
+    const categData = new FormData();
+  
+    for(let i =0; i < Categ.files.length; i++) {
+        categData.append("Categ", Categ.files[i]);
     }
-    console.log(...formData)
+    console.log(...categData)
+ ////////////////////////////////////////////////
+ 
+////////////////////////////////////////////
 
-    fetch('/add_product', {
+    fetch('/add_categories_subcat', {
         method: 'POST',
-        body: formData, 
+        body: categData, 
     })
     .then(res => res.json())
     .then(data => console.log(data))

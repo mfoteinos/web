@@ -9,10 +9,11 @@
 
     <form>
         <div>
-            <label for="file">Add Products:</label>
-            <input type="file" name="file" id="prod_files">
+            <label for="prices">Add Prices:</label>
+            <input type="file" name="prices" id="prices">
         </div>
         <button type="submit">Submit</button>
+
     </form>
 
     <br></br>
@@ -27,18 +28,21 @@
     e.preventDefault();
 
 
-    const files = document.getElementById("prod_files");
-    const formData = new FormData();
-
-
-    for(let i =0; i < files.files.length; i++) {
-        formData.append("files", files.files[i]);
+/////////////////////////////////////////////////////
+    const Price = document.getElementById("prices");
+    const priceData = new FormData();
+  
+    for(let i =0; i < Price.files.length; i++) {
+        priceData.append("Price", Price.files[i]);
     }
-    console.log(...formData)
+    console.log(...priceData)
+ ////////////////////////////////////////////////
+ 
+////////////////////////////////////////////
 
-    fetch('/add_product', {
+    fetch('/add_product_prices', {
         method: 'POST',
-        body: formData, 
+        body: priceData, 
     })
     .then(res => res.json())
     .then(data => console.log(data))
