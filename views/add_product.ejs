@@ -8,8 +8,15 @@
 <body>
 
     <form>
-        <H2>Select Folders with Products and Prices</H2>
-        <input type="file" name="file" id="files" multiple required>
+        <div>
+            <label for="gateg_subcat">Add Categ Subcat:</label>
+            <input type="file" name="gateg_subcat" id="gateg_subcat">
+        </div>
+
+        <div>
+            <label for="file">Add Products:</label>
+            <input type="file" name="file" id="prod_files">
+        </div>
         <button type="submit">Submit</button>
     </form>
 
@@ -24,7 +31,7 @@
     
     e.preventDefault();
     // Prevents HTML handling submission
-    const files = document.getElementById("files");
+    const files = document.getElementById("prod_files");
     const formData = new FormData();
     // Creates empty formData object
     // Appends value of text input
@@ -32,6 +39,15 @@
         formData.append("files", files.files[i]);
     }
     console.log(...formData)
+
+    const Categ = document.getElementById("gateg_subcat");
+    const categData = new FormData();
+    // Creates empty formData object
+    // Appends value of text input
+    for(let i =0; i < Categ.files.length; i++) {
+        categData.append("Categ", Categ.files[i]);
+    }
+    console.log(...categData)
     // Appends value(s) of file input
     // Post data to Node and Express server:
     fetch('/add_product', {
@@ -40,6 +56,14 @@
     })
     .then(res => res.json())
     .then(data => console.log(data))
+
+    fetch('/add_categories_subcat', {
+        method: 'POST',
+        body: categData, // Payload is formData object
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+
     
 
 })

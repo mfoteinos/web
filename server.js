@@ -116,14 +116,24 @@ app.use(cors())
 
 const storage = multer.diskStorage({
     destination: function(req, res, callback){
-        callback(null, __dirname + "/uploads")
+        callback(null, __dirname + "/products")
     },
     filename: function(req, file, callback){
         callback(null, file.originalname)
     }
 })
 
-const uploads = multer({storage: storage})
+const categ = multer.diskStorage({
+    destination: function(req, res, callback){
+        callback(null, __dirname + "/categories")
+    },
+    filename: function(req, file, callback){
+        callback(null, file.originalname)
+    }
+})
+
+const products = multer({storage: storage})
+const categories = multer({storage: categ})
 
 
 app.get('/', checkNotAuthenticated, (req,res) => {
@@ -559,22 +569,20 @@ app.get('/leaderboard', checkAuthenticated, checkAdmin, (req,res) => {
 
 app.get('/add_product', checkAuthenticated, checkAdmin, (req,res) => {
 
-    SupermarketM.find({})
-
     res.render('add_product')
 });
 
 
-app.post('/add_product', checkAuthenticated, checkAdmin, uploads.array("files"), (req,res) => {
+app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files"), (req,res) => {
 
-    fs.readFile('uploads/Data.products.json', 'utf8', (err, product) => {
+    fs.readFile('products/Data.products.json', 'utf8', (err, product) => {
         if (err) {
           console.error(err);
           return;
         }
         product = JSON.parse(product);
 
-        fs.readFile('Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
+        fs.readFile('categories/Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
             if (err) {
               console.error(err);
               return;
@@ -627,8 +635,49 @@ app.post('/add_product', checkAuthenticated, checkAdmin, uploads.array("files"),
    
 })
 
+app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.array("Categ"), (req,res) => {
+
+    fs.readFile('categories/Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        cat_subs = JSON.parse(cat_subs);
+        console.log(cat_subs)
+
+        let temp = 0
+        let tempArray = [];
+
+        cat_subs.forEach(element => {
+            temp = new Categ_Sub({
+                id: element.id,
+                name: element.name,
+                subcategories: element.subcategories
+            })
+            tempArray.push(temp)
+        })
+       
+        Categ_Sub.collection.insertMany(tempArray, (err) => {
+
+            if(err)
+            {
+              return console.error(err);
+            }
+            else {
+              console.info('successfully stored.');
+          }
+          })
+    })
+})
+
 app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
     Product.deleteMany({}).then(result => {
+        console.log(result)
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+    Categ_Sub.deleteMany({}).then(result => {
         console.log(result)
     }).catch((err) =>{
         console.log(err);
