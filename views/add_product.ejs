@@ -9,17 +9,18 @@
 
     <form>
         <H2>Select Folders with Products and Prices</H2>
-        <input type="file" name="file" id="files" multiple>
+        <input type="file" name="file" id="files" multiple required>
         <button type="submit">Submit</button>
     </form>
 
+    <br></br>
     <div id="delete_all">
         <label for="delete">Delete All :</label>
-        <button id="delete_btn">Delete</button>
+        <button id="delete_btn" onclick="Sure()">Delete</button>
     </div>
 <script>
     const form = document.querySelector('form');
-form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', (e) => {
     
     e.preventDefault();
     // Prevents HTML handling submission
@@ -38,8 +39,32 @@ form.addEventListener('submit', (e) => {
         body: formData, // Payload is formData object
     })
     .then(res => res.json())
-    .then(data => console.log(data));
+    .then(data => console.log(data))
+    
+
 })
+
+function Sure(){
+    const del = document.getElementById("delete_all")
+    let sure = `<label for="delete">Are you sure:</label>
+                <button id="Yes" onclick="delete_all()">Yes</button>
+                <button id="Cansel" onclick="reload()">Cancel</button>
+                `
+
+    del.innerHTML = `${sure}`
+}
+
+function reload(){
+    location.reload();
+}
+
+function delete_all(){
+    fetch('/delete_products', {
+        method: 'POST',
+    }).then(alert("All products deleted"))
+    .then(location.reload())
+}
+
 </script>
 
 </body>

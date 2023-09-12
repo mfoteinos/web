@@ -112,6 +112,8 @@ app.use(methodOverride('_method'))
 app.use(express.json());
 app.use(cors())
 
+
+
 const storage = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/uploads")
@@ -592,7 +594,6 @@ app.post('/add_product', checkAuthenticated, checkAdmin, uploads.array("files"),
          }
 
             prod.forEach(element => {
-                console.log(element.name)
                   Product.find({'name': element.name}).then(result => {
                         if(result == ""){
                                     temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory, prices:[]})
@@ -613,32 +614,25 @@ app.post('/add_product', checkAuthenticated, checkAdmin, uploads.array("files"),
                                           return console.error(err);
                                         }
                                     })
-                                }else{
-                                    Product.updateOne({'name': element.name}, {$push: {id: element.id, name:element.name, category: element.category, subcategory: element.subcategory, prices:[]}}).then(result => {
-                                        let i = 0
-                                        while(i < 7){
-                                            let week = new Date();
-                                            week.setDate(week.getDate() - i)
-                                              Product.updateOne({'name': element.name}, {$push: {prices: {date: week.toLocaleDateString(), price: (Math.floor((Math.random()*5)* 100)/100) + 1}}}).then(result => {
-                                                  console.log(result)
-                                                 }).catch((err) =>{
-                                                      console.log(err);
-                                              })
-                                              i += 1
-                                          }
-                                                     console.log(result)
-                                                    }).catch((err) =>{
-                                                       console.log(err);
-                                                 })
                                 }
-                })
-
+                
+                
+                
+                            })
             })
          })
 
        
     })
    
+})
+
+app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
+    Product.deleteMany({}).then(result => {
+        console.log(result)
+    }).catch((err) =>{
+        console.log(err);
+    })
 })
 
 app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
