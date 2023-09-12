@@ -16,11 +16,6 @@
 
     </form>
 
-    <br></br>
-    <div id="delete_all">
-        <label for="delete">Delete All :</label>
-        <button id="delete_btn" onclick="Sure()">Delete</button>
-    </div>
 <script>
     const form = document.querySelector('form');
     form.addEventListener('submit', (e) => {
@@ -37,8 +32,7 @@
     }
     console.log(...priceData)
  ////////////////////////////////////////////////
- 
-////////////////////////////////////////////
+
 
     fetch('/add_product_prices', {
         method: 'POST',
@@ -49,27 +43,6 @@
 
 
 })
-
-function Sure(){
-    const del = document.getElementById("delete_all")
-    let sure = `<label for="delete">Are you sure:</label>
-                <button id="Yes" onclick="delete_all()">Yes</button>
-                <button id="Cansel" onclick="reload()">Cancel</button>
-                `
-
-    del.innerHTML = `${sure}`
-}
-
-function reload(){
-    location.reload();
-}
-
-function delete_all(){
-    fetch('/delete_products', {
-        method: 'POST',
-    }).then(alert("All products deleted"))
-    .then(location.reload())
-}
 
 </script>
 

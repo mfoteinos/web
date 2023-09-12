@@ -9,16 +9,15 @@
 
     <form>
         <div>
-            <label for="gateg_subcat">Add Categ Subcat:</label>
-            <input type="file" name="gateg_subcat" id="gateg_subcat">
+            <label for="file">Add Supermarket:</label>
+            <input type="file" name="file" id="super_files">
         </div>
         <button type="submit">Submit</button>
-
     </form>
 
     <br></br>
     <div id="delete_all">
-        <label for="delete">Delete All Categories :</label>
+        <label for="delete">Delete All Supermarkets:</label>
         <button id="delete_btn" onclick="Sure()">Delete</button>
     </div>
 <script>
@@ -28,21 +27,18 @@
     e.preventDefault();
 
 
-/////////////////////////////////////////////////////
-    const Categ = document.getElementById("gateg_subcat");
-    const categData = new FormData();
-  
-    for(let i =0; i < Categ.files.length; i++) {
-        categData.append("Categ", Categ.files[i]);
-    }
-    console.log(...categData)
- ////////////////////////////////////////////////
- 
-////////////////////////////////////////////
+    const Supermarket = document.getElementById("super_files");
+    const formData = new FormData();
 
-    fetch('/add_categories_subcat', {
+
+    for(let i =0; i < Supermarket.files.length; i++) {
+        formData.append("files", Supermarket.files[i]);
+    }
+    console.log(...formData)
+
+    fetch('/add_supermarket', {
         method: 'POST',
-        body: categData, 
+        body: formData, 
     })
     .then(res => res.json())
     .then(data => console.log(data))
@@ -65,9 +61,9 @@ function reload(){
 }
 
 function delete_all(){
-    fetch('/delete_categories', {
+    fetch('/delete_supermarket', {
         method: 'POST',
-    }).then(alert("All Categories deleted"))
+    }).then(alert("All products deleted"))
     .then(location.reload())
 }
 

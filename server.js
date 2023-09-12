@@ -141,9 +141,19 @@ const price = multer.diskStorage({
     }
 })
 
+const supermarket = multer.diskStorage({
+    destination: function(req, res, callback){
+        callback(null, __dirname + "/supermarket")
+    },
+    filename: function(req, file, callback){
+        callback(null, file.originalname)
+    }
+})
+
 const products = multer({storage: storage})
 const categories = multer({storage: categ})
 const prices = multer({storage: price})
+const supermarkets = multer({storage: supermarket})
 
 
 app.get('/', checkNotAuthenticated, (req,res) => {
@@ -592,6 +602,11 @@ app.get('/add_prices', checkAuthenticated, checkAdmin, (req,res) => {
     res.render('add_prices')
 });
 
+app.get('/add_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
+
+    res.render('add_supermarket')
+});
+
 
 app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files"), (req,res) => {
 
@@ -625,34 +640,31 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
                   Product.find({'name': element.name}).then(result => {
                         if(result == ""){
                                     temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory})
-                                    let i = 0
-                                        while(i < 7){
-                                          let week = new Date();
-                                          week.setDate(week.getDate() - i)
-                                            Product.updateOne({'name': element.name}, {$push: {prices: {date: week.toLocaleDateString(), price: (Math.floor((Math.random()*5)* 100)/100) + 1}}}).then(result => {
-                                                console.log(result)
-                                               }).catch((err) =>{
-                                                    console.log(err);
-                                            })
-                                            i += 1
-                                        }
                                     Product.collection.insertOne(temp, (err) => {
                                         if(err)
                                         {
                                           return console.error(err);
+                                        }else {
+                                            console.info('successfully stored.');
                                         }
                                     })
                                 }
-                
-                
-                
-                            })
+                    })
             })
          })
 
        
     })
    
+})
+
+app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
+    Product.deleteMany({}).then(result => {
+        console.log(result)
+    }).catch((err) =>{
+        console.log(err);
+    })
+
 })
 
 app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.array("Categ"), (req,res) => {
@@ -689,19 +701,97 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
     })
 })
 
-app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Price"), (req,res) => {
-
-})
-
-app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
-    Product.deleteMany({}).then(result => {
+app.post('/delete_categories', checkAuthenticated, checkAdmin, (req,res) => {
+    Categ_Sub.deleteMany({}).then(result => {
         console.log(result)
+        res.redirect('admin_home')
     }).catch((err) =>{
         console.log(err);
     })
+})
 
-    Categ_Sub.deleteMany({}).then(result => {
+app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Price"), (req,res) => {
+    fs.readFile('Prices.json', 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        data = JSON.parse(data);
+        console.log(data)
+
+        data.forEach(element => {
+            let i = 0
+            while(i < 7){
+                Product.updateOne({'name': element.name}, { $push: { prices : element.prices[i]}}).then(result => {
+                    console.log(result)
+                   }).catch((err) =>{
+                        console.log(err);
+                })
+                i +=1
+            }
+            
+         })
+    })
+
+})
+
+app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array("files"), (req,res) => {
+    fs.readFile('supermarket/export.geojson', 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      
+        data = JSON.parse(data);
+        data = data.features.filter(feature => feature.properties.name != null && feature.properties.name != "No supermarket");
+        data = data.filter(feature => feature.geometry.type != undefined && feature.geometry.type != "Polygon" );
+        let tempArray = [];
+        let i = 0
+        let temp = 0
+        let today = new Date();
+        today = today.toLocaleDateString()
+        data.forEach(element => {
+          // console.log(element)
+      
+          i = Math.floor(Math.random() * 2)
+          if (i % 2 == 0){
+            temp = new SupermarketM({
+              type:element.type,
+              properties: {id:(element.id.slice(5)),name:element.properties.name},
+              offers: [{id: (element.id.slice(5)),username:"Dusk",product: "Μπάμιες",price: 1000,date: today,likes: 100, dislikes: 0,available: true, reqDay: true, reqWeek: true}],
+              geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
+            });
+          }
+          else {
+            temp = new SupermarketM({
+              type:element.type,
+              properties: {id:(element.id.slice(5)),name:element.properties.name},
+              offers: [],
+              geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
+            });
+          }
+      
+          tempArray.push(temp)
+        });
+        
+      SupermarketM.collection.insertMany(tempArray, (err) => {
+      
+          if(err)
+          {
+            return console.error(err);
+          }
+          else {
+            console.info('supermarkets were successfully stored.');
+        }
+        })
+        res.redirect('admin_home')
+      });
+})
+
+app.post('/delete_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
+    SupermarketM.deleteMany({}).then(result => {
         console.log(result)
+        res.redirect('admin_home')
     }).catch((err) =>{
         console.log(err);
     })

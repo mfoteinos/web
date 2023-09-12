@@ -17,7 +17,7 @@
 
     <br></br>
     <div id="delete_all">
-        <label for="delete">Delete All :</label>
+        <label for="delete">Delete All Products :</label>
         <button id="delete_btn" onclick="Sure()">Delete</button>
     </div>
 <script>
@@ -63,7 +63,7 @@ function reload(){
 function delete_all(){
     fetch('/delete_products', {
         method: 'POST',
-    }).then(alert("All products deleted"))
+    }).then(alert("All Products deleted"))
     .then(location.reload())
 }
 

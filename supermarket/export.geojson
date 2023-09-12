@@ -1,0 +1,1569 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-ide",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2023-01-28T18:06:10Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/165714007",
+        "building": "yes",
+        "name": "Κρόνος",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              21.7309124,
+              38.195391
+            ],
+            [
+              21.7310171,
+              38.1950031
+            ],
+            [
+              21.7311565,
+              38.1950284
+            ],
+            [
+              21.7311646,
+              38.1950073
+            ],
+            [
+              21.7314167,
+              38.1950579
+            ],
+            [
+              21.731406,
+              38.1951211
+            ],
+            [
+              21.7314435,
+              38.1951317
+            ],
+            [
+              21.7314033,
+              38.1953045
+            ],
+            [
+              21.7314382,
+              38.1953109
+            ],
+            [
+              21.7313952,
+              38.1954458
+            ],
+            [
+              21.7311592,
+              38.1953994
+            ],
+            [
+              21.7311485,
+              38.1954331
+            ],
+            [
+              21.7309124,
+              38.195391
+            ]
+          ]
+        ]
+      },
+      "id": "way/165714007"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/165780237",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              21.7232791,
+              38.2253408
+            ],
+            [
+              21.7241955,
+              38.225179
+            ],
+            [
+              21.7242175,
+              38.2251845
+            ],
+            [
+              21.7242289,
+              38.2251911
+            ],
+            [
+              21.7242417,
+              38.2252035
+            ],
+            [
+              21.7243092,
+              38.2252942
+            ],
+            [
+              21.7246284,
+              38.2257958
+            ],
+            [
+              21.7244067,
+              38.2258948
+            ],
+            [
+              21.7242894,
+              38.2261231
+            ],
+            [
+              21.7236475,
+              38.2262818
+            ],
+            [
+              21.7229248,
+              38.2264678
+            ],
+            [
+              21.7228144,
+              38.226233
+            ],
+            [
+              21.7226744,
+              38.2259793
+            ],
+            [
+              21.7225952,
+              38.2258534
+            ],
+            [
+              21.7225277,
+              38.2257503
+            ],
+            [
+              21.7224177,
+              38.2256102
+            ],
+            [
+              21.7224146,
+              38.2256022
+            ],
+            [
+              21.7224142,
+              38.2255944
+            ],
+            [
+              21.722417,
+              38.2255848
+            ],
+            [
+              21.7224264,
+              38.2255626
+            ],
+            [
+              21.7224335,
+              38.2255518
+            ],
+            [
+              21.7224402,
+              38.2255438
+            ],
+            [
+              21.7224464,
+              38.2255377
+            ],
+            [
+              21.7224534,
+              38.2255329
+            ],
+            [
+              21.7224613,
+              38.2255302
+            ],
+            [
+              21.7224894,
+              38.2255209
+            ],
+            [
+              21.7230143,
+              38.2253878
+            ],
+            [
+              21.7232791,
+              38.2253408
+            ]
+          ]
+        ]
+      },
+      "id": "way/165780237"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/176516266",
+        "addr:city": "Πάτρα",
+        "addr:housenumber": "243",
+        "addr:postcode": "26332",
+        "addr:street": "Πατρών Κλάους",
+        "brand": "Lidl",
+        "brand:wikidata": "Q151954",
+        "building": "yes",
+        "name": "Lidl",
+        "opening_hours": "Mo-Fr 07:00-21:00; Sa 07:00-20:00",
+        "operator": "Lidl",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              21.7608869,
+              38.2097852
+            ],
+            [
+              21.7611393,
+              38.2099389
+            ],
+            [
+              21.7606345,
+              38.210452
+            ],
+            [
+              21.7603317,
+              38.2102669
+            ],
+            [
+              21.7604652,
+              38.2101353
+            ],
+            [
+              21.7605173,
+              38.2101664
+            ],
+            [
+              21.7608869,
+              38.2097852
+            ]
+          ]
+        ]
+      },
+      "id": "way/176516266"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/504524333",
+        "addr:city": "Πάτρα",
+        "addr:housenumber": "16",
+        "addr:street": "Παρνασσού",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "building": "yes",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              21.7276674,
+              38.2325984
+            ],
+            [
+              21.7276121,
+              38.2320627
+            ],
+            [
+              21.727651,
+              38.2320439
+            ],
+            [
+              21.7279168,
+              38.2320954
+            ],
+            [
+              21.7279155,
+              38.2321429
+            ],
+            [
+              21.7281681,
+              38.2321952
+            ],
+            [
+              21.728142,
+              38.2326284
+            ],
+            [
+              21.7276674,
+              38.2325984
+            ]
+          ]
+        ]
+      },
+      "id": "way/504524333"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/791178932",
+        "addr:city": "ΠΑΤΡΑ",
+        "addr:housenumber": "Ο.Τ. 868Α",
+        "addr:postcode": "26334",
+        "addr:street": "Καλαβρύτων",
+        "branch": "ΠΑΤΡΑ 8 ΚΑΛΑΒΡΥΤΩΝ",
+        "brand": "ΑΒ Βασιλόπουλος",
+        "brand:el": "ΑΒ Βασιλόπουλος",
+        "brand:en": "AB Vassilopoulos",
+        "brand:wikidata": "Q4721807",
+        "brand:wikipedia": "el:Άλφα Βήτα Βασιλόπουλος",
+        "building": "yes",
+        "name": "ΑΒ Βασιλόπουλος",
+        "name:el": "ΑΒ Βασιλόπουλος",
+        "name:en": "AB Vassilopoulos",
+        "opening_hours": "Mo-Fr 08:00-21:00; Sa 08:00-20:00",
+        "opening_hours:covid19": "Mo-Fr 07:00-21:00; Sa 07:00-20:00",
+        "phone": "+302610337290",
+        "shop": "supermarket",
+        "website": "https://www.ab.gr/storedetails/patra-8-kalavryton"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              21.7474699,
+              38.2318199
+            ],
+            [
+              21.7470217,
+              38.2318213
+            ],
+            [
+              21.7469476,
+              38.2317809
+            ],
+            [
+              21.7469488,
+              38.2315088
+            ],
+            [
+              21.7472513,
+              38.2315028
+            ],
+            [
+              21.7474638,
+              38.2314989
+            ],
+            [
+              21.7474699,
+              38.2318199
+            ]
+          ]
+        ]
+      },
+      "id": "way/791178932"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/791180067",
+        "addr:city": "Πάτρα",
+        "addr:postcode": "26500",
+        "addr:street": "Εθν. Οδός Πατρών - Αθηνών & Αμερικής",
+        "branch": "ΠΑΤΡΑ 2 ΕΘΝΙΚΗ ΟΔΟΣ",
+        "brand": "ΑΒ Βασιλόπουλος",
+        "brand:el": "ΑΒ Βασιλόπουλος",
+        "brand:en": "AB Vassilopoulos",
+        "brand:wikidata": "Q4721807",
+        "brand:wikipedia": "el:Άλφα Βήτα Βασιλόπουλος",
+        "building": "yes",
+        "name": "ΑΒ Βασιλόπουλος",
+        "name:el": "ΑΒ Βασιλόπουλος",
+        "name:en": "AB Vassilopoulos",
+        "opening_hours": "Mo-Fr 08:00-21:00; Sa 08:00-20:00",
+        "opening_hours:covid19": "Mo-Fr 07:00-21:00; Sa 07:00-20:00",
+        "phone": "+302610451532 +302610453111 +302610453143",
+        "shop": "supermarket",
+        "website": "https://www.ab.gr/storedetails/patra-2-ethniki-odos"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              21.7494531,
+              38.2614183
+            ],
+            [
+              21.7496685,
+              38.2613164
+            ],
+            [
+              21.7498265,
+              38.2615076
+            ],
+            [
+              21.7496043,
+              38.2616097
+            ],
+            [
+              21.7494531,
+              38.2614183
+            ]
+          ]
+        ]
+      },
+      "id": "way/791180067"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/905212351",
+        "brand": "Γαλαξίας",
+        "brand:el": "Γαλαξίας",
+        "brand:en": "Galaxias",
+        "brand:wikidata": "Q5518063",
+        "brand:wikipedia": "el:Γαλαξίας (σούπερ μάρκετ)",
+        "building": "yes",
+        "name": "Γαλαξίας",
+        "name:el": "Γαλαξίας",
+        "name:en": "Galaxias",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              21.7447733,
+              38.2595761
+            ],
+            [
+              21.7454688,
+              38.2593815
+            ],
+            [
+              21.745544,
+              38.2595474
+            ],
+            [
+              21.7448485,
+              38.2597418
+            ],
+            [
+              21.7447733,
+              38.2595761
+            ]
+          ]
+        ]
+      },
+      "id": "way/905212351"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/354449389",
+        "brand": "Lidl",
+        "brand:wikidata": "Q151954",
+        "brand:wikipedia": "en:Lidl",
+        "name": "Lidl",
+        "opening_hours": "Mo-Fr 07:00-21:00, Sa 07:00-20:00",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.712654,
+          38.2080319
+        ]
+      },
+      "id": "node/354449389"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/360217468",
+        "name": "The Mart",
+        "name:en": "The Mart",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7806567,
+          38.28931
+        ]
+      },
+      "id": "node/360217468"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/360226900",
+        "addr:city": "Πάτρα",
+        "addr:housenumber": "9",
+        "addr:postcode": "26442",
+        "addr:street": "Νοταρά",
+        "brand": "Lidl",
+        "brand:wikidata": "Q151954",
+        "brand:wikipedia": "en:Lidl",
+        "name": "Lidl",
+        "opening_hours": "Mo-Fr 09:00-21:00; Sa 9:00-20:00",
+        "operator": "LIDL",
+        "payment:bitcoin": "no",
+        "payment:cash": "yes",
+        "payment:coins": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "payment:mastercard": "yes",
+        "payment:visa": "yes",
+        "phone": "800 111 3333",
+        "shop": "supermarket",
+        "website": "https://www.lidl-hellas.gr/el/index.htm"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7434265,
+          38.2633511
+        ]
+      },
+      "id": "node/360226900"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/364381224",
+        "addr:city": "Ρίο",
+        "addr:housenumber": "23",
+        "addr:postcode": "26504",
+        "addr:street": "Αθηνών",
+        "name": "Σουπερμάρκετ Ανδρικόπουλος",
+        "name:en": "Supermarket Andrikopoulos",
+        "operator": "Andrikopoulos",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7908028,
+          38.2952086
+        ]
+      },
+      "id": "node/364381224"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/364463568",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7642075,
+          38.2104365
+        ]
+      },
+      "id": "node/364463568"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/980515550",
+        "brand": "Lidl",
+        "brand:wikidata": "Q151954",
+        "brand:wikipedia": "en:Lidl",
+        "name": "Lidl",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.740082,
+          38.2312926
+        ]
+      },
+      "id": "node/980515550"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1643373636",
+        "addr:city": "Δημοτική Ενότητα Ρίου",
+        "addr:street": "Σώμερσετ",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "opening_hours": "Mo-Fr 08:00-21:00; Sa 08:00-20:00; Su 11:00-18:00",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7814957,
+          38.3013087
+        ]
+      },
+      "id": "node/1643373636"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1643373639",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.790383,
+          38.2949372
+        ]
+      },
+      "id": "node/1643373639"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1643818277",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7629172,
+          38.2756942
+        ]
+      },
+      "id": "node/1643818277"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1643818281",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "brand:wikipedia": "el:Σκλαβενίτης",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7489662,
+          38.2596476
+        ]
+      },
+      "id": "node/1643818281"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1643889596",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7568738,
+          38.2126477
+        ]
+      },
+      "id": "node/1643889596"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1657132006",
+        "name": "Ρουμελιώτης SUPER Market",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7436127,
+          38.2613806
+        ]
+      },
+      "id": "node/1657132006"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1657132008",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "brand:wikipedia": "el:Σκλαβενίτης",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.741582,
+          38.2585236
+        ]
+      },
+      "id": "node/1657132008"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1763830009",
+        "addr:housenumber": "52-56",
+        "addr:street": "Καλαβρύτων",
+        "name": "My market",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7473265,
+          38.2323892
+        ]
+      },
+      "id": "node/1763830009"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1763830474",
+        "brand": "ΑΒ Βασιλόπουλος",
+        "brand:el": "ΑΒ Βασιλόπουλος",
+        "brand:en": "AB Vassilopoulos",
+        "brand:wikidata": "Q4721807",
+        "brand:wikipedia": "el:Άλφα Βήτα Βασιλόπουλος",
+        "name": "ΑΒ Βασιλόπουλος",
+        "name:el": "ΑΒ Βασιλόπουλος",
+        "name:en": "AB Vassilopoulos",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7257294,
+          38.2322376
+        ]
+      },
+      "id": "node/1763830474"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1770994538",
+        "name": "Markoulas",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7603629,
+          38.2644973
+        ]
+      },
+      "id": "node/1770994538"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1815896581",
+        "access": "customers",
+        "brand": "Lidl",
+        "brand:wikidata": "Q151954",
+        "brand:wikipedia": "en:Lidl",
+        "name": "Lidl",
+        "opening_hours": "Mo-Sa 08:00-20:00",
+        "operator": "Lidl",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.8051332,
+          38.3067563
+        ]
+      },
+      "id": "node/1815896581"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1971240515",
+        "name": "Ανδρικόπουλος",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.736371,
+          38.2399863
+        ]
+      },
+      "id": "node/1971240515"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1971247760",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "brand:wikipedia": "el:Σκλαβενίτης",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7373409,
+          38.2364945
+        ]
+      },
+      "id": "node/1971247760"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1971249846",
+        "name": "My Market",
+        "name:de": "My market",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7342362,
+          38.2427052
+        ]
+      },
+      "id": "node/1971249846"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3144355008",
+        "addr:city": "Πάτρα",
+        "addr:postcode": "26441",
+        "addr:street": "Αγίας Σοφίας & Αθηνών",
+        "name": "My market",
+        "opening_hours": "08:00-21:00 (Saturday: 08:00-20:00)",
+        "operator": "ΜETRO AEBE",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7396708,
+          38.2568618
+        ]
+      },
+      "id": "node/3144355008"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3354481184",
+        "name": "Ανδρικόπουλος",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7323293,
+          38.1951968
+        ]
+      },
+      "id": "node/3354481184"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4101518891",
+        "addr:street": "Εγνατίας",
+        "name": "ΑΒ ΒΑΣΙΛΟΠΟΥΛΟΣ",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7418506,
+          38.2565589
+        ]
+      },
+      "id": "node/4101518891"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4356067891",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7365286,
+          38.2450095
+        ]
+      },
+      "id": "node/4356067891"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4356183595",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "brand:wikipedia": "el:Σκλαβενίτης",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "opening_hours": "Mo-Fr 08:00-21:00; Sa 08:00-20:00",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.733285,
+          38.2434859
+        ]
+      },
+      "id": "node/4356183595"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4357217589",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7414219,
+          38.2524287
+        ]
+      },
+      "id": "node/4357217589"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4357425491",
+        "name:de": "Kaponis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7423925,
+          38.2512732
+        ]
+      },
+      "id": "node/4357425491"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4357589496",
+        "name": "Ανδρικόπουλος",
+        "name:de": "Elomas",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7302559,
+          38.2427963
+        ]
+      },
+      "id": "node/4357589496"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4358244594",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7337191,
+          38.2454121
+        ]
+      },
+      "id": "node/4358244594"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4931300543",
+        "name": "Kronos",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7296435,
+          38.2425794
+        ]
+      },
+      "id": "node/4931300543"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4969309651",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7940989,
+          38.3015018
+        ]
+      },
+      "id": "node/4969309651"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5005384516",
+        "name": "No supermarket",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7363349,
+          38.2498065
+        ]
+      },
+      "id": "node/5005384516"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5132918123",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7400704,
+          38.2523678
+        ]
+      },
+      "id": "node/5132918123"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5164678230",
+        "addr:city": "Πάτρα",
+        "addr:housenumber": "1 - 3",
+        "addr:postcode": "26442",
+        "addr:street": "Αξιού",
+        "name": "Ανδρικόπουλος - Supermarket",
+        "name:el": "Ανδρικόπουλος",
+        "name:en": "Andrikopoulos",
+        "opening_hours": "Mo-Fr 08:00-21:00; Sa 08:00-20:00",
+        "operator": "Ανδρικόπουλος",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "payment:edenred_card": "yes",
+        "phone": "+302610430062",
+        "shop": "supermarket",
+        "website": "https://www.andrikopoulos.com.gr/"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7481501,
+          38.2691937
+        ]
+      },
+      "id": "node/5164678230"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5164741179",
+        "addr:postcode": "26442",
+        "addr:street": "Νοταρά",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "brand:wikipedia": "el:Σκλαβενίτης",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "opening_hours": "Mo-Fr 9:00-21:00, Sa 9:00-20:00",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "payment:edenred_card": "yes",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7497014,
+          38.2690963
+        ]
+      },
+      "id": "node/5164741179"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5350727524",
+        "name:en": "ENA food cash $ cary",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7251655,
+          38.233827
+        ]
+      },
+      "id": "node/5350727524"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5620198221",
+        "brand": "ΑΒ Βασιλόπουλος",
+        "brand:el": "ΑΒ Βασιλόπουλος",
+        "brand:en": "AB Vassilopoulos",
+        "brand:wikidata": "Q4721807",
+        "brand:wikipedia": "el:Άλφα Βήτα Βασιλόπουλος",
+        "name": "ΑΒ Βασιλόπουλος",
+        "name:el": "ΑΒ Βασιλόπουλος",
+        "name:en": "AB Vassilopoulos",
+        "opening_hours": "Mo-Fr 08:00-21:00; Sa 08:00-20:00",
+        "shop": "supermarket",
+        "wheelchair": "yes"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7357783,
+          38.2170935
+        ]
+      },
+      "id": "node/5620198221"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5783486253",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.8203451,
+          38.312741
+        ]
+      },
+      "id": "node/5783486253"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5909978406",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7312416,
+          38.2451867
+        ]
+      },
+      "id": "node/5909978406"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7673935764",
+        "name": "3A",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7396687,
+          38.2504514
+        ]
+      },
+      "id": "node/7673935764"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7673976786",
+        "brand": "Spar",
+        "brand:wikidata": "Q610492",
+        "brand:wikipedia": "en:SPAR (retailer)",
+        "name": "Spar",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7389771,
+          38.2486316
+        ]
+      },
+      "id": "node/7673976786"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7673986831",
+        "name": "ΑΝΔΡΙΚΟΠΟΥΛΟΣ",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7383224,
+          38.2481545
+        ]
+      },
+      "id": "node/7673986831"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7674120315",
+        "name": "ΑΝΔΡΙΚΟΠΟΥΛΟΣ",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7308044,
+          38.2429466
+        ]
+      },
+      "id": "node/7674120315"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7677225097",
+        "name": "MyMarket",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7265283,
+          38.2392836
+        ]
+      },
+      "id": "node/7677225097"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7914886761",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7575349,
+          38.2653368
+        ]
+      },
+      "id": "node/7914886761"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8214753473",
+        "name": "Ena Cash And Carry",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7253472,
+          38.2346622
+        ]
+      },
+      "id": "node/8214753473"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8214854586",
+        "name": "ΚΡΟΝΟΣ - (Σκαγιοπουλείου)",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7294915,
+          38.2358002
+        ]
+      },
+      "id": "node/8214854586"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8214887295",
+        "name": "Ανδρικόπουλος Super Market",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7306406,
+          38.2379176
+        ]
+      },
+      "id": "node/8214887295"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8214887306",
+        "name": "3Α Αράπης",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7328984,
+          38.2375068
+        ]
+      },
+      "id": "node/8214887306"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8214910532",
+        "brand": "Γαλαξίας",
+        "brand:el": "Γαλαξίας",
+        "brand:en": "Galaxias",
+        "brand:wikidata": "Q5518063",
+        "brand:wikipedia": "el:Γαλαξίας (σούπερ μάρκετ)",
+        "name": "Γαλαξίας",
+        "name:el": "Γαλαξίας",
+        "name:en": "Galaxias",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.733787,
+          38.2361127
+        ]
+      },
+      "id": "node/8214910532"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8215010716",
+        "name": "Super Market Θεοδωρόπουλος",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7283123,
+          38.2360129
+        ]
+      },
+      "id": "node/8215010716"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8215157448",
+        "name": "Super Market ΚΡΟΝΟΣ",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7340723,
+          38.2390442
+        ]
+      },
+      "id": "node/8215157448"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8753329904",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7396855,
+          38.2642274
+        ]
+      },
+      "id": "node/8753329904"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8753329905",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7398813,
+          38.2658237
+        ]
+      },
+      "id": "node/8753329905"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8777081651",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "brand:wikipedia": "el:Σκλαβενίτης",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7428703,
+          38.2601801
+        ]
+      },
+      "id": "node/8777081651"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8777171555",
+        "name": "3A ARAPIS",
+        "name:el": "3Α Αράπης",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7460078,
+          38.2586424
+        ]
+      },
+      "id": "node/8777171555"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8805335004",
+        "brand": "Μασούτης",
+        "brand:el": "Μασούτης",
+        "brand:en": "Masoutis",
+        "brand:wikidata": "Q6783887",
+        "brand:wikipedia": "en:Masoutis",
+        "name": "Μασούτης",
+        "name:el": "Μασούτης",
+        "name:en": "Masoutis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7355058,
+          38.2454669
+        ]
+      },
+      "id": "node/8805335004"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8805467220",
+        "name": "ΑΒ Shop & Go",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7380288,
+          38.24957
+        ]
+      },
+      "id": "node/8805467220"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8806495733",
+        "name": "3Α ΑΡΑΠΗΣ",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7455558,
+          38.2398789
+        ]
+      },
+      "id": "node/8806495733"
+    }
+  ]
+}
