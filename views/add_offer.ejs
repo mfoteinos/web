@@ -114,8 +114,9 @@
             if (element.subcategory == uuid){
               let tempProduct = `
               <option></option>
-              <option value ='${element.name}'>${element.name}</option>
-              `
+              <option value ='${element.name}|${element.id}'>${element.name}</option>
+              <br></br>`
+
 
               product = product.concat(tempProduct)
 
@@ -177,8 +178,7 @@ const displayCharacters = (product) => {
                         <input type="number" name="new_value" id="new_value" step="any" required>
 
                         <input type="hidden" name="Sup_id" id="Sup_id" value="<%= Sup_id %>"> 
-                        <input type="hidden" name="product" id="product" value="${product.name}">
-                        <input type="hidden" name="product_id" id="product_id" value="${product.id}">
+                        <input type="hidden" name="product" id="product" value="${product.name}|${product.id}">
 
                         <button id="find_Product">Add Offer</button>
 

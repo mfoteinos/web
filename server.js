@@ -302,18 +302,23 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
 //             console.log(err);
 //     })
 //     }
-    console.log(req.body)
+
+    let tempArray = req.body.product.split('|')
+    
+    let product_name = tempArray[0]
+
+    let product_id = tempArray[1]
 
     let today = new Date().toLocaleDateString();
 
 
-    let id_string = req.body.Sup_id.concat(req.user.username)
+    let id_string = req.body.Sup_id.concat(req.user.username, product_id)
 
     var offer = []
     SupermarketM.find({'properties.id': req.body.Sup_id}, {'offers':1}).then(result => {
         result.forEach(element => {
             for(x of element.offers){
-                if(x.product == req.body.product && x.username == req.user.username){
+                if(x.product == product_name){
                     offer.push(x)
                 }
             }
@@ -322,7 +327,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
         let req_Week = false
         if(offer == ""){
 
-            Product.find({'name': req.body.product}).then(result =>{
+            Product.find({'name': product_name}).then(result =>{
                 let sum = 0
                 
                 for(x of result[0].prices){
@@ -335,7 +340,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                 if(req.body.new_value <= 0.8*avg){
                     req_Week = true
                 }
-                SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
+                SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:product_name, 
                     price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week}}}).then(result => {
                         let points = 0
                         if(req_Day){
@@ -359,7 +364,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
         })
         }else if(offer[0].price*0.8 >= req.body.new_value){
             
-            Product.find({'name': req.body.product}).then(result =>{
+            Product.find({'name': product_name}).then(result =>{
                 let sum = 0
                 
                 for(x of result[0].prices){
@@ -374,7 +379,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                 }
                 SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$pull: {offers: {id:offer[0].id_string, username:offer[0].username, product:offer[0].product, 
                     price:offer[0].new_value, date:offer[0].date,likes:offer[0].likes, dislikes:offer[0].dislikes, available:offer[0].available, reqDay: offer[0].reqDay, reqWeek: offer[0].reqDay}}}).then(result => {
-                        SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:req.body.product, 
+                        SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:product_name, 
                             price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week}}}).then(result => {
                             let points = 0
                             if(req_Day){
