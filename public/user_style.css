@@ -12,6 +12,40 @@ html{
     z-index: 10;
   }
 body{
+max-width: 1200px;
+margin: 20px auto;
 font-family: 'Myfont';
 font-size: 15px;
+}
+div{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+select{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 20px;
+  cursor: pointer;
+}
+button{
+    cursor: pointer;
+}
+form{
+  text-align: right;
+}
+div a{
+  display: flex;
+  text-align: left;
+  margin: 5px;
+  padding: 5px;
+  background: #21db2a;
+  cursor: pointer;
+  
+}
+label{
+  height: 25px;
+    
 }

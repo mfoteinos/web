@@ -3,7 +3,7 @@
 <html>
 
 <head>
-<title>Covid-Mole</title>
+<title>Bang</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8"> 
 <link rel="stylesheet" href="/user_style.css">
@@ -18,10 +18,15 @@
             <input type="text" id="input-box" placeholder="Search Supermarket" autocomplete="off">
             <button>Search</button>
         </div>
-      </div>
+    </div>
       <div id="productList"></div>
       <br></br>
-
+    
+    <form action="/logout?_method=DELETE" method="POST">
+            <button type="submit">Log Out</button>
+    </form>
+    
+    
 
 <div id = "map"></div>
 
@@ -294,11 +299,7 @@ Categories()
 </script>
 
 
-<li> 
-    <form action="/logout?_method=DELETE" method="POST">
-        <button type="submit">Log Out</button>
-    </form>
-</li>
+
 
 
 <a href="/user_profile">
