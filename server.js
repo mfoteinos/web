@@ -21,6 +21,8 @@ const Categ_Sub = require('./models/Categ_Subcateg')
 const Product = require('./models/product')
 const fs = require('fs');
 
+const cron = require("node-cron");
+
 
 
 
@@ -43,6 +45,24 @@ initializePassport(
     id => UserM.findById(id)
 );
 
+//"*/15 * * * * *" for every 15 seconds
+
+//"0 0 1 * *" for every month seconds
+
+cron.schedule("*/30 * * * * *", function () {
+    let tokens = 100
+    UserM.updateMany({}, {$set: { 'monthpoints': 0, 'monthtokens': 0}}).then((result) =>{
+        UserM.count({}).then(count => {
+            tokens = tokens * count
+            console.log(tokens)
+        })
+    }).catch((err) =>{
+        console.log(err);
+    })
+
+
+
+  });
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -309,7 +329,15 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
 
     let product_id = tempArray[1]
 
-    let today = new Date().toLocaleDateString();
+    var date_ob = new Date();
+
+    var day = date_ob.getDate();
+
+    var month = date_ob.getMonth() + 1;
+
+    today = [date_ob.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
+    
+
 
 
     let id_string = req.body.Sup_id.concat(req.user.username, product_id)
@@ -804,42 +832,62 @@ app.post('/delete_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
 
 app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
 
-    let date_ob = new Date();
-    let date = ("0" + date_ob.getDate()).slice(-2);
+    if(req.query.date){
+        var month = req.query.date.substring(5,7);
 
-    // current month
-    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        var year = req.query.date.substring(0,4);
+    } else {
+        var date_ob = new Date();
+        // current month
+        var month = date_ob.getMonth() + 1;
+        month = (month>9 ? '' : '0') + month;
 
-    // current year
-    let year = date_ob.getFullYear();
+        // current year
+        var year = date_ob.getFullYear();
+    }
+
+    // console.log(month)
+
+    // console.log(year)
+
 
     let startDate = year + "-" + month + "-01";
 
-    let startDateRev = "01-"; + "-" + month + "-" + year;
-
     let lastday = new Date(year,month,0).getDate()
+
+    // console.log("lastday:" + lastday)
 
     let endDate = year + "-" + month + '-' + lastday;
 
-    let endDateRev = lastday + "-" + month + '-' + year;
-    
-    console.log(startDate)
-    console.log(endDate)
+    let monthlabels = new Array(lastday).fill('')
 
-    SupermarketM.find({'offers.date': {$gte: startDateRev,  $lte: endDateRev}}).then((result) =>{
+    for (var i = 0; i < monthlabels.length; i++) {
+        if (i<9) {
+            monthlabels[i] = year + "-" + month + "-" + "0" + (i+1);
+        } else {
+            monthlabels[i] = year + "-" + month + "-" + (i+1);
+        }
+
+    }
+
+    // console.log(monthlabels)
+
+    offercount = new Array(lastday).fill(0);
+
+    SupermarketM.find({'offers.date': {$gte: startDate,  $lte: endDate}}).then((result) =>{
         for (superm of result){
             for (offer of superm.offers){
-                console.log(superm.properties.name)
-                console.log(offer.date)
-            }
+                offercount[offer.date.substring(8,10) - 1] += 1;
         }
-        console.log(result[0].offers[0].date)
-        res.render('statistics', {startDate:startDate,endDate:endDate})
+    }
+    console.log(offercount)
+        res.render('statistics', {startDate:startDate,endDate:endDate, offercount:offercount, monthlabels:monthlabels})
     }).catch((err) =>{
         console.log(err);
     })
 
 });
+
 
 app.use((req,res) => {
 

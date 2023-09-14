@@ -43,7 +43,8 @@
     <div class="chartCard">
       <div class="chartBox">
         <canvas id="myChart"></canvas>
-        <input type="month" onchange="filterChart(this)">
+        <form action="/statistics" method="get">
+        <input type="month" name="date" onchange="this.form.submit()"></form>
       </div>
     </div>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
@@ -52,14 +53,19 @@
 
     <script>
 
+    var startDate = <%- JSON.stringify(startDate) %>; 
 
-    a
-    // setup 
+    var endDate = <%- JSON.stringify(endDate) %>; 
+
+    var offercount = <%- JSON.stringify(offercount) %>;
+
+    var monthlabels = <%- JSON.stringify(monthlabels) %>; 
+
     const data = {
-      labels: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-06-01', '2023-08-01', '2023-10-01', '2023-12-01'],
+      labels: monthlabels,
       datasets: [{
-        label: 'Weekly Sales',
-        data: [18, 12, 6, 9, 12, 3, 9],
+        label: 'Αριθμός Προσφορών',
+        data: offercount,
         backgroundColor: [
           'rgba(255, 26, 104, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -89,8 +95,8 @@
       options: {
         scales: {
             x: {
-                min: '2023-09-01',
-                max: '2023-09-30',
+                min: startDate,
+                max: endDate,
                 type: 'time',
                 time: {
                     unit: 'day'
@@ -109,19 +115,8 @@
     );
 
     function filterChart(date) {
-        const year = date.value.substring(0,4);
-        const month = date.value.substring(5,7);
-
-        const lastDay = (y, m) => {
-            return new Date(y,m,0).getDate()
-        };
-
-        const startDate = `${date.value}-01`;
-        const endDate = `${date.value}-${lastDay(year,month)}`;
-
-        myChart.config.options.scales.x.min = startDate;
-        myChart.config.options.scales.x.max = endDate;
-        myChart.update();
+      console.log(date.value)
+ 
 
 
     }

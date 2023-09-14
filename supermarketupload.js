@@ -22,8 +22,14 @@ fs.readFile('export.geojson', 'utf8', (err, data) => {
   let tempArray = [];
   let i = 0
   let temp = 0
-  let today = new Date();
-  today = today.toLocaleDateString()
+  var date_ob = new Date();
+
+  var day = date_ob.getDate();
+
+  var month = date_ob.getMonth() + 1;
+
+  today = [date_ob.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
+
   data.forEach(element => {
     // console.log(element)
 
