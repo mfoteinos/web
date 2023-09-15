@@ -76,8 +76,7 @@
           if (element.name == categ){
           for (const sub of element.subcategories){
             let option = ` <option></option>
-            <option value ='${sub.uuid}'><${sub.name}></option>`
-
+            <option value ='${sub.uuid}'>${sub.name}</option>`
             sub_categories = sub_categories.concat(option)
             }
           }
