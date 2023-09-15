@@ -769,7 +769,7 @@ app.post('/delete_categories', checkAuthenticated, checkAdmin, (req,res) => {
 })
 
 app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Price"), (req,res) => {
-    fs.readFile('Prices.json', 'utf8', (err, data) => {
+    fs.readFile('prices/Prices.json', 'utf8', (err, data) => {
         if (err) {
           console.error(err);
           return;
