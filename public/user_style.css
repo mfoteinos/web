@@ -4,7 +4,10 @@ padding: 0px;
 box-sizing: border-box;
 }
 html{
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
+  background: url('supermar.jpg') no-repeat center center fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 #map {
     width: 50%;
@@ -48,4 +51,8 @@ div a{
 label{
   height: 25px;
     
+}
+a{
+  display: flex;
+  justify-content: flex-end;
 }

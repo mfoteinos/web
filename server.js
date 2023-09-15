@@ -49,20 +49,20 @@ initializePassport(
 
 //"0 0 1 * *" for every month seconds
 
-cron.schedule("*/30 * * * * *", function () {
-    let tokens = 100
-    UserM.updateMany({}, {$set: { 'monthpoints': 0, 'monthtokens': 0}}).then((result) =>{
-        UserM.count({}).then(count => {
-            tokens = tokens * count
-            console.log(tokens)
-        })
-    }).catch((err) =>{
-        console.log(err);
-    })
+// cron.schedule("*/30 * * * * *", function () {
+//     let tokens = 100
+//     UserM.updateMany({}, {$set: { 'monthpoints': 0, 'monthtokens': 0}}).then((result) =>{
+//         UserM.count({}).then(count => {
+//             tokens = tokens * count
+//             console.log(tokens)
+//         })
+//     }).catch((err) =>{
+//         console.log(err);
+//     })
 
 
 
-  });
+//   });
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
