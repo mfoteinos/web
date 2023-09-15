@@ -12,21 +12,27 @@
 </head>
 
 <body>
-
+    <h1>Αναζήτηση τοπικού καταστήματος</h1>
     <div class="serch-box">
         <div class="row">
             <input type="text" id="input-box" placeholder="Search Supermarket" autocomplete="off">
             <button>Search</button>
+           
         </div>
     </div>
-      <div id="productList"></div>
-      <br></br>
-    
     <form action="/logout?_method=DELETE" method="POST">
-            <button type="submit">Log Out</button>
-    </form>
+        <button type="submit">Log Out</button>
+    </form>         
+    <a href="/user_profile">My Profile</a>
+    <br>
     
+    <h2><u>Επιλογή καταστήματος</u></h2>
+    <div id="productList"></div>
     
+    <br>
+    <br>
+            
+    <h3>Τοποθεσία προεπιλεγμένου καταστήματος</h3> 
 
 <div id = "map"></div>
 
@@ -297,14 +303,6 @@ const OffMarkers = L.geoJSON(gjOfferSups, {
 Categories() 
 
 </script>
-
-
-
-
-
-<a href="/user_profile">
-     My Profile
-</a>
 
 
 
