@@ -29,7 +29,7 @@ const userSchema = new Schema({
         default: 0,
         required: true
     },
-    month_tokens:{
+    monthtokens:{
         type: Number,
         default: 0,
         required: true

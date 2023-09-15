@@ -19,6 +19,7 @@ const UserM = require('./models/user');
 const SupermarketM = require('./models/supermarket');
 const Categ_Sub = require('./models/Categ_Subcateg')
 const Product = require('./models/product')
+const TokenM = require('./models/tokens')
 const fs = require('fs');
 
 const cron = require("node-cron");
@@ -49,20 +50,65 @@ initializePassport(
 
 //"0 0 1 * *" for every month seconds
 
-cron.schedule("*/30 * * * * *", function () {
+// 0 0 28-31 * * [ “$(date +\%d -d tomorrow)” = “01” ]
+
+cron.schedule("0 0 1 * *", function () {
     let tokens = 100
-    UserM.updateMany({}, {$set: { 'monthpoints': 0, 'monthtokens': 0}}).then((result) =>{
+    UserM.updateMany({}, {$set: { 'monthpoints': 0}}).then(() =>{
         UserM.count({}).then(count => {
             tokens = tokens * count
-            console.log(tokens)
+            TokenM.updateOne({'id': 0}, {$inc: { 'tokens': tokens}}).then(() =>{
+                console.log("Added " + tokens + " tokens to the token bank.")
+            }).catch((err) =>{
+                console.log(err);
+            })
         })
     }).catch((err) =>{
         console.log(err);
     })
 
+});
 
-
-  });
+cron.schedule("0 0 28-31 * *", function () {
+    let test_mode = false
+    let dateTomorrow = new Date();
+    dateTomorrow.setDate(dateTomorrow.getDate() + 1)
+    if (dateTomorrow.getDate() == 1 || test_mode) {
+        TokenM.find({'id':0}).then((result) =>{
+            dist_tokens = Math.round(result[0].tokens * 0.8)
+            console.log(dist_tokens + " tokens to be distributed.")
+            UserM.find({}).then( (result) => {
+                let sum = 0
+                for (user of result){
+                    sum += user.monthpoints
+                }
+                if (sum > 0) {
+                    for (user of result){
+                        let user_percent = (user.monthpoints / sum)
+                        let user_tokens = Math.round(dist_tokens * user_percent)
+                        UserM.updateOne({'username': user.username}, {$inc: { 'tokens': user_tokens}, $set: { 'monthtokens': user_tokens}}).then(() =>{
+                        }).catch((err) =>{
+                            console.log(err);
+                        })
+                    }
+                    TokenM.updateOne({'id': 0}, {$inc: { 'tokens': -dist_tokens}}).then(() =>{
+                        console.log("Removed " + dist_tokens + " tokens from the token bank.")
+                    }).catch((err) =>{
+                        console.log(err);
+                    })
+                } else {
+                    console.log("Total month points <= 0, can't distribute tokens")
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+        })
+        
+        }).catch((err) =>{
+            console.log(err);
+        })
+    }
+});
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -538,7 +584,13 @@ app.get('/user_profile', checkAuthenticated, (req,res) => {
                 }
             }
         })
-        res.render('user_profile', {name:req.user.username, offers});
+        UserM.find({'username': req.user.username}).then((result) =>{
+            res.render('user_profile', {name:req.user.username, offers, user:result[0]});
+        }).catch((err) =>{
+            console.log(err);
+        })
+    }).catch((err) =>{
+        console.log(err);
     })
 
 

@@ -18,10 +18,24 @@
                 <button>Change password</button>
             </form>
         </div>
+        <div class="userstats" id="userstats"></div>
         <div class="offers" id="offers"></div>
 
         <script>
+            var user = <%- JSON.stringify(user) %>;
             var offers = <%- JSON.stringify(offers) %>;
+
+            function showStats(){
+                let showstats = `<div>Username: ${user.username} </div>
+                                <div>Μηνιαίοι Πόντοι: ${user.monthpoints} </div>
+                                <div>Συνολικοί Πόντοι: ${user.points} </div>
+                                <div>Μηνιαία Tokens: ${user.monthtokens} </div>
+                                <div>Συνολικά Tokens: ${user.tokens} </div>
+                                <br></br> `
+            
+                var x = document.getElementById("userstats")
+                x.innerHTML = `${showstats}`
+            }
 
             function showOffers(){
                 let showoffers = ``
@@ -36,6 +50,8 @@
                 var x = document.getElementById("offers")
                 x.innerHTML = `${showoffers}`
             }
+
+            showStats()
             showOffers()
 
         </script>
