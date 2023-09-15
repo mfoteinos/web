@@ -267,33 +267,6 @@ app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
     let week = new Date();
     week.setDate(week.getDate() - 7)
 
-    // let likes = 0
-    // let dislikes = 0
-
-    // SupermarketM.find({'offers.username': req.user.username}).then(result =>{
-        //     result.forEach(element => {
-            //         for(x of element.offers){
-                //             if(x.username == req.user.username){
-                    //                 likes += x.likes
-                    //                 dislikes += x.dislikes
-                //             }
-    //         }
-    //  })
-
-    //  let sum_points = 5 * likes + (-1) * dislikes
-
-     //  if(sum_points <= 0){
-        //     UserM.updateOne({'username': req.user.username}, {'points': 0}).then(result =>{
-            //         console.log(result)  
-        //     })
-     //  }else{
-        //     UserM.updateOne({'username': req.user.username}, {'points': sum_points}).then(result =>{
-            //         console.log(result)  
-     //  }) 
-     //  }
-    // })
-
-    
 
    SupermarketM.updateMany({}, {$pull: {offers: {date: week.toLocaleDateString()}}}).then(result => {
     SupermarketM.find({'offers':  { $size: 0 } }).lean(true)
