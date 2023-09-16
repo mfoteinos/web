@@ -41,7 +41,11 @@
         body: formData, 
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data =>{
+        var d = JSON.stringify(data)
+        var x = JSON.parse(d)
+       alert(x.error)
+    })
 
 
 })
@@ -63,7 +67,7 @@ function reload(){
 function delete_all(){
     fetch('/delete_supermarket', {
         method: 'POST',
-    }).then(alert("All products deleted"))
+    }).then(alert("All Supermarkets deleted"))
     .then(location.reload())
 }
 

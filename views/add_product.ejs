@@ -34,16 +34,18 @@
     for(let i =0; i < files.files.length; i++) {
         formData.append("files", files.files[i]);
     }
-    console.log(...formData)
+    //console.log(...formData)
 
     fetch('/add_product', {
         method: 'POST',
         body: formData, 
     })
     .then(res => res.json())
-    .then(data => console.log(data))
-
-
+    .then(data =>{
+        var d = JSON.stringify(data)
+        var x = JSON.parse(d)
+       alert(x.error)
+    })
 })
 
 function Sure(){

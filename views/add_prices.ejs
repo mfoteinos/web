@@ -39,7 +39,11 @@
         body: priceData, 
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data =>{
+        var d = JSON.stringify(data)
+        var x = JSON.parse(d)
+       alert(x.error)
+    })
 
 
 })

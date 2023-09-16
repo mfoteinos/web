@@ -671,18 +671,19 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
     fs.readFile('products/Data.products.json', 'utf8', (err, product) => {
         if (err) {
           console.error(err);
-          return;
+          return
         }
         product = JSON.parse(product);
 
         fs.readFile('categories/Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
             if (err) {
               console.error(err);
-              return;
+              res.jsonp({ error: 'Categories Not Found' })
+              return
             }
             cat_subs = JSON.parse(cat_subs);
 
-            var prod = []
+            let prod = []
         
             for(x of cat_subs){
                 for(y of product.products){
@@ -694,26 +695,33 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
             }
          }
 
-            prod.forEach(element => {
-                  Product.find({'name': element.name}).then(result => {
-                        if(result == ""){
-                                    temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory})
-                                    Product.collection.insertOne(temp, (err) => {
-                                        if(err)
-                                        {
-                                          return console.error(err);
-                                        }else {
-                                            console.info('successfully stored.');
-                                        }
-                                    })
-                                }
-                    })
+               prod.forEach(element => {
+                Product.find({'name': element.name}).then(result => {
+                    if(result == ""){
+                        temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory})
+                        Product.collection.insertOne(temp, (err) => {
+                            if(err)
+                            {
+                            return console.error(err);
+                            }else {
+                            console.info('successfully stored.');
+                            }
+                        })
+                    }else{
+                        Product.updateOne({'name': element.name}, {id: element.id, name:element.name, category: element.category, subcategory: element.subcategory}).then(result =>{
+                            console.log(result)
+                        }).catch((err) =>{
+                            console.log(err);
+                        })
+                    }
+                })
             })
-         })
 
-       
+
+
+
+         })
     })
-   
 })
 
 app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
@@ -750,10 +758,11 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
 
             if(err)
             {
-              return console.error(err);
+              return res.jsonp({ error: 'Error' })
             }
             else {
-              console.info('successfully stored.');
+              console.info('successfully stored.')
+              res.jsonp({ error: 'Done' })
           }
           })
     })
@@ -789,6 +798,7 @@ app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Pr
             }
             
          })
+        
     })
 
 })
@@ -836,13 +846,13 @@ app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array(
       
           if(err)
           {
-            return console.error(err);
+            return res.jsonp({ error: 'Error' })
           }
           else {
-            console.info('supermarkets were successfully stored.');
+            console.info('supermarkets were successfully stored.')
+            res.jsonp({ error: 'Done' })
         }
         })
-        res.redirect('admin_home')
       });
 })
 
