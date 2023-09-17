@@ -1,0 +1,54 @@
+html{
+scroll-behavior: smooth;
+background: url('products.jpg') no-repeat center center fixed;
+background-size: cover;
+background-repeat: no-repeat;
+    }
+body{
+    max-width: 1200px;
+    margin: 20px auto;
+    font-family: 'Myfont';
+    font-size: 15px;
+    }
+div{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 2px;
+    flex-direction: column;
+    }
+div a{
+        display: flex;
+        text-align: right;
+        cursor: pointer;
+        
+    }
+button{
+        cursor: pointer;
+    }
+form{
+      text-align: left;
+    }
+div br{
+    line-height: 22px;
+}
+.userstats{
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    width: 300px;
+	height: 140px;
+    border: solid #000000;
+}
+body div{
+    
+}
+.offers{
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+	height: 100%;
+    border: solid #000000;
+}
