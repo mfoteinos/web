@@ -696,9 +696,10 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
                 }
             }
          }
+            
 
-         let myPromise = new Promise(() => {
-            prod.forEach(element => {
+         
+               prod.forEach(element => {
                 Product.find({'name': element.name}).then(result => {
                     if(result == ""){
                         temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory})
@@ -720,12 +721,12 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
                     }
                 })
             })
-            }); 
 
-            myPromise.then( result =>{
-                res.jsonp({ error: 'Done' })
-            }
-              );
+
+
+
+
+
 
          })
     })
@@ -740,6 +741,7 @@ app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
 
 })
 
+
 app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.array("Categ"), (req,res) => {
 
     fs.readFile('categories/Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
@@ -753,25 +755,35 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
         let tempArray = [];
 
         cat_subs.forEach(element => {
-            temp = new Categ_Sub({
-                id: element.id,
-                name: element.name,
-                subcategories: element.subcategories
-            })
-            tempArray.push(temp)
-        })
-       
-        Categ_Sub.collection.insertMany(tempArray, (err) => {
+            Categ_Sub.find({'name': element.name}).then(result => {
+                if(result == ""){
+                    temp = new Categ_Sub({
+                        id: element.id,
+                        name: element.name,
+                        subcategories: element.subcategories
+                    })
 
-            if(err)
-            {
-              return res.jsonp({ error: 'Error' })
-            }
-            else {
-              console.info('successfully stored.')
-              res.jsonp({ error: 'Done' })
-          }
-          })
+                    Categ_Sub.collection.insertOne(temp, (err) => {
+                        if(err)
+                        {
+                          return res.jsonp({ error: 'Error' })
+                        }
+                        else {
+                          console.info('successfully stored.')
+                      }
+                      })
+                }else{
+                    Categ_Sub.updateOne({'name': element.name}, {id: element.id, name:element.name,  subcategories: element.subcategories}).then(result =>{
+                        console.log(result)
+                    }).catch((err) =>{
+                        res.jsonp({ error: 'Error' })
+                        console.log(err);
+                    })
+
+                }
+            })
+        })
+
     })
 })
 
@@ -795,7 +807,7 @@ app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Pr
 
         data.forEach(element => {
             let i = 0
-            while(i < 7){
+            while(i < element.prices.length){
                 Product.updateOne({'name': element.name}, { $push: { prices : element.prices[i]}}).then(result => {
                     console.log(result)
                    }).catch((err) =>{
@@ -803,7 +815,6 @@ app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Pr
                 })
                 i +=1
             }
-            
          })
         
     })
