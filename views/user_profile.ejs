@@ -2,17 +2,22 @@
 
 <html>
     <head>
-
+        <title>Bang Profile</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8"> 
+        <link rel="stylesheet" href="/profile_style.css">
     </head>
 
     <body>
         <div class="profile">
             <a href="/user_home">Go home</a>
+            <br>
             <form action="/user_profile_username?_method=PUT" method="POST">
                 <!-- Username: <%= name%> -->
                 <input type="text" name="username" placeholder="User name" required>
                 <button>Change username</button>
             </form>
+            <br>
             <form action="/user_profile_password?_method=PUT" method="POST">
                 <input type="password" name="password" placeholder="Password" required>
                 <button>Change password</button>

@@ -22,8 +22,9 @@ font-size: 15px;
 }
 div{
   display: flex;
-  align-items: center;
+  flex-direction: row;
   flex-wrap: wrap;
+  margin: 2px;
 }
 
 select{
