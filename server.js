@@ -320,27 +320,6 @@ app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
 
 app.post('/add_offer', checkAuthenticated, (req,res) => {
 
-//   function CheckReq(f_prod_name, f_offer_value){
-//         let req_Day = false
-//         let req_Week = false
-//         Product.find({'name': f_prod_name}).then(result =>{
-//             let sum = 0
-            
-//             for(x of result[0].prices){
-//                 sum += x.price
-//             }
-//             let avg = sum / 7
-//             if(f_offer_value <= 0.8*result[0].prices[0].price){
-//                 req_Day = true
-//             }
-//             if(f_offer_value <= 0.8*avg){
-//                 req_Week = true
-//             }
-//             return [req_Day, req_Week]
-//         }).catch((err) =>{
-//             console.log(err);
-//     })
-//     }
 
     let tempArray = req.body.product.split('|')
     
@@ -402,7 +381,14 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                                 console.log(err);
                             })
                         }
-                    res.redirect('/user_home')
+                    //res.redirect('/user_home')
+                    res.send(`<div> 
+                    <form action="/user_home" method="get">
+                    <label for="Add">Successfully Added</label>
+                    <button>Return Home</button>
+                    </form>
+                    <div>
+                    `)
                     }).catch((err) =>{
                         console.log(err);
                 })
@@ -441,7 +427,14 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                                     console.log(err);
                                 })
                             }
-                                res.redirect('/user_home')
+                                //res.redirect('/user_home')
+                                res.send(`<div> 
+                                <form action="/user_home" method="get">
+                                <label for="Add">Offer Updated</label>
+                                <button>Return Home</button>
+                                </form>
+                                <div>
+                                `)
                                 }).catch((err) =>{
                                     console.log(err);
                             })
@@ -452,7 +445,14 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                 console.log(err);
         })
         }else{
-            res.redirect('/user_home')
+            //res.redirect('/user_home')
+            res.send(`<div> 
+            <form action="/user_home" method="get">
+            <label for="Add">Error</label>
+            <button>Return Home</button>
+            </form>
+            <div>
+            `)
         }
     })
 });
