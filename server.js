@@ -697,14 +697,15 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
             }
          }
 
-               prod.forEach(element => {
+         let myPromise = new Promise(() => {
+            prod.forEach(element => {
                 Product.find({'name': element.name}).then(result => {
                     if(result == ""){
                         temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory})
                         Product.collection.insertOne(temp, (err) => {
                             if(err)
                             {
-                            return console.error(err);
+                            return res.jsonp({ error: 'Error' })
                             }else {
                             console.info('successfully stored.');
                             }
@@ -713,14 +714,18 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
                         Product.updateOne({'name': element.name}, {id: element.id, name:element.name, category: element.category, subcategory: element.subcategory}).then(result =>{
                             console.log(result)
                         }).catch((err) =>{
+                            res.jsonp({ error: 'Error' })
                             console.log(err);
                         })
                     }
                 })
             })
+            }); 
 
-
-
+            myPromise.then( result =>{
+                res.jsonp({ error: 'Done' })
+            }
+              );
 
          })
     })
