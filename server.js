@@ -368,7 +368,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                 }
                 SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:product_name, 
                     price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week}}}).then(result => {
-                        let points = 0
+                        var points = 0
                         if(req_Day){
                             points += 50
                         }
@@ -385,6 +385,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                     res.send(`<div> 
                     <form action="/user_home" method="get">
                     <label for="Add">Successfully Added</label>
+                    <p>User Gets ${points} Points</p>
                     <button>Return Home</button>
                     </form>
                     <div>
@@ -431,6 +432,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                                 res.send(`<div> 
                                 <form action="/user_home" method="get">
                                 <label for="Add">Offer Updated</label>
+                                <p>User Gets ${points} Points</p>
                                 <button>Return Home</button>
                                 </form>
                                 <div>
