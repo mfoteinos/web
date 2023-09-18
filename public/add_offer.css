@@ -33,3 +33,24 @@
   .hide {
     display: none;
   }
+  h2{
+    display: block;
+    font-size: 1em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+
+  }
+  body{
+  scroll-behavior: smooth;
+  background: url('specialoffer.jpg') no-repeat center center fixed;
+  background-repeat: no-repeat;
+  }
+  a{
+    display: flex;
+    text-align: right;
+    cursor: pointer;   
+    flex-wrap: wrap;
+    justify-content: flex-end; 
+}

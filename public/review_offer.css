@@ -1,0 +1,13 @@
+body{
+    scroll-behavior: smooth;
+    background: url('customer-reviews.jpg') no-repeat center center fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+a{
+        display: flex;
+        text-align: right;
+        cursor: pointer;   
+        flex-wrap: wrap;
+        justify-content: center; 
+}

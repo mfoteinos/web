@@ -43,9 +43,10 @@ form{
 div a{
   display: flex;
   text-align: left;
-  margin: 5px;
-  padding: 5px;
-  background: #21db2a;
+  margin: 2px;
+  padding: 2px;
+  background: #ffffff;
+  border: solid #000000;
   cursor: pointer;
   
 }
