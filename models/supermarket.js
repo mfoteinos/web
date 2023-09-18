@@ -73,7 +73,7 @@ const supermarketSchema = new Schema({
             },
         secondWeek:{
             type: Boolean,
-            required: false,
+            required: true,
             default: false
                 }
         }

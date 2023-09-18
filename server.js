@@ -110,7 +110,7 @@ cron.schedule("0 0 28-31 * *", function () {
     }
 });
 
-cron.schedule("* * * * * *", function () {
+cron.schedule("*/30 * * * * *", function () {
     let date_ob = new Date();
     date_ob.setDate(date_ob.getDate() - 7)
     let day = date_ob.getDate();
@@ -136,6 +136,8 @@ cron.schedule("* * * * * *", function () {
             }
         }
 
+        //console.log(offerlist)
+        //console.log(week, second_week)
 
         offerlist.forEach(element => {
             if(element.date <= week && element.secondWeek == false){
@@ -154,13 +156,14 @@ cron.schedule("* * * * * *", function () {
                         req_Week = true
                     }
                     if(req_Day == false && req_Week == false){
-                        SupermarketM.updateOne({ 'offers':{$elemMatch:{id: element.id}}}, {$pull: { offers: {id:element.id} }}).then((result) =>{
+                        SupermarketM.updateOne({'offers': {$elemMatch:{id: element.id}}}, {$pull: { offers: {id:element.id} }}).then((result) =>{
                             console.log(result)
                         }).catch((err) =>{
                             console.log(err);
                         })
                     }else{
-                        SupermarketM.updateOne({ 'offers':{$elemMatch:{id: element.id}}}, {$set: { offers: {secondWeek: true} }}).then((result) =>{
+                        SupermarketM.updateOne({'offers': {$elemMatch:{id: element.id}}}, {$set: {offers:{id:element.id, username:element.username, product:element.product, 
+                            price:element.prise, date:element.date,likes:element.likes, dislikes:element.dislikes, available:element.available, reqDay: element.reqDay, reqWeek: element.reqWeek, secondWeek: true}}}).then((result) =>{
                             console.log(result)
                         }).catch((err) =>{
                             console.log(err);
@@ -440,7 +443,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                     req_Week = true
                 }
                 SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:product_name, 
-                    price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week, secondWeek: second_week}}}).then(result => {
+                    price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week}}}).then(result => {
                         var points = 0
                         if(req_Day){
                             points += 50
@@ -537,28 +540,11 @@ app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
 
     // console.log(req.params.id)
     SupermarketM.find({ 'properties.id': req.params.id }).then((result) =>{
-        let reviewedsup = result
-        let userpoints = []
-        let offerusernames = []
-        for (offer of reviewedsup[0].offers){
-            offerusernames.push(offer.username)
-        }
-        UserM.find({'username': {$in: offerusernames}}).then((result) =>{
-            console.log(result)
-            for (user of result){
-                userpoints.push({"id": user.username, "points": user.points})
-            }
-            UserM.find({'username': req.user.username}).then((result) =>{
-                res.render('review_offer', {reviewedsup:reviewedsup[0], userpoints, likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers, admin:req.user.admin})
-            }).catch((err) =>{
-                console.log(err);
-            })
-        }).catch((err) =>{
-            console.log(err);
-        })
+        result1 = result
+        // console.log(result[0])
         UserM.find({'username': req.user.username}).then((result) =>{
             // console.log(result[0].likedoffers.id)
-            res.render('review_offer', {reviewedsup:reviewedsup[0], userpoints, likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers, admin:req.user.admin})
+            res.render('review_offer', {reviewedsup:result1[0], likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers, admin:req.user.admin})
         }).catch((err) =>{
             console.log(err);
         })
@@ -650,27 +636,7 @@ app.get('/user_profile', checkAuthenticated, (req,res) => {
             }
         })
         UserM.find({'username': req.user.username}).then((result) =>{
-            let prof_user = result[0];
-            let liked_history = [];
-            let disliked_history = [];
-            let union = [...new Set([...prof_user.likedoffers, ...prof_user.dislikedoffers])];
-            SupermarketM.find({'offers.id': {$in: union}}).then((result) =>{
-                for (superm of result){
-                    for (offer of superm.offers){
-                        if (prof_user.likedoffers.includes(offer.id)){
-                            liked_history.push(offer); // sosto????
-                        }
-                        if (prof_user.dislikedoffers.includes(offer.id)){
-                            disliked_history.push(offer); // sosto????
-                        }
-                        // liked_history.sort((a, b) => (a.color > b.color) ? 1 : -1) // otan prostethoun alles hmeromhnies review (+ ola ta offers panw)
-                        // disliked_history.sort((a, b) => (a.color > b.color) ? 1 : -1)
-                }
-            }
-            res.render('user_profile', {name:req.user.username, offers, user:prof_user, liked_history, disliked_history});
-            }).catch((err) =>{
-                console.log(err);
-            })
+            res.render('user_profile', {name:req.user.username, offers, user:result[0]});
         }).catch((err) =>{
             console.log(err);
         })
@@ -955,7 +921,7 @@ app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array(
             temp = new SupermarketM({
               type:element.type,
               properties: {id:(element.id.slice(5)),name:element.properties.name},
-              offers: [{id: (element.id.slice(5)),username:"a",product: "Μπάμιες",price: 1000,date: today,likes: 100, dislikes: 0,available: true, reqDay: true, reqWeek: true}],
+              offers: [{id: (element.id.slice(5)),username:"Dusk",product: "Μπάμιες",price: 1000,date: today,likes: 100, dislikes: 0,available: true, reqDay: true, reqWeek: true}],
               geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
             });
           }
@@ -1041,9 +1007,7 @@ app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
     SupermarketM.find({'offers.date': {$gte: startDate,  $lte: endDate}}).then((result) =>{
         for (superm of result){
             for (offer of superm.offers){
-                if (startDate <= offer.date <= endDate){
-                    offercount[offer.date.substring(8,10) - 1] += 1;
-                }
+                offercount[offer.date.substring(8,10) - 1] += 1;
         }
     }
     console.log(offercount)
