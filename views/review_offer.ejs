@@ -12,9 +12,11 @@
 <script>
 
 var reviewedsup = <%- JSON.stringify(reviewedsup) %>;
+var userpoints = <%- JSON.stringify(userpoints) %>;
 var likedoffers = <%- JSON.stringify(likedoffers) %>;
 var dislikedoffers = <%- JSON.stringify(dislikedoffers) %>;
 var admin = <%- JSON.stringify(admin) %>;
+console.log(userpoints)
 
 function customPopup(reviewedsup){
     let offertext = ``
@@ -25,7 +27,7 @@ function customPopup(reviewedsup){
     for (offer of reviewedsup.offers) {
         let temptext = `<div> Προϊόν: ${offer.product} </div>
                         <div> Τιμή: ${offer.price} </div>
-                        <div> Από Χρήστη: ${offer.username} </div>
+                        <div> Από Χρήστη: ${offer.username} με πόντους ${userpoints.find(({ id }) => id === offer.username).points} </div>
                         <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>`
         if (!likedoffers.includes(offer.id) && offer.available == true){
             likedtext = `<div> Likes: ${offer.likes} <form action="/like/${reviewedsup.properties.id}/${offer.id}" method="post"><button id='like${offer.id}' >Like</button>

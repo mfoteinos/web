@@ -19,16 +19,23 @@
             </form>
             <br>
             <form action="/user_profile_password?_method=PUT" method="POST">
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[#,$,*,&,@,])(?=.*[A-Z]).{8,}">
                 <button>Change password</button>
             </form>
         </div>
         <div class="userstats" id="userstats"></div>
+        <div">=====OFFER HISTORY=====</div>
         <div class="offers" id="offers"></div>
+        <div">=====LIKE HISTORY=====</div>
+        <div class="likes" id="likes"></div>
+        <div">=====DISLIKE HISDTORY HISTORY=====</div>
+        <div class="dislikes" id="dislikes"></div>
 
         <script>
             var user = <%- JSON.stringify(user) %>;
             var offers = <%- JSON.stringify(offers) %>;
+            var liked_history = <%- JSON.stringify(liked_history) %>;
+            var disliked_history = <%- JSON.stringify(disliked_history) %>;
 
             function showStats(){
                 let showstats = `<div>Username: ${user.username} </div>
@@ -42,22 +49,28 @@
                 x.innerHTML = `${showstats}`
             }
 
-            function showOffers(){
+            function showOffers(ar, tag){
                 let showoffers = ``
-                for(x of offers){
-                    let temp = `<div> Προϊόν: ${x.product} </div>
-                        <div> Ημερομηνία Καταχώρησης: ${x.date} </div>
-                        <div> Likes: ${x.likes} </div>
-                        <div> Dislikes: ${x.dislikes} </div>
-                        <br></br> `
+                for(offer of ar){
+                    let temp = `<div> Προϊόν: ${offer.product} </div>
+                        <div> Τιμή: ${offer.price} </div>
+                        <div> Ημερομηνία Καταχώρησης: ${offer.date} </div>
+                        <div> Likes: ${offer.likes} </div>
+                        <div> Dislikes: ${offer.dislikes} </div>
+                        <div> Διαθέσιμο: ${offer.available} </div>
+                        <div> Κριτήριο Μέρας: ${offer.reqDay} </div>
+                        <div> Κριτήριο Βδομάδας: ${offer.reqWeek} </div>
+                        <br></br>`
                     showoffers = showoffers.concat(temp)
                 }
-                var x = document.getElementById("offers")
+                var x = document.getElementById(tag)
                 x.innerHTML = `${showoffers}`
             }
 
             showStats()
-            showOffers()
+            showOffers(offers, "offers")
+            showOffers(liked_history, "likes")
+            showOffers(disliked_history, "dislikes")
 
         </script>
 
