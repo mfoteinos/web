@@ -336,14 +336,6 @@ app.delete('/logout', (req, res) => {
 
 app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
 
-
-
-    let today = "8/14/2023"
-    let week = new Date();
-    week.setDate(week.getDate() - 7)
-
-
-   SupermarketM.updateMany({}, {$pull: {offers: {date: week.toLocaleDateString()}}}).then(result => {
     SupermarketM.find({'offers':  { $size: 0 } }).lean(true)
     .then((result) => {
         var gjNoOfferSups = result;
@@ -368,9 +360,7 @@ app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
      })
     .catch((err) =>{
         console.log(err);
-    })
-    }).catch((err) =>{
-    console.log(err);
+
     })
 
 });
@@ -673,12 +663,6 @@ app.put('/user_profile_password', checkAuthenticated, async (req,res) => {
 
 app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
 
-    let today = "8/14/2023"
-    let week = new Date();
-    week.setDate(week.getDate() - 7)
-    
-
-   SupermarketM.updateMany({}, {$pull: {offers: {date: week.toLocaleDateString()}}}).then(result => {
     SupermarketM.find({'offers':  { $size: 0 } }).lean(true)
     .then((result) => {
         var gjNoOfferSups = result;
@@ -703,9 +687,6 @@ app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
      })
     .catch((err) =>{
         console.log(err);
-    })
-    }).catch((err) =>{
-    console.log(err);
     })
 
 });
