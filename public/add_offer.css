@@ -54,3 +54,10 @@
     flex-wrap: wrap;
     justify-content: flex-end; 
 }
+img {
+overflow-clip-margin: content-box;
+overflow: clip;
+margin: auto;
+position: absolute;
+top: 0;
+}
