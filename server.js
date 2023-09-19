@@ -1073,8 +1073,8 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
     }
 
-    console.log(weeklabels[0])
-    console.log(weeklabels[6])
+    // console.log(weeklabels[0])
+    // console.log(weeklabels[6])
 
 
     let offerlist = [];
@@ -1084,34 +1084,60 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
         for (superm of result){
             for (offer of superm.offers){
                 if (weeklabels[0] <= offer.date && offer.date <= weeklabels[6]){
-                    offerlist.push({"name": offer.product, "price": offer.price});
+                    offerlist.push({"name": offer.product, "price": offer.price, "count": 1});
                     productlist.push(offer.product);
                     
                 }
             }
         }
+        let totals = {};
+
+        for (let i = 0; i < offerlist.length; i++) {
+          let name = offerlist[i].name;
+          if (name in totals) {
+            totals[name].price += offerlist[i].price;
+            totals[name].count += 1;
+          } else {
+            totals[name] =  { "price": offer.price, "count": 1};
+          }
+        }
+        // console.log(totals)
+
+
         productlist = [...new Set(productlist)];
+
+        for (const [key, value] of Object.entries(totals)) {
+            console.log(key, value);
+            totals[key] = {"price": totals[key].price / totals[key].count};
+        }
+
+        console.log(totals)
+        console.log("Productlist: ")
         console.log(productlist)
+
         let avg_prices = []
+        let discounts = []
 
         Product.find({'name': {$in: productlist}}).then((result) =>{
-            console.log(result)
             for (prod of result) {
                 let sum = 0
                 for(x of prod.prices){
                     sum += x.price
                 }
-                avg_prices.push({"name": prod.name, "avg_price": sum/7})
+                avg_prices.push({"name": prod.name, "prices": sum/7})
             }
-            console.log(avg_prices)
+            for (prod of avg_prices) {
+                let calc = prod.price / totals[prod.name].price 
+                discounts.push(calc.toString() + "%")
+            }
+            console.log(discounts)
             console.log(lol)
             res.render('statistics', {startDate:weeklabels[0],endDate:weeklabels[6], offercount:offercount, productlabels:weeklabels})
            
         }).catch((err) =>{
             console.log(err);
         })
-        console.log(lol)
-        res.render('statistics', {startDate:weeklabels[0],endDate:weeklabels[6], offercount:offercount, productlabels:weeklabels})
+
         }).catch((err) =>{
             console.log(err);
         });
