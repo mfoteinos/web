@@ -19,14 +19,26 @@ Product.find({}).then(result => {
         let temp1 = 0
         let i = 0
         let prices = []
-        while(i < 7){
+        while(i < 30){
             let week = new Date();
             week.setDate(week.getDate() - i)
              temp1 = {date: week.toLocaleDateString(), 
-                        price: (Math.floor((Math.random()*5)* 100)/100) + 1}
+                        price: (Math.floor((Math.random()*5)* 100)/100) + 5,
+                        avg_price: 0}
               i += 1
              prices.push(temp1)
-          }
+        }
+        i = 0
+
+        while(i < 23){
+            let sum = 0
+            for (let index = 1; index < 8; index++) {
+                sum += prices[i + index].price
+            }
+            prices[i].avg_price = sum / 7
+
+            i += 1
+        }
           
         temp = {
             id: element.id,
