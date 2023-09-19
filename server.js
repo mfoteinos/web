@@ -143,17 +143,14 @@ cron.schedule("*/30 * * * * *", function () {
         offerlist.forEach(element => {
             if(element.date <= week && element.secondWeek == false){
                 Product.find({'name': element.product}).then(result =>{
-                    let sum = 0
+
                     let req_Day = false
                     let req_Week = false
-                    for(x of result[0].prices){
-                        sum += x.price
-                    }
-                    let avg = sum / 7
-                    if(element.price <= 0.8*element.price){
+                   
+                    if(element.price <= 0.8*result[0].prices[0].price){
                         req_Day = true
                     }
-                    if(element.price <= 0.8*avg){
+                    if(element.price <= 0.8*result[0].prices[0].avg_price){
                         req_Week = true
                     }
                     if(req_Day == false && req_Week == false){
@@ -421,16 +418,11 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
         if(offer == ""){
 
             Product.find({'name': product_name}).then(result =>{
-                let sum = 0
-                
-                for(x of result[0].prices){
-                    sum += x.price
-                }
-                let avg = sum / 7
+               
                 if(req.body.new_value <= 0.8*result[0].prices[0].price){
                     req_Day = true
                 }
-                if(req.body.new_value <= 0.8*avg){
+                if(req.body.new_value <= 0.8*result[0].prices[0].avg_price){
                     req_Week = true
                 }
                 SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:product_name, 
@@ -466,16 +458,10 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
         }else if(offer[0].price*0.8 >= req.body.new_value){
             
             Product.find({'name': product_name}).then(result =>{
-                let sum = 0
-                
-                for(x of result[0].prices){
-                    sum += x.price
-                }
-                let avg = sum / 7
                 if(req.body.new_value <= 0.8*result[0].prices[0].price){
                     req_Day = true
                 }
-                if(req.body.new_value <= 0.8*avg){
+                if(req.body.new_value <= 0.8*result[0].prices[0].avg_price){
                     req_Week = true
                 }
                 SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$pull: {offers: {id:offer[0].id_string, username:offer[0].username, product:offer[0].product, 
@@ -897,14 +883,12 @@ app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Pr
 
         data.forEach(element => {
             let i = 0
-            while(i < element.prices.length){
-                Product.updateOne({'name': element.name}, { $push: { prices : element.prices[i]}}).then(result => {
+                Product.updateOne({'name': element.name}, { $set: { prices : element.prices}}).then(result => {
                     console.log(result)
                    }).catch((err) =>{
                         console.log(err);
                 })
-                i +=1
-            }
+            
          })
         
     })
