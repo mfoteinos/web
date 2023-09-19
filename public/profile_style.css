@@ -56,3 +56,10 @@ hr{
     width: 200px;
     align: left;
 }
+img {
+    overflow-clip-margin: content-box;
+    overflow: clip;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  }
