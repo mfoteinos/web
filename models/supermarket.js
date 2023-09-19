@@ -70,7 +70,12 @@ const supermarketSchema = new Schema({
         reqWeek:{
             type: Boolean,
             required: false
-            }
+            },
+        secondWeek:{
+            type: Boolean,
+            required: true,
+            default: false
+                }
         }
     }
 )

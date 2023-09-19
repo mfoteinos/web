@@ -111,6 +111,81 @@ cron.schedule("0 0 28-31 * *", function () {
     }
 });
 
+cron.schedule("*/30 * * * * *", function () {
+    let date_ob = new Date();
+    date_ob.setDate(date_ob.getDate() - 7)
+    let day = date_ob.getDate();
+    let month = date_ob.getMonth() + 1;
+    let week = [date_ob.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
+
+    let date = new Date();
+    date.setDate(date.getDate() - 14)
+    let day1 = date.getDate();
+    let month1 = date.getMonth() + 1;
+    let second_week = [date.getFullYear() + '-',(month1>9 ? '' : '0') + month1 + '-',(day1>9 ? '' : '0') + day1].join('');
+
+
+    SupermarketM.find({'offers.date': {$lte: week}}).then((result) =>{
+
+        let offerlist = []
+
+        for (superm of result){
+            for (offer of superm.offers){
+                if (offer.date <= week){
+                    offerlist.push(offer);
+                }
+            }
+        }
+
+        //console.log(offerlist)
+        //console.log(week, second_week)
+
+        offerlist.forEach(element => {
+            if(element.date <= week && element.secondWeek == false){
+                Product.find({'name': element.product}).then(result =>{
+                    let sum = 0
+                    let req_Day = false
+                    let req_Week = false
+                    for(x of result[0].prices){
+                        sum += x.price
+                    }
+                    let avg = sum / 7
+                    if(element.price <= 0.8*element.price){
+                        req_Day = true
+                    }
+                    if(element.price <= 0.8*avg){
+                        req_Week = true
+                    }
+                    if(req_Day == false && req_Week == false){
+                        SupermarketM.updateOne({'offers': {$elemMatch:{id: element.id}}}, {$pull: { offers: {id:element.id} }}).then((result) =>{
+                            console.log(result)
+                        }).catch((err) =>{
+                            console.log(err);
+                        })
+                    }else{
+                        SupermarketM.updateOne({'offers': {$elemMatch:{id: element.id}}}, {$set: {offers:{id:element.id, username:element.username, product:element.product, 
+                            price:element.prise, date:element.date,likes:element.likes, dislikes:element.dislikes, available:element.available, reqDay: element.reqDay, reqWeek: element.reqWeek, secondWeek: true}}}).then((result) =>{
+                            console.log(result)
+                        }).catch((err) =>{
+                            console.log(err);
+                        })
+                    }
+                })
+            }else if(element.date <= second_week){
+                SupermarketM.updateOne({ 'offers':{$elemMatch:{id: element.id}}}, {$pull: { offers: {id:element.id} }}).then((result) =>{
+                    console.log(result)
+                }).catch((err) =>{
+                    console.log(err);
+                })
+            }
+        })
+
+
+    })
+})
+
+
+
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
 
@@ -262,14 +337,6 @@ app.delete('/logout', (req, res) => {
 
 app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
 
-
-
-    let today = "8/14/2023"
-    let week = new Date();
-    week.setDate(week.getDate() - 7)
-
-
-   SupermarketM.updateMany({}, {$pull: {offers: {date: week.toLocaleDateString()}}}).then(result => {
     SupermarketM.find({'offers':  { $size: 0 } }).lean(true)
     .then((result) => {
         var gjNoOfferSups = result;
@@ -294,9 +361,7 @@ app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
      })
     .catch((err) =>{
         console.log(err);
-    })
-    }).catch((err) =>{
-    console.log(err);
+
     })
 
 });
@@ -352,6 +417,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
         })
         let req_Day = false
         let req_Week = false
+        let second_week = false
         if(offer == ""){
 
             Product.find({'name': product_name}).then(result =>{
@@ -413,9 +479,9 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                     req_Week = true
                 }
                 SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$pull: {offers: {id:offer[0].id_string, username:offer[0].username, product:offer[0].product, 
-                    price:offer[0].new_value, date:offer[0].date,likes:offer[0].likes, dislikes:offer[0].dislikes, available:offer[0].available, reqDay: offer[0].reqDay, reqWeek: offer[0].reqDay}}}).then(result => {
+                    price:offer[0].new_value, date:offer[0].date,likes:offer[0].likes, dislikes:offer[0].dislikes, available:offer[0].available, reqDay: offer[0].reqDay, reqWeek: offer[0].reqDay, secondWeek: offer[0].second_week}}}).then(result => {
                         SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:product_name, 
-                            price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week}}}).then(result => {
+                            price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week, secondWeek: second_week}}}).then(result => {
                             let points = 0
                             if(req_Day){
                                 points += 50
@@ -629,12 +695,6 @@ app.put('/user_profile_password', checkAuthenticated, async (req,res) => {
 
 app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
 
-    let today = "8/14/2023"
-    let week = new Date();
-    week.setDate(week.getDate() - 7)
-    
-
-   SupermarketM.updateMany({}, {$pull: {offers: {date: week.toLocaleDateString()}}}).then(result => {
     SupermarketM.find({'offers':  { $size: 0 } }).lean(true)
     .then((result) => {
         var gjNoOfferSups = result;
@@ -659,9 +719,6 @@ app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
      })
     .catch((err) =>{
         console.log(err);
-    })
-    }).catch((err) =>{
-    console.log(err);
     })
 
 });
@@ -815,8 +872,9 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
                 }
             })
         })
-
     })
+
+    return  res.jsonp({ error: 'Done' })
 })
 
 app.post('/delete_categories', checkAuthenticated, checkAdmin, (req,res) => {
@@ -876,7 +934,7 @@ app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array(
             temp = new SupermarketM({
               type:element.type,
               properties: {id:(element.id.slice(5)),name:element.properties.name},
-              offers: [{id: (element.id.slice(5)),username:"a",product: "Μπάμιες",price: 1000,date: today,likes: 100, dislikes: 0,available: true, reqDay: true, reqWeek: true}],
+              offers: [{id: (element.id.slice(5)),username:"Dusk",product: "Μπάμιες",price: 1000,date: today,likes: 100, dislikes: 0,available: true, reqDay: true, reqWeek: true}],
               geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
             });
           }
