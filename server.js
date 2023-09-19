@@ -111,7 +111,7 @@ cron.schedule("0 0 28-31 * *", function () {
     }
 });
 
-cron.schedule("*/30 * * * * *", function () {
+cron.schedule("0 0 * * * *", function () {
     let date_ob = new Date();
     date_ob.setDate(date_ob.getDate() - 7)
     let day = date_ob.getDate();
