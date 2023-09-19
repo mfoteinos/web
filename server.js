@@ -40,6 +40,7 @@ const initializePassport = require('./passport-config');
 const { render } = require('ejs');
 const { result, fromPairs } = require('lodash');
 const path = require('path');
+const ProductM = require('./models/product');
 initializePassport(
     passport, 
     username => UserM.find({'username':username}),
@@ -333,7 +334,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
 
     var month = date_ob.getMonth() + 1;
 
-    today = [date_ob.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
+    let today = [date_ob.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
     
 
 
@@ -480,15 +481,9 @@ app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
             }).catch((err) =>{
                 console.log(err);
             })
-        }).catch((err) =>{
-            console.log(err);
-        })
-        UserM.find({'username': req.user.username}).then((result) =>{
-            // console.log(result[0].likedoffers.id)
-            res.render('review_offer', {reviewedsup:reviewedsup[0], userpoints, likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers, admin:req.user.admin})
-        }).catch((err) =>{
-            console.log(err);
-        })
+            }).catch((err) =>{
+                console.log(err);
+            })
     }).catch((err) =>{
         console.log(err);
     })
@@ -593,8 +588,8 @@ app.get('/user_profile', checkAuthenticated, (req,res) => {
                         // liked_history.sort((a, b) => (a.color > b.color) ? 1 : -1) // otan prostethoun alles hmeromhnies review (+ ola ta offers panw)
                         // disliked_history.sort((a, b) => (a.color > b.color) ? 1 : -1)
                 }
-            }
-            res.render('user_profile', {name:req.user.username, offers, user:prof_user, liked_history, disliked_history});
+                }
+                res.render('user_profile', {name:req.user.username, offers, user:prof_user, liked_history, disliked_history});
             }).catch((err) =>{
                 console.log(err);
             })
@@ -961,22 +956,107 @@ app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
     }
 
     // console.log(monthlabels)
+    // console.log(endDate >= monthlabels[16])
+    // console.log(endDate)
 
     offercount = new Array(lastday).fill(0);
 
     SupermarketM.find({'offers.date': {$gte: startDate,  $lte: endDate}}).then((result) =>{
         for (superm of result){
             for (offer of superm.offers){
-                if (startDate <= offer.date <= endDate){
+                if (startDate <= offer.date && offer.date <= endDate){
                     offercount[offer.date.substring(8,10) - 1] += 1;
                 }
         }
+        console.log(offercount)
     }
-    console.log(offercount)
-        res.render('statistics', {startDate:startDate,endDate:endDate, offercount:offercount, monthlabels:monthlabels})
+    res.render('statistics', {startDate:startDate,endDate:endDate, offercount:offercount, monthlabels:monthlabels})
     }).catch((err) =>{
         console.log(err);
     })
+
+});
+
+app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
+
+    let date_ob = new Date();
+
+    let temp = new Date();
+
+    // let endday = date_ob.getDate();
+
+    // let endmonth = date_ob.getMonth() + 1;
+
+    // let endDate = [date_ob.getFullYear() + '-',(endmonth>9 ? '' : '0') + endmonth + '-',(endday>9 ? '' : '0') + endday].join('');
+
+    // date_ob.setDate(date_ob.getDate() - 7);
+    
+    // let startday = date_ob.getDate();
+
+    // let startmonth = date_ob.getMonth() + 1;
+
+    // let startDateDate = [date_ob.getFullYear() + '-',(startmonth>9 ? '' : '0') + startmonth + '-',(startday>9 ? '' : '0') + startday].join('');
+
+    // console.log(startday)
+    // console.log(endday)
+
+    let weeklabels = new Array(7).fill('')
+
+    for (var i = 0; i < 7; i++) {
+        
+        temp.setDate(date_ob.getDate() - i);
+    
+        let day = temp.getDate();
+
+        let month = temp.getMonth() + 1;
+
+        weeklabels[6 - i] = [temp.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
+
+
+    }
+
+    console.log(weeklabels[0])
+    console.log(weeklabels[6])
+
+
+    let offerlist = [];
+    let productlist = [];
+
+    SupermarketM.find({'offers.date': {$gte: weeklabels[0],  $lte: weeklabels[6]}}).then((result) =>{
+        for (superm of result){
+            for (offer of superm.offers){
+                if (weeklabels[0] <= offer.date && offer.date <= weeklabels[6]){
+                    offerlist.push({"name": offer.product, "price": offer.price});
+                    productlist.push(offer.product);
+                    
+                }
+            }
+        }
+        productlist = [...new Set(productlist)];
+        console.log(productlist)
+        let avg_prices = []
+
+        Product.find({'name': {$in: productlist}}).then((result) =>{
+            console.log(result)
+            for (prod of result) {
+                let sum = 0
+                for(x of prod.prices){
+                    sum += x.price
+                }
+                avg_prices.push({"name": prod.name, "avg_price": sum/7})
+            }
+            console.log(avg_prices)
+            console.log(lol)
+            res.render('statistics', {startDate:weeklabels[0],endDate:weeklabels[6], offercount:offercount, productlabels:weeklabels})
+           
+        }).catch((err) =>{
+            console.log(err);
+        })
+        console.log(lol)
+        res.render('statistics', {startDate:weeklabels[0],endDate:weeklabels[6], offercount:offercount, productlabels:weeklabels})
+        }).catch((err) =>{
+            console.log(err);
+        });
 
 });
 

@@ -38,7 +38,7 @@ fs.readFile('export.geojson', 'utf8', (err, data) => {
       temp = new SupermarketM({
         type:element.type,
         properties: {id:(element.id.slice(5)),name:element.properties.name},
-        offers: [{id: (element.id.slice(5)),username:"a",product: "Μπάμιες",price: 1000,date: today,likes: 100, dislikes: 0,available: true, reqDay: true, reqWeek: true}],
+        offers: [{id: (element.id.slice(5)),username:"a",product: "Pampers Prem Care No4 8-14κιλ 34τεμ",price: Math.round(Math.random() * 50) / 10,date: today,likes: 100, dislikes: 0,available: true, reqDay: true, reqWeek: true}],
         geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
       });
     }
