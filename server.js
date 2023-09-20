@@ -299,6 +299,7 @@ const prices = multer({storage: price})
 const supermarkets = multer({storage: supermarket})
 
 
+//Gets more resent fill that is uploaded to a specific directory
 const getMostRecentFile = (dir) => {
     const files = orderReccentFiles(dir);
     return files.length ? files[0] : undefined;
@@ -785,11 +786,13 @@ app.get('/add_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
 
 app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files"), (req,res) => {
 
+    //Finds the most resent file that is aploaded to products and categories directory
     let temp1 = getMostRecentFile('products')
     temp1 = 'products/'.concat(temp1.file)
     let temp2 = getMostRecentFile('categories')
     temp2 = 'categories/'.concat(temp2.file)
-    //Read the uploaded Products File
+
+    //Reads the uploaded Products File
     fs.readFile(temp1, 'utf8', (err, product) => {
         if (err) {
           console.error(err);
@@ -869,9 +872,11 @@ app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
 
 app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.array("Categ"), (req,res) => {
 
+    //Finds the most resent file that is aploaded to categories directory
     let temp = getMostRecentFile('categories')
     temp = 'categories/'.concat(temp.file)
 
+    //Reads the uploaded file
     fs.readFile(temp, 'utf8', (err, cat_subs) => {
         if (err) {
           console.error(err);
@@ -882,15 +887,18 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
         let temp = 0
         let tempArray = [];
 
+        //For each element in the file 
         cat_subs.forEach(element => {
+            //Checks If category exists 
             Categ_Sub.find({'name': element.name}).then(result => {
+                //If doesnt exist add the new category
                 if(result == ""){
                     temp = new Categ_Sub({
                         id: element.id,
                         name: element.name,
                         subcategories: element.subcategories
                     })
-
+                    //Insert to Database 
                     Categ_Sub.collection.insertOne(temp, (err) => {
                         if(err)
                         {
@@ -900,6 +908,7 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
                           console.info('successfully stored.')
                       }
                       })
+                //Else if exists update the current category
                 }else{
                     Categ_Sub.updateOne({'name': element.name}, {id: element.id, name:element.name,  subcategories: element.subcategories}).then(result =>{
                         console.log(result)
@@ -916,7 +925,6 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
         })
     })
 
-    return  res.jsonp({ error: 'Done' })
 })
 
 //Delete all Categories/Subcategories
@@ -931,19 +939,21 @@ app.post('/delete_categories', checkAuthenticated, checkAdmin, (req,res) => {
 
 app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Price"), (req,res) => {
 
+    //Finds the most resent file that is aploaded to prices directory
     let temp = getMostRecentFile('prices')
     temp = 'prices/'.concat(temp.file)
 
+    //Read uploaded file 
     fs.readFile(temp, 'utf8', (err, data) => {
         if (err) {
           console.error(err);
           return;
         }
         data = JSON.parse(data);
-        console.log(data)
 
+        //For each element 
         data.forEach(element => {
-
+                //Find the product and update its prices
                 Product.updateOne({'name': element.name}, { $set: { prices : element.prices}}).then(result => {
                     console.log(result)
                    }).catch((err) =>{
@@ -958,25 +968,26 @@ app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Pr
 
 app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array("files"), (req,res) => {
 
+    //Finds the most resent file that is aploaded to supermarket directory
     let temp = getMostRecentFile('supermarket')
     temp = 'supermarket/'.concat(temp.file)
 
+    //Read uploaded file 
     fs.readFile(temp, 'utf8', (err, data) => {
         if (err) {
           console.error(err);
           return;
         }
 
+        //From data filter only the supermarkets 
         data = JSON.parse(data);
         data = data.features.filter(feature => feature.properties.name != null && feature.properties.name != "No supermarket");
         data = data.filter(feature => feature.geometry.type != undefined && feature.geometry.type != "Polygon" );
         let tempArray = [];
       
-      
+      //For every Supermarket 
         data.forEach(element => {
-          // console.log(element)
-      
-          
+            //Create new Object Supermarket
             temp = new SupermarketM({
               type:element.type,
               properties: {id:(element.id.slice(5)),name:element.properties.name},
@@ -987,7 +998,8 @@ app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array(
           tempArray.push(temp)
         });
         
-      SupermarketM.collection.insertMany(tempArray, (err) => {
+        //Add supermarkets to DataBase
+        SupermarketM.collection.insertMany(tempArray, (err) => {
       
           if(err)
           {
@@ -997,9 +1009,7 @@ app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array(
             console.info('supermarkets were successfully stored.');
         }
         })
-      
         console.log('test');
-        // allSupermarkets = JSON.stringify(data);
       });
 })
 

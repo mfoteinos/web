@@ -25,6 +25,7 @@
         <button id="delete_btn" onclick="Sure()">Delete</button>
     </div>
 <script>
+    //Add an EventListener to the file apload form on submit
     const form = document.querySelector('form');
     form.addEventListener('submit', (e) => {
     
@@ -34,12 +35,12 @@
     const Supermarket = document.getElementById("super_files");
     const formData = new FormData();
 
-
+    //Get All uploaded files 
     for(let i =0; i < Supermarket.files.length; i++) {
         formData.append("files", Supermarket.files[i]);
     }
-    console.log(...formData)
 
+    //Sends a Post request to server with the file data as body
     fetch('/add_supermarket', {
         method: 'POST',
         body: formData, 
@@ -54,6 +55,7 @@
 
 })
 
+//Makes the user confirm if he wants to delete everything
 function Sure(){
     const del = document.getElementById("delete_all")
     let sure = `<label for="delete">Are you sure:</label>
@@ -64,10 +66,12 @@ function Sure(){
     del.innerHTML = `${sure}`
 }
 
+//Reloads the page 
 function reload(){
     location.reload();
 }
 
+//Sends a Post request to server and deletes every supermarket
 function delete_all(){
     fetch('/delete_supermarket', {
         method: 'POST',
