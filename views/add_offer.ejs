@@ -80,6 +80,7 @@
       return ""
     }
 
+    //Create an option in the bropdown menu for every subcategory for the selected category
     Cat_Sub.forEach(element => {
           if (element.name == categ){
           for (const sub of element.subcategories){
@@ -103,6 +104,7 @@
     uuid = document.querySelector('#sub-cat');
     uuid = uuid.value;
 
+    //If the subcategory bropdown menu is empty hide the product bropdown menu
     if(uuid == ""){
       var k = document.getElementById("prod")
           k.innerHTML = ``
@@ -118,6 +120,7 @@
 
             product = product.concat(head)
 
+    //Create an option in the bropdown menu for every product that belongs in the selected subcategory
     Product.forEach(element => {
             if (element.subcategory == uuid){
               let tempProduct = `
@@ -180,6 +183,7 @@ Categories()
 const displayCharacters = (product) => {
     const htmlString = product
         .map((product) => {
+          //Returns the procucts wit an input form to add the offer value 
             return `
             <div id="productList"></div>
               <form action="/add_offer" method="POST">
