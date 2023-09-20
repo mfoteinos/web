@@ -252,7 +252,7 @@ app.use(express.json());
 app.use(cors())
 
 
-
+// Where to storage the products file
 const storage = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/products")
@@ -262,6 +262,7 @@ const storage = multer.diskStorage({
     }
 })
 
+//Where to storage the categories/subcategories file
 const categ = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/categories")
@@ -271,6 +272,7 @@ const categ = multer.diskStorage({
     }
 })
 
+//Where to storage the prices file
 const price = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/prices")
@@ -280,6 +282,7 @@ const price = multer.diskStorage({
     }
 })
 
+//Where to storage the supermarket file
 const supermarket = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/supermarket")
@@ -288,6 +291,7 @@ const supermarket = multer.diskStorage({
         callback(null, file.originalname)
     }
 })
+
 
 const products = multer({storage: storage})
 const categories = multer({storage: categ})
@@ -387,14 +391,14 @@ app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
 
 app.post('/add_offer', checkAuthenticated, (req,res) => {
 
-
+    //Split product name from product id
     let tempArray = req.body.product.split('|')
     
     let product_name = tempArray[0]
 
     let product_id = tempArray[1]
 
-    //Finds the current 
+    //Finds the current date
     var date_ob = new Date();
 
     var day = date_ob.getDate();
@@ -766,38 +770,43 @@ app.get('/add_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
 
 
 app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files"), (req,res) => {
-
+    //Read the uploaded Products File
     fs.readFile('products/Data.products.json', 'utf8', (err, product) => {
         if (err) {
           console.error(err);
           return
         }
+        //Get all products
         product = JSON.parse(product);
 
+        //Read the uploaded Categories File
         fs.readFile('categories/Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
             if (err) {
               console.error(err);
               res.jsonp({ error: 'Categories Not Found' })
               return
             }
+            //Get all categories 
             cat_subs = JSON.parse(cat_subs);
 
             let prod = []
-        
+            //Find all the products that belong to that categories and subcategories
             for(x of cat_subs){
                 for(y of product.products){
                     for(k of x.subcategories){
                             if(x.id == y.category && k.uuid == y.subcategory ){
                                 prod.push(y)
                         } 
+                    }
                 }
             }
-         }
             
 
-         
-               prod.forEach(element => {
+            //For every prodact that you found 
+            prod.forEach(element => {
+                //Chech if product already exists 
                 Product.find({'name': element.name}).then(result => {
+                    //If exists add new product 
                     if(result == ""){
                         temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory})
                         Product.collection.insertOne(temp, (err) => {
@@ -808,6 +817,7 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
                             console.info('successfully stored.');
                             }
                         })
+                    //Else update existed product
                     }else{
                         Product.updateOne({'name': element.name}, {id: element.id, name:element.name, category: element.category, subcategory: element.subcategory}).then(result =>{
                             console.log(result)
@@ -823,12 +833,11 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
 
 
 
-
-
          })
     })
 })
 
+//Delete all Products
 app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
     Product.deleteMany({}).then(result => {
         console.log(result)
@@ -885,6 +894,7 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
     return  res.jsonp({ error: 'Done' })
 })
 
+//Delete all Categories/Subcategories
 app.post('/delete_categories', checkAuthenticated, checkAdmin, (req,res) => {
     Categ_Sub.deleteMany({}).then(result => {
         console.log(result)
@@ -918,40 +928,29 @@ app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Pr
 })
 
 app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array("files"), (req,res) => {
+    
     fs.readFile('supermarket/export.geojson', 'utf8', (err, data) => {
         if (err) {
           console.error(err);
           return;
         }
-      
+
         data = JSON.parse(data);
         data = data.features.filter(feature => feature.properties.name != null && feature.properties.name != "No supermarket");
         data = data.filter(feature => feature.geometry.type != undefined && feature.geometry.type != "Polygon" );
         let tempArray = [];
-        let i = 0
-        let temp = 0
-        let today = new Date();
-        today = today.toLocaleDateString()
+      
+      
         data.forEach(element => {
           // console.log(element)
       
-          i = Math.floor(Math.random() * 2)
-          if (i % 2 == 0){
-            temp = new SupermarketM({
-              type:element.type,
-              properties: {id:(element.id.slice(5)),name:element.properties.name},
-              offers: [{id: (element.id.slice(5)),username:"Dusk",product: "Μπάμιες",price: 1000,date: today,likes: 100, dislikes: 0,available: true, reqDay: true, reqWeek: true}],
-              geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
-            });
-          }
-          else {
+          
             temp = new SupermarketM({
               type:element.type,
               properties: {id:(element.id.slice(5)),name:element.properties.name},
               offers: [],
               geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
             });
-          }
       
           tempArray.push(temp)
         });
@@ -960,16 +959,19 @@ app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array(
       
           if(err)
           {
-            return res.jsonp({ error: 'Error' })
+            return console.error(err);
           }
           else {
-            console.info('supermarkets were successfully stored.')
-            res.jsonp({ error: 'Done' })
+            console.info('supermarkets were successfully stored.');
         }
         })
+      
+        console.log('test');
+        // allSupermarkets = JSON.stringify(data);
       });
 })
 
+//Delete all Supermarkets
 app.post('/delete_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
     SupermarketM.deleteMany({}).then(result => {
         console.log(result)
@@ -1104,11 +1106,19 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
         }
 
+        console.log(weeklabels)
+        
+
         const diffTime = Math.abs(endday - today);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
+        console.log(diffDays)
+
+
         let offerlist = [];
         let productlist = [];
+
+        
 
         SupermarketM.find({'offers.date': {$gte: weeklabels[0],  $lte: weeklabels[6]}}).then((result) =>{
             for (let i = 0; i < weeklabels.length; i++) {
@@ -1137,6 +1147,7 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
             Product.find({'name': {$in: productlist}, 'category': {$in: category_list}, 'subcategory': {$in: subcategory_list}}).then((result) =>{
 
+                console.log("Voitheia")
                 for (let i = 0; i < weeklabels.length; i++) {
                         for (let j = 0; j < offerlist[i].length; j++) {
                             if(result.find(({ name }) => name === offerlist[i][j].name)) {
