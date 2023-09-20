@@ -13,6 +13,7 @@ html{
     width: 50%;
     height: 500px;
     z-index: 10;
+   
   }
 body{
 max-width: 1200px;
@@ -20,13 +21,12 @@ margin: 20px auto;
 font-family: 'Myfont';
 font-size: 15px;
 }
-div{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin: 2px;
-}
-
+.leaflet-popup-content {
+	overflow-y:scroll;
+	max-height:200px;
+	margin: 13px 19px;
+	line-height: 1.4;
+	}
 select{
   display: flex;
   align-items: center;
@@ -39,6 +39,7 @@ button{
 }
 form{
   text-align: right;
+  margin: 3px;
 }
 div a{
   display: flex;
@@ -51,11 +52,22 @@ div a{
   opacity: 50%;
   
 }
+/* div{
+  display: flex;
+  flex-wrap: wrap;
+} */
+
+}
 label{
   height: 25px;
     
 }
 a{
+  margin: 2px;
+  padding: 2px;
+  background: #ffffff;
+  border: solid #000000;
+  opacity: 50%;
 cursor: pointer;
  
 }
