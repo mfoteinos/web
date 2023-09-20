@@ -1092,19 +1092,11 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
         }
 
-        console.log(weeklabels)
-        
-
         const diffTime = Math.abs(endday - today);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
-        console.log(diffDays)
-
-
         let offerlist = [];
         let productlist = [];
-
-        
 
         SupermarketM.find({'offers.date': {$gte: weeklabels[0],  $lte: weeklabels[6]}}).then((result) =>{
             for (let i = 0; i < weeklabels.length; i++) {
@@ -1133,7 +1125,6 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
             Product.find({'name': {$in: productlist}, 'category': {$in: category_list}, 'subcategory': {$in: subcategory_list}}).then((result) =>{
 
-                console.log("Voitheia")
                 for (let i = 0; i < weeklabels.length; i++) {
                         for (let j = 0; j < offerlist[i].length; j++) {
                             if(result.find(({ name }) => name === offerlist[i][j].name)) {
