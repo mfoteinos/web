@@ -387,14 +387,14 @@ app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
 
 app.post('/add_offer', checkAuthenticated, (req,res) => {
 
-
+    //Split product name from product id
     let tempArray = req.body.product.split('|')
     
     let product_name = tempArray[0]
 
     let product_id = tempArray[1]
 
-    //Finds the current 
+    //Finds the current date
     var date_ob = new Date();
 
     var day = date_ob.getDate();
@@ -790,13 +790,13 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
                             if(x.id == y.category && k.uuid == y.subcategory ){
                                 prod.push(y)
                         } 
+                    }
                 }
             }
-         }
             
 
          
-               prod.forEach(element => {
+            prod.forEach(element => {
                 Product.find({'name': element.name}).then(result => {
                     if(result == ""){
                         temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory})
@@ -1104,11 +1104,19 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
         }
 
+        console.log(weeklabels)
+        
+
         const diffTime = Math.abs(endday - today);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
+        console.log(diffDays)
+
+
         let offerlist = [];
         let productlist = [];
+
+        
 
         SupermarketM.find({'offers.date': {$gte: weeklabels[0],  $lte: weeklabels[6]}}).then((result) =>{
             for (let i = 0; i < weeklabels.length; i++) {
@@ -1137,6 +1145,7 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
             Product.find({'name': {$in: productlist}, 'category': {$in: category_list}, 'subcategory': {$in: subcategory_list}}).then((result) =>{
 
+                console.log("Voitheia")
                 for (let i = 0; i < weeklabels.length; i++) {
                         for (let j = 0; j < offerlist[i].length; j++) {
                             if(result.find(({ name }) => name === offerlist[i][j].name)) {
