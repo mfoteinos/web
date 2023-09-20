@@ -425,6 +425,16 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                 if(req.body.new_value <= 0.8*result[0].prices[0].avg_price){
                     req_Week = true
                 }
+                if(!(req.body.new_value <= result[0].prices[0].price) && !(req.body.new_value <= result[0].prices[0].avg_price)){
+                    res.send(`<div> 
+                    <form action="/user_home" method="get">
+                    <label for="Add">Η προσφόρα που προτείνατε έχει τιμή μεγαλύτερη των σημερινών και εβδομαδιαίων τιμών, οπότε δεν εγκρίθηκε</label>
+                    <button>Return Home</button>
+                    </form>
+                    <div>
+                    `)
+                    return
+                }
                 SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:product_name, 
                     price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week}}}).then(result => {
                         var points = 0
@@ -443,8 +453,8 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                     //res.redirect('/user_home')
                     res.send(`<div> 
                     <form action="/user_home" method="get">
-                    <label for="Add">Successfully Added</label>
-                    <p>User Gets ${points} Points</p>
+                    <label for="Add">Η προσφορά προστέθηκε</label>
+                    <p>Λάβατε ${points} Πόντους</p>
                     <button>Return Home</button>
                     </form>
                     <div>
@@ -484,8 +494,8 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                                 //res.redirect('/user_home')
                                 res.send(`<div> 
                                 <form action="/user_home" method="get">
-                                <label for="Add">Offer Updated</label>
-                                <p>User Gets ${points} Points</p>
+                                <label for="Add">Η προσφορά προστέθηκε</label>
+                                <p>Λάβατε ${points} πόντους</p>
                                 <button>Return Home</button>
                                 </form>
                                 <div>
@@ -503,7 +513,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
             //res.redirect('/user_home')
             res.send(`<div> 
             <form action="/user_home" method="get">
-            <label for="Add">Error</label>
+            <label for="Add">Η προσφόρα που προτείνατε δεν είναι 20% μικρότερη από την τρέχουσα προσφόρα για αυτό το προϊόν, οπότε δεν εγκρίθηκε</label>
             <button>Return Home</button>
             </form>
             <div>
@@ -1025,99 +1035,110 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
     let temp = new Date();
 
-    // let endday = date_ob.getDate();
+    let today = new Date();
 
-    // let endmonth = date_ob.getMonth() + 1;
+    let endday = new Date();
 
-    // let endDate = [date_ob.getFullYear() + '-',(endmonth>9 ? '' : '0') + endmonth + '-',(endday>9 ? '' : '0') + endday].join('');
+    let daysBack = 0;
 
-    // date_ob.setDate(date_ob.getDate() - 7);
-    
-    // let startday = date_ob.getDate();
+    if(req.query.weeksback){
+        daysBack = req.query.weeksback * 7
+    }
 
-    // let startmonth = date_ob.getMonth() + 1;
 
-    // let startDateDate = [date_ob.getFullYear() + '-',(startmonth>9 ? '' : '0') + startmonth + '-',(startday>9 ? '' : '0') + startday].join('');
-
-    // console.log(startday)
-    // console.log(endday)
+    console.log(req.query.category)
+    console.log(req.query.subcat)
 
     let weeklabels = new Array(7).fill('')
 
     for (var i = 0; i < 7; i++) {
         
-        temp.setDate(date_ob.getDate() - i);
+        temp.setDate(date_ob.getDate() - i - daysBack);
     
         let day = temp.getDate();
 
         let month = temp.getMonth() + 1;
 
+        if (i==6) {
+            endday = temp
+        }
+
         weeklabels[6 - i] = [temp.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
 
 
     }
+    
 
-    // console.log(weeklabels[0])
-    // console.log(weeklabels[6])
+    const diffTime = Math.abs(endday - today);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+    console.log(diffDays)
 
 
     let offerlist = [];
     let productlist = [];
 
+    
+
     SupermarketM.find({'offers.date': {$gte: weeklabels[0],  $lte: weeklabels[6]}}).then((result) =>{
-        for (superm of result){
-            for (offer of superm.offers){
-                if (weeklabels[0] <= offer.date && offer.date <= weeklabels[6]){
-                    offerlist.push({"name": offer.product, "price": offer.price, "count": 1});
-                    productlist.push(offer.product);
-                    
+        for (let i = 0; i < weeklabels.length; i++) {
+            let tempofferlist = []
+            for (superm of result){
+                for (offer of superm.offers){
+                    if (weeklabels[i] == offer.date ){
+                        tempofferlist.push({"name": offer.product, "price": offer.price, "count": 1});
+                        productlist.push(offer.product);
+                        
+                    }
                 }
             }
+            offerlist.push(tempofferlist)
         }
-        let totals = {};
-
-        for (let i = 0; i < offerlist.length; i++) {
-          let name = offerlist[i].name;
-          if (name in totals) {
-            totals[name].price += offerlist[i].price;
-            totals[name].count += 1;
-          } else {
-            totals[name] =  { "price": offer.price, "count": 1};
-          }
-        }
-        // console.log(totals)
-
 
         productlist = [...new Set(productlist)];
 
-        for (const [key, value] of Object.entries(totals)) {
-            console.log(key, value);
-            totals[key] = {"price": totals[key].price / totals[key].count};
-        }
+        console.log(offerlist)
 
-        console.log(totals)
         console.log("Productlist: ")
         console.log(productlist)
 
-        let avg_prices = []
-        let discounts = []
+        let discountlist = new Array(weeklabels.length).fill(0)
+        let countlist = new Array(weeklabels.length).fill(0)
 
         Product.find({'name': {$in: productlist}}).then((result) =>{
-            for (prod of result) {
-                let sum = 0
-                for(x of prod.prices){
-                    sum += x.price
+
+            console.log("Voitheia")
+            console.log(result.find(({ name }) => name === offerlist[5][0].produ))
+            for (let i = 0; i < weeklabels.length; i++) {
+                    for (let j = 0; j < offerlist[i].length; j++) {
+                        let avg_price = result.find(({ name }) => name === offerlist[i][j].name).prices[diffDays - 6].avg_price
+                        offerlist[i][j].price = (avg_price - offerlist[i][j].price) / avg_price
+                    }
+            }
+
+            for (let i = 0; i < weeklabels.length; i++) {
+                for (let j = 0; j < offerlist[i].length; j++) {
+                    discountlist[i] += offerlist[i][j].price
+                    countlist[i] += 1
                 }
-                avg_prices.push({"name": prod.name, "prices": sum/7})
             }
-            for (prod of avg_prices) {
-                let calc = prod.price / totals[prod.name].price 
-                discounts.push(calc.toString() + "%")
+
+            for (let i = 0; i < weeklabels.length; i++) {
+                if (countlist[i] != 0) {
+                    discountlist[i] = Math.round((discountlist[i] / countlist[i]) * 100)
+                }
             }
-            console.log(discounts)
-            console.log(lol)
-            res.render('statistics', {startDate:weeklabels[0],endDate:weeklabels[6], offercount:offercount, productlabels:weeklabels})
+
+            console.log(discountlist)
+
+            Categ_Sub.find().then((result) =>{
+                let ctg_name = result
+                res.render('statistics_two', {startDate:weeklabels[0],endDate:weeklabels[6], discountlist:discountlist, weeklabels:weeklabels, ctg_name})
            
+            }).catch((err) =>{
+                console.log(err);
+            })
+        
         }).catch((err) =>{
             console.log(err);
         })
