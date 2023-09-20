@@ -366,11 +366,15 @@ app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
 
 app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
 
+    //Get the Supermarket id of the Supermarket you add the offer
     var Sup_id = req.params.id
+    //Find Categories/Subcategories from the Database
     Categ_Sub.find().then((result) =>{
         var ctg_name = result
+        //Find the Products from the Database
         Product.find().then((result) =>{
             var product = result 
+            //Render the add offer and send to the page the categories, subctegories, procucts, and the Supermartket id of which Supermartket you add the offer
             res.render('add_offer', {ctg_name, product, Sup_id})
         }).catch((err) =>{
             console.log(err);
