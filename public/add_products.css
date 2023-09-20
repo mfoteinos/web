@@ -17,3 +17,6 @@ overflow: clip;
   margin: auto;
   top: 0;
 }
+input{
+  color: red;
+}
