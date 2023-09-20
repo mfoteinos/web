@@ -53,7 +53,8 @@
 
         categories = categories.concat(tempcat)
 
-        var y = document.getElementById("categ")
+          //Returs dropdown menu to div with id == categ
+          var y = document.getElementById("categ")
           y.innerHTML = `${categories}`
 
   }
@@ -97,6 +98,8 @@
 
 
          sub_categories = sub_categories.concat(tempSub)
+
+         //Returs dropdown menu to div with id == subcat
           var x = document.getElementById("subcat")
           x.innerHTML = `${sub_categories}`
   }
@@ -152,6 +155,7 @@
                                   `
                     product = product.concat(foot)
 
+          //Returs dropdown menu to div with id == prod
           var k = document.getElementById("prod")
           k.innerHTML = `${product}`
   }

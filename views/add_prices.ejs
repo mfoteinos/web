@@ -21,23 +21,22 @@
     </form>
 
 <script>
+    //Add an EventListener to the file apload form on submit
     const form = document.querySelector('form');
     form.addEventListener('submit', (e) => {
     
     e.preventDefault();
 
-
-/////////////////////////////////////////////////////
+    
     const Price = document.getElementById("prices");
     const priceData = new FormData();
-  
+        
+    //Get All uploaded files 
     for(let i =0; i < Price.files.length; i++) {
         priceData.append("Price", Price.files[i]);
     }
-    console.log(...priceData)
- ////////////////////////////////////////////////
 
-
+    //Sends a Post request to server with the file data as body
     fetch('/add_product_prices', {
         method: 'POST',
         body: priceData, 
