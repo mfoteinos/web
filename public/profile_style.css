@@ -56,6 +56,15 @@ div br{
 	height: 100%;
     border: solid #000000;
 }
+.dislikes{
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    width: 300px;
+	height: 100%;
+    border: solid #000000;
+}
+
 hr{
     width: 200px;
     align: left;
