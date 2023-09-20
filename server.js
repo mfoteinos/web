@@ -909,7 +909,10 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
                     })
 
                 }
-            })
+            }).catch((err) =>{
+                res.jsonp({ error: 'Error' })
+                console.log(err);
+                 })
         })
     })
 
