@@ -259,6 +259,64 @@
     {
       "type": "Feature",
       "properties": {
+        "@id": "way/504524333",
+        "addr:city": "Πάτρα",
+        "addr:housenumber": "16",
+        "addr:street": "Παρνασσού",
+        "brand": "Σκλαβενίτης",
+        "brand:el": "Σκλαβενίτης",
+        "brand:en": "Sklavenitis",
+        "brand:wikidata": "Q7536037",
+        "building": "yes",
+        "name": "Σκλαβενίτης",
+        "name:el": "Σκλαβενίτης",
+        "name:en": "Sklavenitis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              21.7276674,
+              38.2325984
+            ],
+            [
+              21.7276121,
+              38.2320627
+            ],
+            [
+              21.727651,
+              38.2320439
+            ],
+            [
+              21.7279168,
+              38.2320954
+            ],
+            [
+              21.7279155,
+              38.2321429
+            ],
+            [
+              21.7281681,
+              38.2321952
+            ],
+            [
+              21.728142,
+              38.2326284
+            ],
+            [
+              21.7276674,
+              38.2325984
+            ]
+          ]
+        ]
+      },
+      "id": "way/504524333"
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "@id": "way/791178932",
         "addr:city": "ΠΑΤΡΑ",
         "addr:housenumber": "Ο.Τ. 868Α",
@@ -1451,6 +1509,29 @@
         ]
       },
       "id": "node/8777171555"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8805335004",
+        "brand": "Μασούτης",
+        "brand:el": "Μασούτης",
+        "brand:en": "Masoutis",
+        "brand:wikidata": "Q6783887",
+        "brand:wikipedia": "en:Masoutis",
+        "name": "Μασούτης",
+        "name:el": "Μασούτης",
+        "name:en": "Masoutis",
+        "shop": "supermarket"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.7355058,
+          38.2454669
+        ]
+      },
+      "id": "node/8805335004"
     },
     {
       "type": "Feature",
