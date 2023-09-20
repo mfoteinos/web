@@ -394,6 +394,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
 
     let product_id = tempArray[1]
 
+    //Finds the current 
     var date_ob = new Date();
 
     var day = date_ob.getDate();
@@ -402,15 +403,15 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
 
     let today = [date_ob.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
     
-
-
-
+    //Product offer contains the Supermarket id, user name, and product id
     let id_string = req.body.Sup_id.concat(req.user.username, product_id)
 
     var offer = []
+    //Find all offers of the supermarket that we want to add the offer  
     SupermarketM.find({'properties.id': req.body.Sup_id}, {'offers':1}).then(result => {
         result.forEach(element => {
             for(x of element.offers){
+                //Find all the offers for the products we want to add
                 if(x.product == product_name){
                     offer.push(x)
                 }
@@ -419,8 +420,9 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
         let req_Day = false
         let req_Week = false
         let second_week = false
+        //If offer doesnt exist 
         if(offer == ""){
-
+            //Check if offer can be added 
             Product.find({'name': product_name}).then(result =>{
                
                 if(req.body.new_value <= 0.8*result[0].prices[0].price){
@@ -439,8 +441,10 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                     `)
                     return
                 }
+                //Add Offer to the supermarket
                 SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:product_name, 
                     price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week}}}).then(result => {
+                        //Check if user gets points for the offer
                         var points = 0
                         if(req_Day){
                             points += 50
@@ -449,12 +453,12 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                             points += 20
                         }
                         if(points > 0){
+                            //Add points to User 
                             UserM.updateOne({'username':  req.user.username}, {$inc: { 'points': points, 'monthpoints': points}}).then((result) =>{
                             }).catch((err) =>{
                                 console.log(err);
                             })
                         }
-                    //res.redirect('/user_home')
                     res.send(`<div> 
                     <form action="/user_home" method="get">
                     <label for="Add">Η προσφορά προστέθηκε</label>
@@ -469,6 +473,7 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
             }).catch((err) =>{
                 console.log(err);
         })
+        //If Offer exists 
         }else if(offer[0].price*0.8 >= req.body.new_value){
             
             Product.find({'name': product_name}).then(result =>{
@@ -478,10 +483,13 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                 if(req.body.new_value <= 0.8*result[0].prices[0].avg_price){
                     req_Week = true
                 }
+                //Delete previous offer for the same product
                 SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$pull: {offers: {id:offer[0].id_string, username:offer[0].username, product:offer[0].product, 
                     price:offer[0].new_value, date:offer[0].date,likes:offer[0].likes, dislikes:offer[0].dislikes, available:offer[0].available, reqDay: offer[0].reqDay, reqWeek: offer[0].reqDay, secondWeek: offer[0].second_week}}}).then(result => {
+                        //Add New offer
                         SupermarketM.updateOne({'properties.id': req.body.Sup_id}, {$push: {offers: {id:id_string, username:req.user.username, product:product_name, 
                             price:req.body.new_value, date:today,likes:0, dislikes:0, available:true, reqDay: req_Day, reqWeek: req_Week, secondWeek: second_week}}}).then(result => {
+                            //Check if user gets points for the offer
                             let points = 0
                             if(req_Day){
                                 points += 50
@@ -490,12 +498,12 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
                                 points += 20
                             }
                             if(points > 0){
+                                //Add points to User 
                                 UserM.updateOne({'username': req.user.username}, {$inc: { 'points': points, 'monthpoints': points}}).then((result) =>{
                                 }).catch((err) =>{
                                     console.log(err);
                                 })
                             }
-                                //res.redirect('/user_home')
                                 res.send(`<div> 
                                 <form action="/user_home" method="get">
                                 <label for="Add">Η προσφορά προστέθηκε</label>
@@ -513,8 +521,8 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
             }).catch((err) =>{
                 console.log(err);
         })
+        //If offer exists and cant be added
         }else{
-            //res.redirect('/user_home')
             res.send(`<div> 
             <form action="/user_home" method="get">
             <label for="Add">Η προσφόρα που προτείνατε δεν είναι 20% μικρότερη από την τρέχουσα προσφόρα για αυτό το προϊόν, οπότε δεν εγκρίθηκε</label>
