@@ -32,10 +32,11 @@
 
 <script>
 
+  //Get Products and Categories/Subcategories form the server
   var Product = <%- JSON.stringify(product) %>;
   var Cat_Sub = <%- JSON.stringify(ctg_name) %>;
 
-
+  //Function that returns a dropdown menu with all the categories  
   function Categories(){
     let categories = ``
       let tempcat = ` <div class="create-offer1" id="create-offer1">
@@ -56,6 +57,7 @@
 
   }
 
+//Function that returns a dropdown menu with all the subcategories based on the category
   function Sub_Cat(){
 
     let sub_categories = ``
@@ -68,7 +70,8 @@
 
     var k = document.getElementById("prod")
           k.innerHTML = ``
-
+    
+    //If the categories bropdown menu is empty hide the subcategories bropdown menu and products bropdown menu
     if(categ == ""){
       var x = document.getElementById("subcat")
           x.innerHTML = ``
@@ -95,6 +98,7 @@
           x.innerHTML = `${sub_categories}`
   }
 
+  //Function that returns a dropdown menu with all the Products based on the subcategory
   function findPr(){
     uuid = document.querySelector('#sub-cat');
     uuid = uuid.value;
@@ -149,19 +153,21 @@
 Categories()
 
 
-
+    //For the search bar
     const charactersList = document.getElementById('productList');
     const searchBar = document.getElementById('input-box');
     let hpCharacters = [];
 
-    searchBar.addEventListener('keyup', (e) => {
 
+    searchBar.addEventListener('keyup', (e) => {
+    
     const searchString = e.target.value.toLowerCase();
 
     const filteredCharacters = Product.filter((product) => {
+      //If the search bar is empty display nothing
       if(searchString == ""){
         return ""
-      }
+      }//Else return the products that match
         return (
             product.name.toLowerCase().includes(searchString)
         );
@@ -170,6 +176,7 @@ Categories()
 
 });
 
+//Function that return the products that match with the string you write
 const displayCharacters = (product) => {
     const htmlString = product
         .map((product) => {
