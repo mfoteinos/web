@@ -247,6 +247,7 @@ function FindSuper(cords){
     map.setView(new L.LatLng(cords[1], cords[0]), 16);
 }
 
+//Function that returns a dropdown menu with all the categories  
 function Categories(){
     let categories = ``
       let tempcat = ` <div class="create-offer1" id="create-offer1">
@@ -267,6 +268,7 @@ function Categories(){
 
   }
 
+//Function that changes the map based on the selected category 
 function Change_Map(){
 
     category = document.querySelector('#category');

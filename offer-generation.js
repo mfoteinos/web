@@ -9,8 +9,11 @@ mongoose.connect(db_url, {useNewUrlParser: true, useUnifiedTopology: true} )
 .then((result) => console.log('connected to database'))
 .catch((err) => console.log(err))
 
+//Find everything from Supermarket
 SupermarketM.find({}).then((result) => {
+    //Find everything from Product
     Product.find({}).then((product => {
+        //Find everything from User
         UserM.find({}).then((user) => {
 
             let date_obj = new Date();
@@ -20,7 +23,7 @@ SupermarketM.find({}).then((result) => {
             let daysback = 60;
 
             let daylabels = new Array(daysback).fill('')
-
+            //Creates an array with 60 random days 
             for (var i = 0; i < daysback; i++) {
         
                 temp.setDate(date_obj.getDate() - i);
@@ -31,9 +34,9 @@ SupermarketM.find({}).then((result) => {
         
                 daylabels[daysback - i] = [temp.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
         
-        
             }
 
+            //Creates 60 random offers 
             for (let index = 0; index < 60; index++) {
 
                 let rand_product = 0
@@ -44,21 +47,24 @@ SupermarketM.find({}).then((result) => {
                 let rand_date = ''
                 let temp = 0
 
-                rand_user = user[(Math.floor(Math.random() * user.length))].username
-                console.log(rand_user);
+                rand_user = user[(Math.floor(Math.random() * user.length))].username //Select random username from user 
                 temp = (Math.floor(Math.random() * product.length))
-                rand_product = product[temp].name
+                rand_product = product[temp].name //Select random product name and get the id from that product 
                 prod_id = product[temp].id
-                rand_super = result[(Math.floor(Math.random() * result.length))].properties.id
-                rand_price = (Math.floor((Math.random()*5)* 100 + 1)/100)
-                rand_date = daylabels[(Math.floor(Math.random() * daylabels.length))]
+                rand_super = result[(Math.floor(Math.random() * result.length))].properties.id//Select random supermarket id
+                rand_price = (Math.floor((Math.random()*5)* 100 + 1)/100) //Create a random price 
+                rand_date = daylabels[(Math.floor(Math.random() * daylabels.length))] //Select a random date
             
                 console.log(rand_super)
 
+                //Create new offer_id 
                 let id_string = rand_super.concat(rand_user, prod_id)
 
+                //Search offers for that offer_id
                 SupermarketM.find({'offers.id':id_string}).then(result => {
+                    //If it doesnt exist 
                     if(result == ""){
+                        //Add the new offer to the Database
                         SupermarketM.updateOne({'properties.id': rand_super}, {$push: {offers: {
                             id: id_string,
                             username: rand_user,
@@ -76,7 +82,7 @@ SupermarketM.find({}).then((result) => {
                         }).catch((err) =>{
                             console.log(err);
                         })
-                        console.log("Error")
+                    //Else print Error
                     }else{
                         console.log("Error")
                     }

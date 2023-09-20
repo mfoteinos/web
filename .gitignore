@@ -1,3 +1,10 @@
 node_modules/
 categories/Data.categ_subcs.json
 .gitignore
+
+categories/Data.categ_subcs2.json
+prices/Prices.json
+products/Data.products4.json
+supermarket/expor1t.geojson
+prices/Prices.json
+prices/Prices.json

@@ -26,24 +26,23 @@
         <button id="delete_btn" onclick="Sure()">Delete</button>
     </div>
 <script>
+    //Add an EventListener to the file apload form on submit
     const form = document.querySelector('form');
     form.addEventListener('submit', (e) => {
     
     e.preventDefault();
 
 
-/////////////////////////////////////////////////////
     const Categ = document.getElementById("gateg_subcat");
     const categData = new FormData();
   
+    //Get All uploaded files 
     for(let i =0; i < Categ.files.length; i++) {
         categData.append("Categ", Categ.files[i]);
     }
-    console.log(...categData)
- ////////////////////////////////////////////////
  
-////////////////////////////////////////////
 
+    //Sends a Post request to server with the file data as body
     fetch('/add_categories_subcat', {
         method: 'POST',
         body: categData, 
@@ -57,6 +56,7 @@
     
 })
 
+//Makes the user confirm if he wants to delete everything
 function Sure(){
     const del = document.getElementById("delete_all")
     let sure = `<label for="delete">Are you sure:</label>
@@ -67,10 +67,12 @@ function Sure(){
     del.innerHTML = `${sure}`
 }
 
+//Reloads the page 
 function reload(){
     location.reload();
 }
 
+//Sends a Post request to server and deletes every category/subcategory
 function delete_all(){
     fetch('/delete_categories', {
         method: 'POST',
