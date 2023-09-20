@@ -53,12 +53,14 @@ initializePassport(
 
 // 0 0 28-31 * * [ “$(date +\%d -d tomorrow)” = “01” ]
 
+
+// Scheduled job that runs every first of the month to add new tokens to the token bank based on the number of registered users
 cron.schedule("0 0 1 * *", function () {
     let tokens = 100
-    UserM.updateMany({}, {$set: { 'monthpoints': 0}}).then(() =>{
-        UserM.count({}).then(count => {
+    UserM.updateMany({}, {$set: { 'monthpoints': 0}}).then(() =>{ // Reset current month points to 0 for every user
+        UserM.count({}).then(count => {  // Find and count the number of registered users
             tokens = tokens * count
-            TokenM.updateOne({'id': 0}, {$inc: { 'tokens': tokens}}).then(() =>{
+            TokenM.updateOne({'id': 0}, {$inc: { 'tokens': tokens}}).then(() =>{  // Calculate token number to be added and inc it
                 console.log("Added " + tokens + " tokens to the token bank.")
             }).catch((err) =>{
                 console.log(err);
@@ -70,6 +72,7 @@ cron.schedule("0 0 1 * *", function () {
 
 });
 
+// Scheduled job that runs at last day of every month to add new tokens to the token bank based on the number of registered users
 cron.schedule("0 0 28-31 * *", function () {
     let test_mode = false
     let dateTomorrow = new Date();
