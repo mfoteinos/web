@@ -928,40 +928,29 @@ app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Pr
 })
 
 app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array("files"), (req,res) => {
+    
     fs.readFile('supermarket/export.geojson', 'utf8', (err, data) => {
         if (err) {
           console.error(err);
           return;
         }
-      
+
         data = JSON.parse(data);
         data = data.features.filter(feature => feature.properties.name != null && feature.properties.name != "No supermarket");
         data = data.filter(feature => feature.geometry.type != undefined && feature.geometry.type != "Polygon" );
         let tempArray = [];
-        let i = 0
-        let temp = 0
-        let today = new Date();
-        today = today.toLocaleDateString()
+      
+      
         data.forEach(element => {
           // console.log(element)
       
-          i = Math.floor(Math.random() * 2)
-          if (i % 2 == 0){
-            temp = new SupermarketM({
-              type:element.type,
-              properties: {id:(element.id.slice(5)),name:element.properties.name},
-              offers: [{id: (element.id.slice(5)),username:"Dusk",product: "Μπάμιες",price: 1000,date: today,likes: 100, dislikes: 0,available: true, reqDay: true, reqWeek: true}],
-              geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
-            });
-          }
-          else {
+          
             temp = new SupermarketM({
               type:element.type,
               properties: {id:(element.id.slice(5)),name:element.properties.name},
               offers: [],
               geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
             });
-          }
       
           tempArray.push(temp)
         });
@@ -970,13 +959,15 @@ app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array(
       
           if(err)
           {
-            return res.jsonp({ error: 'Error' })
+            return console.error(err);
           }
           else {
-            console.info('supermarkets were successfully stored.')
-            res.jsonp({ error: 'Done' })
+            console.info('supermarkets were successfully stored.');
         }
         })
+      
+        console.log('test');
+        // allSupermarkets = JSON.stringify(data);
       });
 })
 

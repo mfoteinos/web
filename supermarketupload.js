@@ -20,36 +20,18 @@ fs.readFile('export.geojson', 'utf8', (err, data) => {
   data = data.features.filter(feature => feature.properties.name != null && feature.properties.name != "No supermarket");
   data = data.filter(feature => feature.geometry.type != undefined && feature.geometry.type != "Polygon" );
   let tempArray = [];
-  let i = 0
-  let temp = 0
-  var date_ob = new Date();
 
-  var day = date_ob.getDate();
-
-  var month = date_ob.getMonth() + 1;
-
-  today = [date_ob.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
 
   data.forEach(element => {
     // console.log(element)
 
-    i = Math.floor(Math.random() * 2)
-    if (i % 2 == 0){
+    
       temp = new SupermarketM({
         type:element.type,
         properties: {id:(element.id.slice(5)),name:element.properties.name},
         offers: [],
         geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
       });
-    }
-    else {
-      temp = new SupermarketM({
-        type:element.type,
-        properties: {id:(element.id.slice(5)),name:element.properties.name},
-        offers: [],
-        geometry: {type:element.geometry.type, coordinates:element.geometry.coordinates}
-      });
-    }
 
     tempArray.push(temp)
   });
