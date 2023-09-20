@@ -52,7 +52,7 @@ SupermarketM.find({}).then((result) => {
                 rand_product = product[temp].name //Select random product name and get the id from that product 
                 prod_id = product[temp].id
                 rand_super = result[(Math.floor(Math.random() * result.length))].properties.id//Select random supermarket id
-                rand_price = (Math.floor((Math.random()*5)* 100 + 1)/100) //Create a random price 
+                rand_price = (Math.floor(((Math.random()*5) + 1)* 100)/100) //Create a random price 
                 rand_date = daylabels[(Math.floor(Math.random() * daylabels.length))] //Select a random date
             
                 console.log(rand_super)

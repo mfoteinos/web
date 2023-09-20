@@ -663,7 +663,7 @@ app.post('/delete/:supid/:id', checkAuthenticated, checkAdmin, (req,res) => {
 
 });
 
-// Render user profiles
+// Render user profile
 app.get('/user_profile', checkAuthenticated, (req,res) => {
     SupermarketM.find({'offers.username': req.user.username}).then(result =>{ // Find all of users offers
 
@@ -675,12 +675,12 @@ app.get('/user_profile', checkAuthenticated, (req,res) => {
                 }
             }
         })
-        UserM.find({'username': req.user.username}).then((result) =>{ // Find users data
+        UserM.find({'username': req.user.username}).then((result) =>{ // Find user's data
             let prof_user = result[0];
             let liked_history = [];
             let disliked_history = [];
             let union = [...new Set([...prof_user.likedoffers, ...prof_user.dislikedoffers])];
-            SupermarketM.find({'offers.id': {$in: union}}).then((result) =>{ // Find users liked and disliked offers
+            SupermarketM.find({'offers.id': {$in: union}}).then((result) =>{ // Find user's liked and disliked offers
                 for (superm of result){
                     for (offer of superm.offers){
                         if (prof_user.likedoffers.includes(offer.id)){
@@ -689,8 +689,6 @@ app.get('/user_profile', checkAuthenticated, (req,res) => {
                         if (prof_user.dislikedoffers.includes(offer.id)){
                             disliked_history.push(offer); // sosto????
                         }
-                        // liked_history.sort((a, b) => (a.color > b.color) ? 1 : -1) // otan prostethoun alles hmeromhnies review (+ ola ta offers panw)
-                        // disliked_history.sort((a, b) => (a.color > b.color) ? 1 : -1)
                 }
                 }
                 res.render('user_profile', {name:req.user.username, offers, user:prof_user, liked_history, disliked_history});
@@ -707,6 +705,8 @@ app.get('/user_profile', checkAuthenticated, (req,res) => {
 
 });
 
+
+// Change username
 app.put('/user_profile_username', checkAuthenticated, (req,res) => {
     UserM.findOneAndUpdate({'username':req.user.username}, {'username':req.body.username})
     .then( () => {
@@ -719,6 +719,8 @@ app.put('/user_profile_username', checkAuthenticated, (req,res) => {
     res.redirect('/user_profile');
 });
 
+
+// Change password
 app.put('/user_profile_password', checkAuthenticated, async (req,res) => {
     UserM.findOneAndUpdate({'username':req.user.username}, {'password': await bcrypt.hash(req.body.password, 10)})
     .then( () => {
@@ -731,6 +733,8 @@ app.put('/user_profile_password', checkAuthenticated, async (req,res) => {
     res.redirect('/user_profile');
 });
 
+
+// Works exactly as user home
 app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
 
     SupermarketM.find({'offers':  { $size: 0 } }).lean(true)
@@ -761,6 +765,8 @@ app.get('/admin_home', checkAuthenticated, checkAdmin, (req,res) => {
 
 });
 
+
+// Finds users scores and sorts them by biggest total points, then renders the leaderboad page with that info
 app.get('/leaderboard', checkAuthenticated, checkAdmin, (req,res) => {
     
     UserM.find({}).sort({points:-1})
@@ -1034,13 +1040,14 @@ app.post('/delete_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
     })
 })
 
+// Render the daily offer count statistics page
 app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
 
-    if(req.query.date){
+    if(req.query.date){ // If user has inputed month data, use it
         var month = req.query.date.substring(5,7);
 
         var year = req.query.date.substring(0,4);
-    } else {
+    } else { // Else use today's month
         var date_ob = new Date();
         // current month
         var month = date_ob.getMonth() + 1;
@@ -1049,10 +1056,6 @@ app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
         // current year
         var year = date_ob.getFullYear();
     }
-
-    // console.log(month)
-
-    // console.log(year)
 
 
     let startDate = year + "-" + month + "-01";
@@ -1065,7 +1068,7 @@ app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
 
     let monthlabels = new Array(lastday).fill('')
 
-    for (var i = 0; i < monthlabels.length; i++) {
+    for (var i = 0; i < monthlabels.length; i++) { // Fill an array of labels with the month's dates in string
         if (i<9) {
             monthlabels[i] = year + "-" + month + "-" + "0" + (i+1);
         } else {
@@ -1078,9 +1081,9 @@ app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
     // console.log(endDate >= monthlabels[16])
     // console.log(endDate)
 
-    offercount = new Array(lastday).fill(0);
+    offercount = new Array(lastday).fill(0); // Fill an array the size of the month with 0
 
-    SupermarketM.find({'offers.date': {$gte: startDate,  $lte: endDate}}).then((result) =>{
+    SupermarketM.find({'offers.date': {$gte: startDate,  $lte: endDate}}).then((result) =>{ // Count every offer by incrementing the offecount array by 1 on the date's day position
         for (superm of result){
             for (offer of superm.offers){
                 if (startDate <= offer.date && offer.date <= endDate){
@@ -1089,7 +1092,7 @@ app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
         }
         console.log(offercount)
     }
-    res.render('statistics', {startDate:startDate,endDate:endDate, offercount:offercount, monthlabels:monthlabels})
+    res.render('statistics', {startDate:startDate,endDate:endDate, offercount:offercount, monthlabels:monthlabels}) // Render the page with the info above
     }).catch((err) =>{
         console.log(err);
     })
@@ -1100,7 +1103,7 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
 
 
-    Categ_Sub.find().then((result) =>{
+    Categ_Sub.find().then((result) =>{ // Find product categories
         let ctg_name = result
         
         let category_list = []
@@ -1113,8 +1116,6 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
             }
         }
 
-        console.log(subcategory_list)
-
 
         let today = new Date();
 
@@ -1122,12 +1123,12 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
         let daysBack = 0;
 
-        if(req.query.weeksback){
+        if(req.query.weeksback){ // If user has inputed weeks to go back, use them
             daysBack = req.query.weeksback * 7;
         }
 
 
-        if (req.query.category) {
+        if (req.query.category) { // If user has inputed a category, use it
             category_list = req.query.category;
             if (req.query.subcat)  {
                 subcategory_list = req.query.subcat;
@@ -1136,9 +1137,9 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
 
 
-        let weeklabels = new Array(7).fill('')
+        let weeklabels = new Array(7).fill('')  // Create an array to store the week's dates in string
 
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < 7; i++) { // Calculate the week's dates
 
             let date_ob = new Date();
 
@@ -1157,23 +1158,18 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
             weeklabels[6 - i] = [temp.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
 
 
-        }
+        }        
 
-        console.log(weeklabels)
-        
-
+        // Calculate the distance of the first day of the week from today (used to adjust index further down)
         const diffTime = Math.abs(endday - today);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
-        console.log(diffDays)
+
+        let offerlist = []; // 2d Array to store offers
+        let productlist = [];  // 1d Array to store product names
 
 
-        let offerlist = [];
-        let productlist = [];
-
-        
-
-        SupermarketM.find({'offers.date': {$gte: weeklabels[0],  $lte: weeklabels[6]}}).then((result) =>{
+        SupermarketM.find({'offers.date': {$gte: weeklabels[0],  $lte: weeklabels[6]}}).then((result) =>{ // Find all offers in that week day by day and push them in the 2d array each loop
             for (let i = 0; i < weeklabels.length; i++) {
                 let tempofferlist = []
                 for (superm of result){
@@ -1188,19 +1184,19 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
                 offerlist.push(tempofferlist)
             }
 
-            productlist = [...new Set(productlist)];
+            productlist = [...new Set(productlist)]; // Delete duplicate names by making it a set
 
             // console.log(offerlist)
 
             // console.log("Productlist: ")
             // console.log(productlist)
 
-            let discountlist = new Array(weeklabels.length).fill(0)
-            let countlist = new Array(weeklabels.length).fill(0)
+            let discountlist = new Array(weeklabels.length).fill(0) // Array to store the average discount sum
+            let countlist = new Array(weeklabels.length).fill(0) // Array to store offer count to divide the discount sum with, creating the average discount
 
             Product.find({'name': {$in: productlist}, 'category': {$in: category_list}, 'subcategory': {$in: subcategory_list}}).then((result) =>{
 
-                for (let i = 0; i < weeklabels.length; i++) {
+                for (let i = 0; i < weeklabels.length; i++) { // Calculate the discount difference from the avg weekly price and then the percent
                         for (let j = 0; j < offerlist[i].length; j++) {
                             if(result.find(({ name }) => name === offerlist[i][j].name)) {
                                 let avg_price = result.find(({ name }) => name === offerlist[i][j].name).prices[diffDays - 6].avg_price
@@ -1211,7 +1207,7 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
                         }
                 }
 
-                for (let i = 0; i < weeklabels.length; i++) {
+                for (let i = 0; i < weeklabels.length; i++) { // Calculcate the average discount sum
                     for (let j = 0; j < offerlist[i].length; j++) {
                         discountlist[i] += offerlist[i][j].price
                         if (offerlist[i][j].price != 0) {
@@ -1220,13 +1216,15 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
                     }
                 }
 
-                for (let i = 0; i < weeklabels.length; i++) {
+                for (let i = 0; i < weeklabels.length; i++) { // Calculate the average discount percent
                     if (countlist[i] != 0) {
                         discountlist[i] = Math.round((discountlist[i] / countlist[i]) * 100)
                     }
                 }
 
                 // console.log(discountlist)
+
+                // Render the page with the info calculated and found above
                 res.render('statistics_two', {startDate:weeklabels[0],endDate:weeklabels[6], discountlist:discountlist, weeklabels:weeklabels, ctg_name})
         
             
