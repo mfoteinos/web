@@ -35,7 +35,9 @@ async function Add_User(name, email, password) {
                     const new_user = new UserM({
                         username: name,
                         password: hash,
-                        email: email
+                        email: email,
+                        points: Math.round(Math.random()* 1000) + 1000,
+                        monthpoints: Math.round(Math.random()* 1000)
                     })
                     //Add the new user top the database
                     new_user.save()
