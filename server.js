@@ -252,7 +252,7 @@ app.use(express.json());
 app.use(cors())
 
 
-
+// Where to storage the products file
 const storage = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/products")
@@ -262,6 +262,7 @@ const storage = multer.diskStorage({
     }
 })
 
+//Where to storage the categories/subcategories file
 const categ = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/categories")
@@ -271,6 +272,7 @@ const categ = multer.diskStorage({
     }
 })
 
+//Where to storage the prices file
 const price = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/prices")
@@ -280,6 +282,7 @@ const price = multer.diskStorage({
     }
 })
 
+//Where to storage the supermarket file
 const supermarket = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/supermarket")
@@ -288,6 +291,7 @@ const supermarket = multer.diskStorage({
         callback(null, file.originalname)
     }
 })
+
 
 const products = multer({storage: storage})
 const categories = multer({storage: categ})
@@ -766,24 +770,27 @@ app.get('/add_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
 
 
 app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files"), (req,res) => {
-
+    //Read the uploaded Products File
     fs.readFile('products/Data.products.json', 'utf8', (err, product) => {
         if (err) {
           console.error(err);
           return
         }
+        //Get all products
         product = JSON.parse(product);
 
+        //Read the uploaded Categories File
         fs.readFile('categories/Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
             if (err) {
               console.error(err);
               res.jsonp({ error: 'Categories Not Found' })
               return
             }
+            //Get all categories 
             cat_subs = JSON.parse(cat_subs);
 
             let prod = []
-        
+            //Find all the products that belong to that categories and subcategories
             for(x of cat_subs){
                 for(y of product.products){
                     for(k of x.subcategories){
@@ -795,9 +802,11 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
             }
             
 
-         
+            //For every prodact that you found 
             prod.forEach(element => {
+                //Chech if product already exists 
                 Product.find({'name': element.name}).then(result => {
+                    //If exists add new product 
                     if(result == ""){
                         temp = new Product({id: element.id, name:element.name, category: element.category, subcategory: element.subcategory})
                         Product.collection.insertOne(temp, (err) => {
@@ -808,6 +817,7 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
                             console.info('successfully stored.');
                             }
                         })
+                    //Else update existed product
                     }else{
                         Product.updateOne({'name': element.name}, {id: element.id, name:element.name, category: element.category, subcategory: element.subcategory}).then(result =>{
                             console.log(result)
@@ -823,12 +833,11 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
 
 
 
-
-
          })
     })
 })
 
+//Delete all Products
 app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
     Product.deleteMany({}).then(result => {
         console.log(result)
@@ -885,6 +894,7 @@ app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.ar
     return  res.jsonp({ error: 'Done' })
 })
 
+//Delete all Categories/Subcategories
 app.post('/delete_categories', checkAuthenticated, checkAdmin, (req,res) => {
     Categ_Sub.deleteMany({}).then(result => {
         console.log(result)
@@ -970,6 +980,7 @@ app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array(
       });
 })
 
+//Delete all Supermarkets
 app.post('/delete_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
     SupermarketM.deleteMany({}).then(result => {
         console.log(result)
