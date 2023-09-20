@@ -20,12 +20,12 @@ margin: 20px auto;
 font-family: 'Myfont';
 font-size: 15px;
 }
-div{
+/* div{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin: 2px;
-}
+} */
 
 select{
   display: flex;

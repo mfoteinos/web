@@ -19,7 +19,8 @@ Product.find({}).then(result => {
         let temp1 = 0
         let i = 0
         let prices = []
-        while(i < 30){
+        let daysback = 70
+        while(i < daysback){
             let week = new Date();
             week.setDate(week.getDate() - i)
              temp1 = {date: week.toLocaleDateString(), 
@@ -30,7 +31,7 @@ Product.find({}).then(result => {
         }
         i = 0
 
-        while(i < 23){
+        while(i < daysback - 8){
             let sum = 0
             for (let index = 1; index < 8; index++) {
                 sum += prices[i + index].price
