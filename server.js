@@ -1035,121 +1035,150 @@ app.get('/statistics', checkAuthenticated, checkAdmin, (req,res) => {
 
 app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
-    let date_ob = new Date();
-
-    let temp = new Date();
-
-    let today = new Date();
-
-    let endday = new Date();
-
-    let daysBack = 0;
-
-    if(req.query.weeksback){
-        daysBack = req.query.weeksback * 7
-    }
 
 
-    console.log(req.query.category)
-    console.log(req.query.subcat)
-
-    let weeklabels = new Array(7).fill('')
-
-    for (var i = 0; i < 7; i++) {
+    Categ_Sub.find().then((result) =>{
+        let ctg_name = result
         
-        temp.setDate(date_ob.getDate() - i - daysBack);
-    
-        let day = temp.getDate();
+        let category_list = []
+        let subcategory_list = []
 
-        let month = temp.getMonth() + 1;
-
-        if (i==6) {
-            endday = temp
+        for (cat of ctg_name) {
+            category_list.push(cat.id)
+            for (let i = 0; i < cat.subcategories.length; i++) {
+                subcategory_list.push(cat.subcategories[i].uuid)
+            }
         }
 
-        weeklabels[6 - i] = [temp.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
+        console.log(subcategory_list)
 
 
-    }
-    
+        let today = new Date();
 
-    const diffTime = Math.abs(endday - today);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        let endday = new Date();
 
-    console.log(diffDays)
+        let daysBack = 0;
+
+        if(req.query.weeksback){
+            daysBack = req.query.weeksback * 7;
+        }
 
 
-    let offerlist = [];
-    let productlist = [];
+        if (req.query.category) {
+            category_list = req.query.category;
+            if (req.query.subcat)  {
+                subcategory_list = req.query.subcat;
+            }
+        }
 
-    
 
-    SupermarketM.find({'offers.date': {$gte: weeklabels[0],  $lte: weeklabels[6]}}).then((result) =>{
-        for (let i = 0; i < weeklabels.length; i++) {
-            let tempofferlist = []
-            for (superm of result){
-                for (offer of superm.offers){
-                    if (weeklabels[i] == offer.date ){
-                        tempofferlist.push({"name": offer.product, "price": offer.price, "count": 1});
-                        productlist.push(offer.product);
-                        
+
+        let weeklabels = new Array(7).fill('')
+
+        for (let i = 0; i < 7; i++) {
+
+            let date_ob = new Date();
+
+            let temp = new Date();
+            
+            temp.setDate(date_ob.getDate() - i - daysBack);
+        
+            let day = temp.getDate();
+
+            let month = temp.getMonth() + 1;
+
+            if (i==6) {
+                endday = temp;
+            }
+
+            weeklabels[6 - i] = [temp.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
+
+
+        }
+
+        console.log(weeklabels)
+        
+
+        const diffTime = Math.abs(endday - today);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+        console.log(diffDays)
+
+
+        let offerlist = [];
+        let productlist = [];
+
+        
+
+        SupermarketM.find({'offers.date': {$gte: weeklabels[0],  $lte: weeklabels[6]}}).then((result) =>{
+            for (let i = 0; i < weeklabels.length; i++) {
+                let tempofferlist = []
+                for (superm of result){
+                    for (offer of superm.offers){
+                        if (weeklabels[i] == offer.date ){
+                            tempofferlist.push({"name": offer.product, "price": offer.price, "count": 1});
+                            productlist.push(offer.product);
+                            
+                        }
                     }
                 }
+                offerlist.push(tempofferlist)
             }
-            offerlist.push(tempofferlist)
-        }
 
-        productlist = [...new Set(productlist)];
+            productlist = [...new Set(productlist)];
 
-        console.log(offerlist)
+            // console.log(offerlist)
 
-        console.log("Productlist: ")
-        console.log(productlist)
+            // console.log("Productlist: ")
+            // console.log(productlist)
 
-        let discountlist = new Array(weeklabels.length).fill(0)
-        let countlist = new Array(weeklabels.length).fill(0)
+            let discountlist = new Array(weeklabels.length).fill(0)
+            let countlist = new Array(weeklabels.length).fill(0)
 
-        Product.find({'name': {$in: productlist}}).then((result) =>{
+            Product.find({'name': {$in: productlist}, 'category': {$in: category_list}, 'subcategory': {$in: subcategory_list}}).then((result) =>{
 
-            console.log("Voitheia")
-            console.log(result.find(({ name }) => name === offerlist[5][0].produ))
-            for (let i = 0; i < weeklabels.length; i++) {
+                console.log("Voitheia")
+                for (let i = 0; i < weeklabels.length; i++) {
+                        for (let j = 0; j < offerlist[i].length; j++) {
+                            if(result.find(({ name }) => name === offerlist[i][j].name)) {
+                                let avg_price = result.find(({ name }) => name === offerlist[i][j].name).prices[diffDays - 6].avg_price
+                                offerlist[i][j].price = (avg_price - offerlist[i][j].price) / avg_price
+                            } else {
+                                offerlist[i][j].price = 0
+                            }
+                        }
+                }
+
+                for (let i = 0; i < weeklabels.length; i++) {
                     for (let j = 0; j < offerlist[i].length; j++) {
-                        let avg_price = result.find(({ name }) => name === offerlist[i][j].name).prices[diffDays - 6].avg_price
-                        offerlist[i][j].price = (avg_price - offerlist[i][j].price) / avg_price
+                        discountlist[i] += offerlist[i][j].price
+                        if (offerlist[i][j].price != 0) {
+                            countlist[i] += 1
+                        }
                     }
-            }
-
-            for (let i = 0; i < weeklabels.length; i++) {
-                for (let j = 0; j < offerlist[i].length; j++) {
-                    discountlist[i] += offerlist[i][j].price
-                    countlist[i] += 1
                 }
-            }
 
-            for (let i = 0; i < weeklabels.length; i++) {
-                if (countlist[i] != 0) {
-                    discountlist[i] = Math.round((discountlist[i] / countlist[i]) * 100)
+                for (let i = 0; i < weeklabels.length; i++) {
+                    if (countlist[i] != 0) {
+                        discountlist[i] = Math.round((discountlist[i] / countlist[i]) * 100)
+                    }
                 }
-            }
 
-            console.log(discountlist)
-
-            Categ_Sub.find().then((result) =>{
-                let ctg_name = result
+                // console.log(discountlist)
                 res.render('statistics_two', {startDate:weeklabels[0],endDate:weeklabels[6], discountlist:discountlist, weeklabels:weeklabels, ctg_name})
-           
+        
+            
             }).catch((err) =>{
                 console.log(err);
             })
-        
-        }).catch((err) =>{
-            console.log(err);
-        })
 
-        }).catch((err) =>{
-            console.log(err);
-        });
+            }).catch((err) =>{
+                console.log(err);
+            });
+    }).catch((err) =>{
+        console.log(err);
+    })
+    
 
 });
 

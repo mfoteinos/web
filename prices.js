@@ -19,9 +19,10 @@ Product.find({}).then(result => {
         let temp1 = 0
         let i = 0
         let prices = []
+        let daysback = 70
 
         //For 30 days back from today
-        while(i < 30){
+        while(i < daysback){
             //Find the date
             let week = new Date();
             week.setDate(week.getDate() - i)
@@ -34,7 +35,7 @@ Product.find({}).then(result => {
         }
         i = 0
         //Then for 23 days back from today
-        while(i < 23){
+        while(i < daysback - 8){
             let sum = 0
             //Calculate the average product price for the past week 
             for (let index = 1; index < 8; index++) {
