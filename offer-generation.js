@@ -16,15 +16,15 @@ SupermarketM.find({}).then((result) => {
         //Find everything from User
         UserM.find({}).then((user) => {
 
-            let date_obj = new Date();
-
-            let temp = new Date();
-
             let daysback = 60;
 
             let daylabels = new Array(daysback).fill('')
             //Creates an array with 60 random days 
             for (var i = 0; i < daysback; i++) {
+
+                let date_obj = new Date();
+
+                let temp = new Date();
         
                 temp.setDate(date_obj.getDate() - i);
             

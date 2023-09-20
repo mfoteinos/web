@@ -76,18 +76,18 @@ cron.schedule("0 0 1 * *", function () {
 cron.schedule("0 0 28-31 * *", function () {
     let test_mode = false
     let dateTomorrow = new Date();
-    dateTomorrow.setDate(dateTomorrow.getDate() + 1)
-    if (dateTomorrow.getDate() == 1 || test_mode) {
-        TokenM.find({'id':0}).then((result) =>{
-            dist_tokens = Math.round(result[0].tokens * 0.8)
+    dateTomorrow.setDate(dateTomorrow.getDate() + 1)  // Get tomorrow
+    if (dateTomorrow.getDate() == 1 || test_mode) {  // If tomorrow is the first of the next month
+        TokenM.find({'id':0}).then((result) =>{  // Find the tokens in the token bank
+            dist_tokens = Math.round(result[0].tokens * 0.8)  // Take 80% of them
             console.log(dist_tokens + " tokens to be distributed.")
-            UserM.find({}).then( (result) => {
+            UserM.find({}).then( (result) => {  // Find all useres
                 let sum = 0
-                for (user of result){
+                for (user of result){  // Sum theirs points for this month
                     sum += user.monthpoints
                 }
                 if (sum > 0) {
-                    for (user of result){
+                    for (user of result){  // Calculate the percentage each users points make up of the total an distribute that many tokens to them
                         let user_percent = (user.monthpoints / sum)
                         let user_tokens = Math.round(dist_tokens * user_percent)
                         UserM.updateOne({'username': user.username}, {$inc: { 'tokens': user_tokens}, $set: { 'monthtokens': user_tokens}}).then(() =>{
@@ -95,7 +95,7 @@ cron.schedule("0 0 28-31 * *", function () {
                             console.log(err);
                         })
                     }
-                    TokenM.updateOne({'id': 0}, {$inc: { 'tokens': -dist_tokens}}).then(() =>{
+                    TokenM.updateOne({'id': 0}, {$inc: { 'tokens': -dist_tokens}}).then(() =>{  // Remove 80% of the tokens from the token bank
                         console.log("Removed " + dist_tokens + " tokens from the token bank.")
                     }).catch((err) =>{
                         console.log(err);
@@ -114,7 +114,9 @@ cron.schedule("0 0 28-31 * *", function () {
     }
 });
 
+// Scheduled job that runs every day to check if offers need to be deleted
 cron.schedule("0 0 * * * *", function () {
+    // Get date of -1 week and -2 weeks from today
     let date_ob = new Date();
     date_ob.setDate(date_ob.getDate() - 7)
     let day = date_ob.getDate();
@@ -128,7 +130,7 @@ cron.schedule("0 0 * * * *", function () {
     let second_week = [date.getFullYear() + '-',(month1>9 ? '' : '0') + month1 + '-',(day1>9 ? '' : '0') + day1].join('');
 
 
-    SupermarketM.find({'offers.date': {$lte: week}}).then((result) =>{
+    SupermarketM.find({'offers.date': {$lte: week}}).then((result) =>{  // Find all offers with date > 1 week
 
         let offerlist = []
 
@@ -143,10 +145,11 @@ cron.schedule("0 0 * * * *", function () {
         //console.log(offerlist)
         //console.log(week, second_week)
 
-        offerlist.forEach(element => {
-            if(element.date <= week && element.secondWeek == false){
+        offerlist.forEach(element => { // Check every offer
+            if(element.date <= week && element.secondWeek == false){ // If older than a week and not refreshed for a second one yet
                 Product.find({'name': element.product}).then(result =>{
 
+                    // Check requirements and if true refresh it for a second week else delete it
                     let req_Day = false
                     let req_Week = false
                    
@@ -171,7 +174,7 @@ cron.schedule("0 0 * * * *", function () {
                         })
                     }
                 })
-            }else if(element.date <= second_week){
+            }else if(element.date <= second_week){  // If older than 2 weeks, delete the offer
                 SupermarketM.updateOne({ 'offers':{$elemMatch:{id: element.id}}}, {$pull: { offers: {id:element.id} }}).then((result) =>{
                     console.log(result)
                 }).catch((err) =>{
@@ -185,7 +188,7 @@ cron.schedule("0 0 * * * *", function () {
 })
 
 
-
+// Used to check if the user is authenticated whenever it's required to access a page
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
 
@@ -196,6 +199,7 @@ function checkAuthenticated(req, res, next) {
     res.redirect('/')
 }
 
+// Used to check if the user is not authenticated whenever it's required to access a page
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return res.redirect('/user_home')
@@ -203,7 +207,7 @@ function checkNotAuthenticated(req, res, next) {
 
     next()
 }
-
+// Used to check if the user is an admin whenever it's required to access a page
 function checkAdmin(req, res, next) {
     if (req.user.admin == true) {
         return next()
@@ -213,6 +217,7 @@ function checkAdmin(req, res, next) {
     res.redirect('/user_home')
 }
 
+// Used to check if the user is not an admin whenever it's required to access a page
 function checkNotAdmin(req, res, next) {
     if (req.user.admin == true) {
         return res.redirect('/admin_home')
@@ -221,19 +226,7 @@ function checkNotAdmin(req, res, next) {
     next()
 }
 
-
-let allSupermarkets;
-
-fs.readFile('export.geojson', 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    data = JSON.parse(data)
-    data = data.features.filter(feature => feature.properties.name != null && feature.properties.name != "No supermarket" )
-    allSupermarkets = JSON.stringify(data)
-  });
-
+// Lister for requests on port 3000
 app.listen(3000);
 
 
@@ -243,7 +236,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
 app.use(flash())
 app.use(session({
-    secret: 'keyboard cat',
+    secret: 'sousou the cat',
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false }
@@ -255,7 +248,7 @@ app.use(express.json());
 app.use(cors())
 
 
-// Where to storage the products file
+// Where to store the products file
 const storage = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/products")
@@ -265,7 +258,7 @@ const storage = multer.diskStorage({
     }
 })
 
-//Where to storage the categories/subcategories file
+//Where to store the categories/subcategories file
 const categ = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/categories")
@@ -275,7 +268,7 @@ const categ = multer.diskStorage({
     }
 })
 
-//Where to storage the prices file
+//Where to store the prices file
 const price = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/prices")
@@ -285,7 +278,7 @@ const price = multer.diskStorage({
     }
 })
 
-//Where to storage the supermarket file
+//Where to store the supermarket file
 const supermarket = multer.diskStorage({
     destination: function(req, res, callback){
         callback(null, __dirname + "/supermarket")
@@ -316,12 +309,13 @@ const getMostRecentFile = (dir) => {
   };
 
 
-
+// Render index page
 app.get('/', checkNotAuthenticated, (req,res) => {
     res.render('index');
 
 });
 
+// Check input of login and if successful, authenticate the user.
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
 
     failureRedirect: '/',
@@ -335,6 +329,8 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     }
   });
 
+
+// Register a new user with the inputs provided
 app.post('/register', checkNotAuthenticated, async (req,res) => {
     const new_user = new UserM(req.body);
     new_user.password = await bcrypt.hash(req.body.password, 10)
@@ -347,6 +343,8 @@ app.post('/register', checkNotAuthenticated, async (req,res) => {
         })
 });
 
+
+// Logout
 app.delete('/logout', (req, res) => {
     req.logout(function(err) {
         if (err) { return next(err); }
@@ -354,19 +352,21 @@ app.delete('/logout', (req, res) => {
       });
 })
 
+
+// Render user home
 app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
 
-    SupermarketM.find({'offers':  { $size: 0 } }).lean(true)
+    SupermarketM.find({'offers':  { $size: 0 } }).lean(true) // Find all supermarkets with at least one offer
     .then((result) => {
         var gjNoOfferSups = result;
-        SupermarketM.find({'offers':  { $not: {$size: 0} } }).lean(true)
+        SupermarketM.find({'offers':  { $not: {$size: 0} } }).lean(true) // Find all supermarkets with no offers
         .then((result) => {
             var gjOfferSups = result;
-            Categ_Sub.find().then((result) =>{
+            Categ_Sub.find().then((result) =>{  // Find product categories for the filter dropdown menu
                 var ctg_name = result
                 Product.find().then((ressult) => {
                     var prod = ressult
-                    res.render('user_home', {gjNoOfferSups, gjOfferSups, ctg_name, prod})
+                    res.render('user_home', {gjNoOfferSups, gjOfferSups, ctg_name, prod})  // Send all the info found above and render page
                 }).catch((err) =>{
                     console.log(err);
                 })
@@ -386,6 +386,7 @@ app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
 });
 
 
+// Render add offer page
 app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
 
     //Get the Supermarket id of the Supermarket you add the offer
@@ -406,7 +407,7 @@ app.get('/add_offer/:id', checkAuthenticated, (req,res) => {
     })
 });
 
-
+// Add an offer with the input provided
 app.post('/add_offer', checkAuthenticated, (req,res) => {
 
     //Split product name from product id
@@ -556,23 +557,23 @@ app.post('/add_offer', checkAuthenticated, (req,res) => {
     })
 });
 
-
+// Render review offer page
 app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
 
-    // console.log(req.params.id)
-    SupermarketM.find({ 'properties.id': req.params.id }).then((result) =>{
+    SupermarketM.find({ 'properties.id': req.params.id }).then((result) =>{ // Find the supermarket you want to review
         let reviewedsup = result
         let userpoints = []
         let offerusernames = []
         for (offer of reviewedsup[0].offers){
             offerusernames.push(offer.username)
         }
-        UserM.find({'username': {$in: offerusernames}}).then((result) =>{
+        UserM.find({'username': {$in: offerusernames}}).then((result) =>{ // Find all users who have added offers to this supermarket
             console.log(result)
             for (user of result){
-                userpoints.push({"id": user.username, "points": user.points})
+                userpoints.push({"id": user.username, "points": user.points}) // Store their points to display
             }
-            UserM.find({'username': req.user.username}).then((result) =>{
+            UserM.find({'username': req.user.username}).then((result) =>{ // Find your own username to filter out liked/disliked offers
+                // Render page with all of the info found above
                 res.render('review_offer', {reviewedsup:reviewedsup[0], userpoints, likedoffers:result[0].likedoffers, dislikedoffers:result[0].dislikedoffers, admin:req.user.admin})
             }).catch((err) =>{
                 console.log(err);
@@ -586,13 +587,14 @@ app.get('/review_offer/:id', checkAuthenticated, (req,res) => {
 
 });
 
+
+// Like an offer
 app.post('/like/:supid/:id', checkAuthenticated, (req,res) => {
 
-    SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.likes': 1}}).then((result) =>{
-console.log(req.body.offeruser)
-        UserM.updateOne({'username': req.user.username}, {$push: {likedoffers: req.params.id}}).then((result) =>{
-            res.redirect('/review_offer/' + req.params.supid)
-            UserM.updateOne({'username': req.body.offeruser}, {$inc: { 'points': 5, 'monthpoints': 5}}).then((result) =>{
+    SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.likes': 1}}).then((result) =>{ // Find offer to like and increase it's likes by 1
+        UserM.updateOne({'username': req.user.username}, {$push: {likedoffers: req.params.id}}).then((result) =>{ // Updates users list of liked offers
+            res.redirect('/review_offer/' + req.params.supid) // Reload page for user
+            UserM.updateOne({'username': req.body.offeruser}, {$inc: { 'points': 5, 'monthpoints': 5}}).then((result) =>{ // Increase offer creator's points
             }).catch((err) =>{
                 console.log(err);
             })
@@ -605,6 +607,8 @@ console.log(req.body.offeruser)
 
 });
 
+
+// Works exactly as like but reduces points
 app.post('/dislike/:supid/:id', checkAuthenticated, (req,res) => {
 
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$inc: { 'offers.$.dislikes': 1}}).then((result) =>{
@@ -623,6 +627,7 @@ app.post('/dislike/:supid/:id', checkAuthenticated, (req,res) => {
 
 });
 
+// Finds offer and switches it's availability to unavailable
 app.post('/available/:supid/:id', checkAuthenticated, (req,res) => {
 
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$set: { 'offers.$.available': true}}).then((result) =>{
@@ -634,6 +639,7 @@ app.post('/available/:supid/:id', checkAuthenticated, (req,res) => {
 
 });
 
+// Finds offer and switches it's availability to available
 app.post('/unavailable/:supid/:id', checkAuthenticated, (req,res) => {
 
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$set: { 'offers.$.available': false}}).then((result) =>{
@@ -645,6 +651,8 @@ app.post('/unavailable/:supid/:id', checkAuthenticated, (req,res) => {
 
 });
 
+
+// Finds offer and deletes it
 app.post('/delete/:supid/:id', checkAuthenticated, checkAdmin, (req,res) => {
 
     SupermarketM.updateOne({ 'offers':{$elemMatch:{id:req.params.id}}}, {$pull: { offers: {id:req.params.id} }}).then((result) =>{
@@ -655,9 +663,9 @@ app.post('/delete/:supid/:id', checkAuthenticated, checkAdmin, (req,res) => {
 
 });
 
-
+// Render user profiles
 app.get('/user_profile', checkAuthenticated, (req,res) => {
-    SupermarketM.find({'offers.username': req.user.username}).then(result =>{
+    SupermarketM.find({'offers.username': req.user.username}).then(result =>{ // Find all of users offers
 
         let offers = []
         result.forEach(element =>{
@@ -667,12 +675,12 @@ app.get('/user_profile', checkAuthenticated, (req,res) => {
                 }
             }
         })
-        UserM.find({'username': req.user.username}).then((result) =>{
+        UserM.find({'username': req.user.username}).then((result) =>{ // Find users data
             let prof_user = result[0];
             let liked_history = [];
             let disliked_history = [];
             let union = [...new Set([...prof_user.likedoffers, ...prof_user.dislikedoffers])];
-            SupermarketM.find({'offers.id': {$in: union}}).then((result) =>{
+            SupermarketM.find({'offers.id': {$in: union}}).then((result) =>{ // Find users liked and disliked offers
                 for (superm of result){
                     for (offer of superm.offers){
                         if (prof_user.likedoffers.includes(offer.id)){
@@ -1192,7 +1200,6 @@ app.get('/statistics_two', checkAuthenticated, checkAdmin, (req,res) => {
 
             Product.find({'name': {$in: productlist}, 'category': {$in: category_list}, 'subcategory': {$in: subcategory_list}}).then((result) =>{
 
-                console.log("Voitheia")
                 for (let i = 0; i < weeklabels.length; i++) {
                         for (let j = 0; j < offerlist[i].length; j++) {
                             if(result.find(({ name }) => name === offerlist[i][j].name)) {
