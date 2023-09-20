@@ -16,10 +16,11 @@ html{
    
   }
 body{
-max-width: 1200px;
+max-width: 1500px;
 margin: 20px auto;
 font-family: 'Myfont';
 font-size: 15px;
+
 }
 .leaflet-popup-content {
 	overflow-y:scroll;
@@ -27,6 +28,10 @@ font-size: 15px;
 	margin: 13px 19px;
 	line-height: 1.4;
 	}
+#productList{
+  display: flex;
+  flex-wrap: wrap;
+}
 select{
   display: flex;
   align-items: center;
