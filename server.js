@@ -299,6 +299,20 @@ const prices = multer({storage: price})
 const supermarkets = multer({storage: supermarket})
 
 
+const getMostRecentFile = (dir) => {
+    const files = orderReccentFiles(dir);
+    return files.length ? files[0] : undefined;
+  };
+  
+  const orderReccentFiles = (dir) => {
+    return fs.readdirSync(dir)
+      .filter((file) => fs.lstatSync(path.join(dir, file)).isFile())
+      .map((file) => ({ file, mtime: fs.lstatSync(path.join(dir, file)).mtime }))
+      .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
+  };
+
+
+
 app.get('/', checkNotAuthenticated, (req,res) => {
     res.render('index');
 
@@ -770,8 +784,13 @@ app.get('/add_supermarket', checkAuthenticated, checkAdmin, (req,res) => {
 
 
 app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files"), (req,res) => {
+
+    let temp1 = getMostRecentFile('products')
+    temp1 = 'products/'.concat(temp1.file)
+    let temp2 = getMostRecentFile('categories')
+    temp2 = 'categories/'.concat(temp2.file)
     //Read the uploaded Products File
-    fs.readFile('products/Data.products.json', 'utf8', (err, product) => {
+    fs.readFile(temp1, 'utf8', (err, product) => {
         if (err) {
           console.error(err);
           return
@@ -780,7 +799,7 @@ app.post('/add_product', checkAuthenticated, checkAdmin, products.array("files")
         product = JSON.parse(product);
 
         //Read the uploaded Categories File
-        fs.readFile('categories/Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
+        fs.readFile(temp2, 'utf8', (err, cat_subs) => {
             if (err) {
               console.error(err);
               res.jsonp({ error: 'Categories Not Found' })
@@ -850,7 +869,10 @@ app.post('/delete_products', checkAuthenticated, checkAdmin, (req,res) =>{
 
 app.post('/add_categories_subcat', checkAuthenticated, checkAdmin, categories.array("Categ"), (req,res) => {
 
-    fs.readFile('categories/Data.categ_subcs.json', 'utf8', (err, cat_subs) => {
+    let temp = getMostRecentFile('categories')
+    temp = 'categories/'.concat(temp.file)
+
+    fs.readFile(temp, 'utf8', (err, cat_subs) => {
         if (err) {
           console.error(err);
           return;
@@ -905,7 +927,11 @@ app.post('/delete_categories', checkAuthenticated, checkAdmin, (req,res) => {
 })
 
 app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Price"), (req,res) => {
-    fs.readFile('prices/Prices.json', 'utf8', (err, data) => {
+
+    let temp = getMostRecentFile('prices')
+    temp = 'prices/'.concat(temp.file)
+
+    fs.readFile(temp, 'utf8', (err, data) => {
         if (err) {
           console.error(err);
           return;
@@ -914,7 +940,7 @@ app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Pr
         console.log(data)
 
         data.forEach(element => {
-            let i = 0
+
                 Product.updateOne({'name': element.name}, { $set: { prices : element.prices}}).then(result => {
                     console.log(result)
                    }).catch((err) =>{
@@ -928,8 +954,11 @@ app.post('/add_product_prices', checkAuthenticated, checkAdmin, prices.array("Pr
 })
 
 app.post('/add_supermarket', checkAuthenticated, checkAdmin, supermarkets.array("files"), (req,res) => {
-    
-    fs.readFile('supermarket/export.geojson', 'utf8', (err, data) => {
+
+    let temp = getMostRecentFile('supermarket')
+    temp = 'supermarket/'.concat(temp.file)
+
+    fs.readFile(temp, 'utf8', (err, data) => {
         if (err) {
           console.error(err);
           return;
