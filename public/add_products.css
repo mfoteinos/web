@@ -2,7 +2,7 @@ body{
     scroll-behavior: smooth;
     background: url('productprices.jpg') no-repeat center center fixed;
     background-repeat: no-repeat;
-    background-size: 75% 75%;
+    background-size: 60% 60%;
     }
 a{
         display: flex;
