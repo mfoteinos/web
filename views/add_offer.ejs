@@ -65,7 +65,8 @@
     let label = `<label for="sub_cat">Choose a subcategory:</label>
           <select name="sub-cat" id="sub-cat" onchange="findPr()">`
     sub_categories = sub_categories.concat(label)
-
+    
+    //Gets the value from the category dropdown menu
     category = document.querySelector('#category');
     categ = category.value;
 
@@ -102,6 +103,7 @@
 
   //Function that returns a dropdown menu with all the Products based on the subcategory
   function findPr(){
+    //Gets the value from the subcategory dropdown menu
     uuid = document.querySelector('#sub-cat');
     uuid = uuid.value;
 
