@@ -43,9 +43,16 @@
     <div class="chartCard">
       <div class="chartBox">
         <canvas id="myChart"></canvas>
-        <form action="/statistics" method="get">
-        <input type="month" name="date" onchange="this.form.submit()"></form>
-      </div>
+        <form action="/statistics_two" method="get">
+        Εβδομάδες πίσω:
+        <input type="number" name="weeksback" id="weeksback" step="any"">
+        <div id="productList"></div>
+        <br></br>
+        <div id="categ"></div>
+        <div id="subcat"></div>
+        <div id="prod"></div>
+        <button id="weeksbackbutton" >Submit</button></form>
+        </div>
     </div>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
 
@@ -57,15 +64,17 @@
 
     var endDate = <%- JSON.stringify(endDate) %>; 
 
-    var offercount = <%- JSON.stringify(offercount) %>;
+    var discountlist = <%- JSON.stringify(discountlist) %>;
 
-    var monthlabels = <%- JSON.stringify(monthlabels) %>; 
+    var weeklabels = <%- JSON.stringify(weeklabels) %>; 
+
+    var Cat_Sub = <%- JSON.stringify(ctg_name) %>;
 
     const data = {
-      labels: monthlabels,
+      labels: weeklabels,
       datasets: [{
-        label: 'Αριθμός Προσφορών',
-        data: offercount,
+        label: 'Ποσοστό μέσης έκπτωσης',
+        data: discountlist,
         backgroundColor: [
           'rgba(255, 26, 104, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -120,6 +129,67 @@
 
 
     }
+
+    function Categories(){
+    let categories = ``
+      let tempcat = ` <div class="create-offer1" id="create-offer1">
+          <label for="category">Choose a category: </label>
+          <select name="category" id="category" onchange="Sub_Cat()">
+            <% ctg_name.forEach(element => { %>
+              <option></option>
+              <option value ='<%= element.id %>'><%= element.name %></option>
+            <% }) %>
+          </select>
+          <br><br>
+          </div> `
+
+        categories = categories.concat(tempcat)
+
+        var y = document.getElementById("categ")
+          y.innerHTML = `${categories}`
+
+  }
+
+  function Sub_Cat(){
+
+    let sub_categories = ``
+    let label = `<label for="sub_cat">Choose a subcategory:</label>
+          <select name="subcat" id="sub-cat" >`
+    sub_categories = sub_categories.concat(label)
+
+    category = document.querySelector('#category');
+    categ = category.value;
+
+    var k = document.getElementById("prod")
+          k.innerHTML = ``
+
+    if(categ == ""){
+      var x = document.getElementById("subcat")
+          x.innerHTML = ``
+      var k = document.getElementById("prod")
+          k.innerHTML = ``
+      return ""
+    }
+
+    Cat_Sub.forEach(element => {
+          if (element.id == categ){
+          for (const sub of element.subcategories){
+            let option = ` <option></option>
+            <option value ='${sub.uuid}'>${sub.name}</option>`
+            sub_categories = sub_categories.concat(option)
+            }
+          }
+        })
+
+         let tempSub = `</select><br><br>`
+
+
+         sub_categories = sub_categories.concat(tempSub)
+          var x = document.getElementById("subcat")
+          x.innerHTML = `${sub_categories}`
+  }
+
+  Categories()
 
 
     </script>
