@@ -19,16 +19,24 @@
   "_id": {
     "$oid": "63d53f2e900dfb0b4dde4a37"
   },
-  "id": "d41744460283406a86f8e4bd5010a66d",
-  "name": "Καθαριότητα",
+  "id": "ee0022e7b1b34eb2b834ea334cda52e7",
+  "name": "Τρόφιμα",
   "subcategories": [
     {
-      "name": "Είδη γενικού καθαρισμού",
-      "uuid": "3be81b50494d4b5495d5fea3081759a6"
+      "name": "Αλεύρι - Σιμιγδάλι",
+      "uuid": "c761cd8b18a246eb81fb21858ac10093"
     },
     {
-      "name": "Χαρτικά",
-      "uuid": "034941f08ca34f7baaf5932427d7e635"
+      "name": "Γλυκά/Σοκολάτες",
+      "uuid": "dca17e0bfb4e469c93c011f8dc8ab512"
+    },
+    {
+      "name": "Σνάκς/Κρουασάν",
+      "uuid": "19c54e78d74d4b64afbb1fd124f01dfc"
+    },
+    {
+      "name": "Γάλα",
+      "uuid": "b3992eb422c2495ca02dd19de9d16ad1"
     }
   ]
 },
