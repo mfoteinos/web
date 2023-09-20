@@ -1,0 +1,19 @@
+body{
+    scroll-behavior: smooth;
+    background: url('productprices.jpg') no-repeat center center fixed;
+    background-repeat: no-repeat;
+    background-size: 75% 75%;
+    }
+a{
+        display: flex;
+        text-align: right;
+        cursor: pointer;   
+        flex-wrap: wrap;
+        justify-content: center; 
+}
+img{
+overflow-clip-margin: content-box;
+overflow: clip;
+  margin: auto;
+  top: 0;
+}
