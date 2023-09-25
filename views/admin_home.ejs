@@ -5,7 +5,7 @@
 <head>
 <title>Bang</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8"> 
+<meta charset="UTF-8">
 <link rel="icon" href="/icons/bangiconpurple.png" type="image/x-icon"/> 
 <link rel="stylesheet" href="/user_style.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
@@ -15,18 +15,28 @@
 <body>
     <img class="logo" src="banglogopurple.png" alt="logo">
     <br><br><br>
-
+    <h1>Αναζήτηση τοπικού καταστήματος</h1>
     <div class="serch-box">
         <div class="row">
             <input type="text" id="input-box" placeholder="Search Supermarket" autocomplete="off">
             <button>Search</button>
+           
         </div>
-      </div>
-      <div id="productList"></div>
-      <br></br>
-      <form action="/logout?_method=DELETE" method="POST">   <button >Log Out</button> </form>
-
-
+    </div>
+    <form action="/logout?_method=DELETE" method="POST">
+        <button type="submit">Log Out</button>
+    </form>
+            
+       
+    <br>
+    
+    <h2><u>Επιλογή καταστήματος</u></h2>
+    <div id="productList"></div>
+    
+    <br>
+    <br>
+            
+    <h3>Τοποθεσία προεπιλεγμένου καταστήματος</h3> 
 
 <div id = "map"></div>
 
@@ -181,17 +191,6 @@ var lc = L.control.locate({
 
 map.on('locationfound', onLocationFound);
 
-// var positionMarker = L.layerGroup();
-// var pos = L.control.locate({
-//     layer: startMarker,
-//     drawCircle: false,
-//     showPopup: false,
-//   })
-//   .addTo(map);
-
-    
-
-
 Sups = gjOfferSups.concat(gjNoOfferSups)
 
 const charactersList = document.getElementById('productList');
@@ -237,6 +236,7 @@ function FindSuper(cords){
     map.setView(new L.LatLng(cords[1], cords[0]), 16);
 }
 
+//Function that returns a dropdown menu with all the categories  
 function Categories(){
     let categories = ``
       let tempcat = ` <div class="create-offer1" id="create-offer1">
@@ -257,6 +257,7 @@ function Categories(){
 
   }
 
+//Function that changes the map based on the selected category 
 function Change_Map(){
 
     category = document.querySelector('#category');
@@ -269,14 +270,14 @@ function Change_Map(){
         layer.setIcon(redIcon);
         layer.bindPopup(customPopup(feature));
     }
-}).addTo(markerGroup);
+    }).addTo(markerGroup);
 
-const OffMarkers = L.geoJSON(gjOfferSups, {
+    const OffMarkers = L.geoJSON(gjOfferSups, {
     onEachFeature: function(feature, layer){
         layer.setIcon(blueIcon);
         layer.bindPopup(customPopup(feature));
     }
-}).addTo(markerGroup);
+    }).addTo(markerGroup);
 
     return ""
     }
@@ -319,6 +320,7 @@ const OffMarkers = L.geoJSON(gjOfferSups, {
     }).addTo(markerGroup);
 
 }
+
 
 Categories() 
 

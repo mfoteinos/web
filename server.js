@@ -26,7 +26,6 @@ const cron = require("node-cron");
 
 
 
-
 const app = express();
 
 const db_url = 'mongodb+srv://xrhsthsthsvashs:ZJgAlDrKedPXkUUZ@cluster0.eixd381.mongodb.net/Data?retryWrites=true&w=majority';
@@ -40,7 +39,8 @@ const initializePassport = require('./passport-config');
 const { render } = require('ejs');
 const { result, fromPairs } = require('lodash');
 const path = require('path');
-const ProductM = require('./models/product');
+
+
 initializePassport(
     passport, 
     username => UserM.find({'username':username}),
@@ -121,7 +121,7 @@ cron.schedule("0 0 * * * *", function () {
     date_ob.setDate(date_ob.getDate() - 7)
     let day = date_ob.getDate();
     let month = date_ob.getMonth() + 1;
-    let week = [date_ob.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join('');
+    let week = [date_ob.getFullYear() + '-',(month>9 ? '' : '0') + month + '-',(day>9 ? '' : '0') + day].join(''); 
 
     let date = new Date();
     date.setDate(date.getDate() - 14)
@@ -295,7 +295,7 @@ const prices = multer({storage: price})
 const supermarkets = multer({storage: supermarket})
 
 
-//Gets more resent fill that is uploaded to a specific directory
+//Gets more resent file that is uploaded to a specific directory
 const getMostRecentFile = (dir) => {
     const files = orderReccentFiles(dir);
     return files.length ? files[0] : undefined;
@@ -364,8 +364,8 @@ app.get('/user_home', checkAuthenticated, checkNotAdmin, (req,res) => {
             var gjOfferSups = result;
             Categ_Sub.find().then((result) =>{  // Find product categories for the filter dropdown menu
                 var ctg_name = result
-                Product.find().then((ressult) => {
-                    var prod = ressult
+                Product.find().then((result) => {
+                    var prod = result
                     res.render('user_home', {gjNoOfferSups, gjOfferSups, ctg_name, prod})  // Send all the info found above and render page
                 }).catch((err) =>{
                     console.log(err);
